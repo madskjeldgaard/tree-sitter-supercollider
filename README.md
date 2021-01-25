@@ -3,6 +3,10 @@
 
 Note: This is massively a work in progress!
 
+## TODO:
+- Syntax highlighting
+- A million other things
+
 ## Try it out
 
 See node tree parsing in action
