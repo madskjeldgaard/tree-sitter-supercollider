@@ -2,12 +2,6 @@
 //
 // The SCIDE lexer file:
 // https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp
-//
-//
-//
-
-const key_words = [
-]
 
 module.exports = grammar({
 	name: 'supercollider',
@@ -29,7 +23,7 @@ module.exports = grammar({
 			$.function_block,
 			$.function_definition,
 			$.function_call,
-			$.variable_declaration,
+			$.variable_definition,
 			$.return_statement
 		),
 
@@ -125,7 +119,7 @@ module.exports = grammar({
 		),
 
 		
-		_declaration: $=> seq(
+		_definition: $=> seq(
 			$.variable,
 			'='
 		),
@@ -135,7 +129,7 @@ module.exports = grammar({
 			$.local_var
 		),
 
-		variable_declaration: $ => seq($.variable, "=", $._value),
+		variable_definition: $ => seq($.variable, "=", $._value),
 
 		local_var: $ => seq('var', $.identifier),
 		environment_var: $ => seq('~', $.identifier),
