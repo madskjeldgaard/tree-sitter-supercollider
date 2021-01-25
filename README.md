@@ -17,3 +17,6 @@ tree-sitter generate && tree-sitter highlight example-file.scd
 
 ## Resources
 
+- [Creating parsers](https://tree-sitter.github.io/tree-sitter/creating-parsers)
+- [the SCIDE lexer](https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp) 
+
