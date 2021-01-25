@@ -19,6 +19,11 @@ See highlighting in action
 tree-sitter generate && tree-sitter highlight example-file.scd
 ```
 
+A suite of automatic tests are defined in the the test dir. Run them like this:
+```bash
+tree-sitter generate && tree-sitter test
+```
+
 ## Resources
 
 - [A nice talk about what tree-sitter is and what it does](https://www.youtube.com/watch?v=Jes3bD6P0To)
