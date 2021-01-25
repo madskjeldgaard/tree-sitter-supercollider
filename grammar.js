@@ -6,7 +6,32 @@
 //
 // TODO:
 // - Unary
-// - Class
+
+/*
+
+keywords 
+"arg"
+"classvar"
+"const"
+"super"
+"this"
+"var"
+
+builtins
+"false"
+"inf"
+"nil"
+"true"
+"thisFunction"
+"thisFunctionDef"
+"thisMethod"
+"thisProcess"
+"thisThread"
+"currentEnvironment"
+"topEnvironment"
+
+*/
+
 
 const PRECEDENCE = {
   call: 14,
@@ -138,7 +163,8 @@ module.exports = grammar({
 			$.number,
 			$.symbol,
 			$.char,
-			$.string
+			$.string,
+			$.bool
 		),
 		number: $ => choice(
 			$.integer, 
@@ -154,6 +180,7 @@ module.exports = grammar({
 		),
 		char: $ => /\$./,
 		string: $ => seq("\"", optional($.identifier), "\""),
+		bool: $ => choice("true", "false"),
 
 		//////////////
 		//  Blocks  //
