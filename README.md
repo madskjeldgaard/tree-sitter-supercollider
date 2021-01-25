@@ -14,3 +14,6 @@ See highlighting in action
 ```bash
 tree-sitter generate && tree-sitter highlight example-file.scd
 ```
+
+## Resources
+
