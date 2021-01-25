@@ -60,6 +60,8 @@ module.exports = grammar({
 			$.function_call,
 			$.variable_definition,
 			$.binary_expression,
+			// $.associative_item,
+			$.collection
 			// $.return_statement
 		),
 
@@ -147,8 +149,8 @@ module.exports = grammar({
 		hexinteger: $=> /0x(\\d|[a-f]|[A-F])+/,
 		float: $=> seq($.integer, ".", $.integer),
 		symbol: $ => choice(
-			seq('\\', $.identifier),
-			seq("'", $.identifier, "'"),
+			seq('\\', choice($.identifier, /[0-9]+/)),
+			seq("'", choice($.identifier, /[0-9]+/), "'"),
 		),
 		char: $ => /\$./,
 		string: $ => seq("\"", optional($.identifier), "\""),
@@ -178,7 +180,6 @@ module.exports = grammar({
 
 		variable_definition: $ => seq($.variable, "=", $._value),
 
-		identifier: $ => /[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
 
 		///////////////
 		//  Classes  //
@@ -204,6 +205,85 @@ module.exports = grammar({
 		)),
 
 		///////////////////
+		//  Collections  //
+		///////////////////
+		// collection: $ => choice(
+		// 	$.unordered_collection, 
+		// 	$ordered_collection
+		// ),
+
+		// unordered_collection: $ => seq(
+		// 	optional($.unordered_collection_types),
+		// 	"[",
+		// 	$.collection_sequence,
+		// 	"]"
+		// ),
+
+// 		collection_sequence: $ => sepBy(",", 
+// 			choice(
+// 			seq($.symbol, "->", $._value)
+// 		),
+		collection: $ => seq(
+			// Optional class prefix
+			optional(choice($._unordered_collection_types, $._ordered_collection_types)),
+			// The actual collection
+			choice(
+				seq("[", $._collection_sequence, "]"),
+				seq("(", $._collection_sequence, ")"),
+			)
+		),
+		_collection_sequence: $ => sepBy1(",", choice(
+			$.associative_item,
+			$._value
+		)),
+		associative_item: $ => seq(
+				choice(
+					prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
+					seq($.identifier, ":")
+				), 
+				$._value
+			),
+
+		_unordered_collection_types: $ => choice(
+			"Bag", 
+			"Dictionary", 
+			"Environment", 
+			"Event", 
+			"IdentityBag", 
+			"IdentityDictionary", 
+			"IdentitySet", 
+			"LazyEnvir", 
+			"MultiLevelIdentityDictionary", 
+			"ObjectTable", 
+			"Set", 
+			"TwoWayIdentityDictionary"
+		),
+
+		_ordered_collection_types: $ => choice(
+			"Array",
+			"Array2D",
+			"ArrayedCollection",
+			"DoubleArray",
+			"FloatArray",
+			"Int16Array",
+			"Int32Array",
+			"Int8Array",
+			"LinkedList",
+			"List",
+			"Order",
+			"OrderedIdentitySet",
+			"Pair",
+			"PriorityQueue",
+			"RawArray",
+			"SequenceableCollection",
+			"Signal",
+			"SortedList",
+			"SparseArray",
+			"String",
+			"SymbolArray",
+		),
+
+		///////////////////
 		//  Expressions  //
 		///////////////////
 		binary_expression: $ => {
@@ -226,6 +306,8 @@ module.exports = grammar({
 			))));
 		},
 
+		class: $ => /[A-Z_][a-zA-Z\d_]*/,
+		identifier: $ => /[a-z_][a-zA-Z\d_]*/,
 
 	}
 });
