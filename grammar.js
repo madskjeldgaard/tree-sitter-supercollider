@@ -6,7 +6,7 @@
 //
 // TODO:
 // - Unary
-// - Classes clash with strings if stirngs contain upper case
+// Return statement should include function returns
 
 /*
 
@@ -67,7 +67,11 @@ module.exports = grammar({
 	// The name of a token that will match keywords for the purpose of the keyword extraction optimization.
 	word: $ => $.identifier,
 	conflicts: $ => [
-		[$.unnamed_argument, $.named_argument]
+		[$.unnamed_argument, $.named_argument],
+		[$.variable_definition, $.function_definition],
+		// [$.function_call, $.variable],
+		// [$._expression_statement, $._value],
+		// [$.function_block, $.function_definition, $.function_call],
 	],
 
 	rules: {
@@ -85,17 +89,17 @@ module.exports = grammar({
 			$.function_call,
 			$.variable_definition,
 			$.binary_expression,
-			// $.associative_item,
-			$.collection
+			// $.naked_statement,
 			// $.return_statement
 		),
 
 		// These are the values that may be assigned to a variable or argument
 		_value: $ => choice(
-			$.literals,
+			$.literal,
 			$.variable,
 			$.function_block,
-			$.binary_expression
+			$.binary_expression,
+			$.collection
 		),
 
 		/////////////////
@@ -103,18 +107,19 @@ module.exports = grammar({
 		/////////////////
 		
 		function_definition: $ => prec.left(1, seq(
-			($.variable),
+			$.variable,
 			'=',
 			$.function_block
 		)),
 
-		function_call: $ => seq(
-			$.variable, 
+		function_call: $ => 
+			seq(
+			alias($._value, $.receiver), 
 			".", 
-			optional($.identifier), 
-			"(", 
-			$.parameter_call_list, 
-			")"
+			optional(alias($.identifier, $.method)), 
+			optional("("), 
+			optional($.parameter_call_list), 
+			optional(")")
 		),
 		
 		function_block: $ => seq(
@@ -132,7 +137,7 @@ module.exports = grammar({
 		),
 
 		// For definition lists
-		argument: $ => seq($.identifier, optional(seq("=", $.literals))),
+		argument: $ => seq($.identifier, optional(seq("=", $.literal))),
 
 		// When supplying arguments to a function call
 		parameter_call_list: $ => sepBy1(',', $.argument_calls),
@@ -142,24 +147,24 @@ module.exports = grammar({
 			$.unnamed_argument,
 		),
 
-		unnamed_argument: $ => choice($.variable, $.literals),
+		unnamed_argument: $ => choice($.variable, $.literal),
 		named_argument: $ => prec.left(1, seq(
 			optional("\\"),
 			$.identifier,
 			optional(
 				seq(
 					choice('=', ':'), 
-					choice($.literals, $.variable)
+					choice($.literal, $.variable)
 				)
 			)
 		)
 		),
 
 		///////////////////////
-		//  Define literals  //
+		//  Define literal  //
 		///////////////////////
 		
-		literals: $ => choice(
+		literal: $ => choice(
 			$.number,
 			$.symbol,
 			$.char,
@@ -173,7 +178,7 @@ module.exports = grammar({
 		),
 		integer: $=>/\d+/,
 		hexinteger: $=> /0x(\\d|[a-f]|[A-F])+/,
-		float: $=> seq($.integer, ".", $.integer),
+		float: $=> /\d+\.\d+/,
 		symbol: $ => choice(
 			seq('\\', choice($.identifier, /[0-9]+/)),
 			seq("'", choice($.identifier, /[0-9]+/), "'"),
@@ -191,6 +196,8 @@ module.exports = grammar({
 				'"'
 			),
 
+		bool: $ => choice("true", "false"),
+
 		// TODO: Is this necessary in SC?
 		escape_sequence: $ => token.immediate(seq(
 			'\\',
@@ -202,8 +209,6 @@ module.exports = grammar({
 				/u{[0-9a-fA-F]+}/
 			)
 		)),
-
-		bool: $ => choice("true", "false"),
 
 		//////////////
 		//  Blocks  //
@@ -224,18 +229,33 @@ module.exports = grammar({
 			$.classvar
 		),
 
-		local_var: $ => seq('var', $.identifier),
+		// TODO: is this a good way to detect local variables in use?
+		local_var: $ => choice(
+			$.identifier,
+			seq('var', $.identifier)
+		),
 		classvar: $ => seq('classvar', $.identifier),
-		environment_var: $ => seq('~', $.identifier),
+		environment_var: $ => choice(
+			/[a-z]/,
+			seq('~', $.identifier),
+		),
+
+		variable_name: $ => $.identifier,
 
 		variable_definition: $ => seq($.variable, "=", $._value),
-
+		// naked_statement: $ => seq($._value),
 
 		///////////////
 		//  Classes  //
 		///////////////
 
-		return_statement: $ => seq("^", choice($.variable, $.literals)),
+		
+		// return_statement: $ => 
+		// choice(
+		// 	// $._end_of_function,
+		// 	seq("^", $._value),
+		// ),
+		// _end_of_function: $ => seq($._value, optional(";"), optional(/\n}/), "}"),
 
 		////////////////
 		//  Comments  //
@@ -347,6 +367,7 @@ module.exports = grammar({
 				[PRECEDENCE.shift, choice('<<', '>>')],
 				[PRECEDENCE.additive, choice('+', '-')],
 				[PRECEDENCE.multiplicative, choice('*', '/', '%')],
+				[PRECEDENCE.assign, '=']
 			];
 
 			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(

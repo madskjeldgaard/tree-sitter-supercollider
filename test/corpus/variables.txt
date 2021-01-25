@@ -1,0 +1,74 @@
+==================
+variable types
+==================
+var localvar = 1;
+a = 2;
+~envvar = 3;
+classvar classy = 4;
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+      (number 
+        (integer ))))
+  (variable_definition 
+    (variable 
+      (environment_var ))
+    (literal 
+      (number 
+        (integer ))))
+  (variable_definition 
+    (variable 
+      (environment_var 
+        (identifier )))
+    (literal 
+      (number 
+        (integer ))))
+  (variable_definition 
+    (variable 
+      (classvar 
+        (identifier )))
+    (literal 
+      (number 
+        (integer)))))
+
+==================
+binary variable operation
+==================
+var num1 = 100;
+var num2 = 4;
+var num3 = num1 + num2;
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+      (number 
+        (integer ))))
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+      (number 
+        (integer ))))
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (binary_expression 
+      left: (variable 
+        (local_var 
+          (identifier )))
+      right: (variable 
+        (local_var 
+          (identifier))))))
+
+

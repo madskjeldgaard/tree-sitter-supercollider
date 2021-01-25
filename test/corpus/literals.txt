@@ -1,0 +1,110 @@
+==================
+literal number
+==================
+var number = 100;
+var anotherNumber = 100.81238;
+var aHexyNumber = 0xFFFFFF;
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+      (number 
+        (integer ))))
+(variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+      (number 
+        (float ))))
+(variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+      (number 
+        (hexinteger ))))
+
+	)
+
+==================
+literal string
+==================
+var string = "hej med Dig !#)¤!¤AZ";
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+      (string ))))
+
+==================
+literal symbol slashed
+==================
+var sym = \averyLongSymbol;
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+        (symbol (identifier)))))
+
+==================
+literal symbol single quoted
+==================
+var sym = 'averyLongSymbol';
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+        (symbol (identifier)))))
+
+
+==================
+literal char
+==================
+var charvar = $w;
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+        (char ))))
+
+==================
+literal bool
+==================
+var boolean = true;
+var boolean2 = false;
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+        (bool )))
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (literal 
+        (bool ))))

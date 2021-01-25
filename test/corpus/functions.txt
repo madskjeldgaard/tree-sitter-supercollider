@@ -1,0 +1,72 @@
+==================
+simple function definition no arguments
+==================
+f = {};
+
+---
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block )))
+
+==================
+Add two numbers in function with piped args
+==================
+f = {|oneArg=10, anotherArg=2| oneArg+anotherArg; };
+
+---
+
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block 
+      (parameter_list 
+        (argument 
+          (identifier )
+          (literal 
+            (number 
+              (integer ))))
+        (argument 
+          (identifier )
+          (literal 
+            (number 
+              (integer )))))
+      (binary_expression 
+        left: (variable 
+          (local_var 
+            (identifier )))
+        right: (variable 
+          (local_var 
+            (identifier )))))))
+==================
+Add two numbers in function with arg list
+==================
+f = {arg oneArg=10, anotherArg=2; oneArg+anotherArg; };
+
+---
+
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block 
+      (parameter_list 
+        (argument 
+          (identifier )
+          (literal 
+            (number 
+              (integer ))))
+        (argument 
+          (identifier )
+          (literal 
+            (number 
+              (integer )))))
+      (binary_expression 
+        left: (variable 
+          (local_var 
+            (identifier )))
+        right: (variable 
+          (local_var 
+            (identifier )))))))
