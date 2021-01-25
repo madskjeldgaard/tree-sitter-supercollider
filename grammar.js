@@ -173,7 +173,7 @@ module.exports = grammar({
 		),
 
 		local_var: $ => seq('var', $.identifier),
-		class_var: $ => seq('classvar', $.identifier),
+		classvar: $ => seq('classvar', $.identifier),
 		environment_var: $ => seq('~', $.identifier),
 
 		variable_definition: $ => seq($.variable, "=", $._value),
