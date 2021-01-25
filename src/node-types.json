@@ -201,6 +201,11 @@
     }
   },
   {
+    "type": "bool",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "classvar",
     "named": true,
     "fields": {},
@@ -428,6 +433,10 @@
       "required": true,
       "types": [
         {
+          "type": "bool",
+          "named": true
+        },
+        {
           "type": "char",
           "named": true
         },
@@ -581,11 +590,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "identifier",
+          "type": "escape_sequence",
           "named": true
         }
       ]
@@ -940,6 +949,14 @@
     "named": false
   },
   {
+    "type": "escape_sequence",
+    "named": true
+  },
+  {
+    "type": "false",
+    "named": false
+  },
+  {
     "type": "hexinteger",
     "named": true
   },
@@ -954,6 +971,10 @@
   {
     "type": "line_comment",
     "named": true
+  },
+  {
+    "type": "true",
+    "named": false
   },
   {
     "type": "var",

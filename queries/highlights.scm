@@ -13,8 +13,8 @@
  ; "this" @keyword
  ; "var" @keyword
 
-(associative_item) @keyword
-(class) @keyword
+; (associative_item) @keyword
+(string) @keyword
 
 
 ; (argument) @keyword

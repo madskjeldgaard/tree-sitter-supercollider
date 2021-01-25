@@ -6,6 +6,7 @@
 //
 // TODO:
 // - Unary
+// - Classes clash with strings if stirngs contain upper case
 
 /*
 
@@ -18,10 +19,8 @@ keywords
 "var"
 
 builtins
-"false"
 "inf"
 "nil"
-"true"
 "thisFunction"
 "thisFunctionDef"
 "thisMethod"
@@ -34,6 +33,7 @@ builtins
 
 
 const PRECEDENCE = {
+	STRING: 2,
   call: 14,
   field: 13,
   unary: 11,
@@ -179,7 +179,30 @@ module.exports = grammar({
 			seq("'", choice($.identifier, /[0-9]+/), "'"),
 		),
 		char: $ => /\$./,
-		string: $ => seq("\"", optional($.identifier), "\""),
+
+		// Taken from https://github.com/tree-sitter/tree-sitter-javascript/blob/83f6a2d900a2dc245e4717ccd05c2a362443cd87/grammar.js#L808
+		string: $ => 
+			seq(
+				'"',
+				repeat(choice(
+					token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
+					$.escape_sequence
+				)),
+				'"'
+			),
+
+		// TODO: Is this necessary in SC?
+		escape_sequence: $ => token.immediate(seq(
+			'\\',
+			choice(
+				/[^xu0-7]/,
+				/[0-7]{1,3}/,
+				/x[0-9a-fA-F]{2}/,
+				/u[0-9a-fA-F]{4}/,
+				/u{[0-9a-fA-F]+}/
+			)
+		)),
+
 		bool: $ => choice("true", "false"),
 
 		//////////////
@@ -333,7 +356,7 @@ module.exports = grammar({
 			))));
 		},
 
-		class: $ => /[A-Z_][a-zA-Z\d_]*/,
+		// class: $ => /[A-Z_][a-zA-Z\d_]*/,
 		identifier: $ => /[a-z_][a-zA-Z\d_]*/,
 
 	}
