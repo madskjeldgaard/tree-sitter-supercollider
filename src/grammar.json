@@ -74,6 +74,10 @@
         {
           "type": "SYMBOL",
           "name": "binary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "collection"
         }
       ]
     },
@@ -916,18 +920,6 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "_collection_types"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
               "type": "SEQ",
               "members": [
                 {
@@ -1060,8 +1052,13 @@
           ]
         },
         {
-          "type": "SYMBOL",
-          "name": "_object"
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_object"
+          },
+          "named": true,
+          "value": "item"
         }
       ]
     },
@@ -1642,6 +1639,10 @@
     [
       "_collection_types",
       "class"
+    ],
+    [
+      "instance_method_call",
+      "collection"
     ]
   ],
   "externals": [],

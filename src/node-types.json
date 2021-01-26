@@ -46,27 +46,15 @@
       "required": true,
       "types": [
         {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "literal",
+          "type": "item",
           "named": true
         },
         {
           "type": "symbol",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -82,6 +70,10 @@
         "types": [
           {
             "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "collection",
             "named": true
           },
           {
@@ -189,6 +181,10 @@
             "named": true
           },
           {
+            "type": "collection",
+            "named": true
+          },
+          {
             "type": "function_block",
             "named": true
           },
@@ -273,6 +269,41 @@
         },
         {
           "type": "variable_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "collection",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "associative_item",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "variable",
           "named": true
         }
       ]
@@ -417,6 +448,37 @@
     }
   },
   {
+    "type": "item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "literal",
     "named": true,
     "fields": {},
@@ -518,6 +580,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "collection",
           "named": true
         },
         {
@@ -682,6 +748,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "collection",
           "named": true
         },
         {

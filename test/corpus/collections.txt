@@ -1,0 +1,113 @@
+==================
+integer array
+==================
+[1,2,3,4];
+
+---
+(source_file 
+    (object 
+      (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    )
+
+==================
+Associative array
+==================
+[\a -> 1, \b -> \symmysymmyya, \c -> 3.81];
+
+---
+(source_file 
+    (object 
+      (collection 
+        (associative_item 
+          (symbol 
+            (identifier ))
+          (item 
+            (literal 
+              (number 
+                (integer )))))
+        (associative_item 
+          (symbol 
+            (identifier ))
+          (item 
+            (literal 
+              (symbol 
+                (identifier )))))
+        (associative_item 
+          (symbol 
+            (identifier ))
+          (item 
+            (literal 
+              (number 
+                (float )))))))
+    )
+
+
+==================
+Assign array to variable
+==================
+var array = [1,2,3,4];
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (collection 
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer))))))
+
+==================
+Simple event
+==================
+var event = (freq: 441.0, dur: 1.0);
+
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (local_var 
+        (identifier )))
+    (collection 
+      (associative_item 
+        (identifier )
+        (item 
+          (literal 
+            (number 
+              (float )))))
+      (associative_item 
+        (identifier )
+        (item 
+          (literal 
+            (number 
+              (float ))))))))
+
+

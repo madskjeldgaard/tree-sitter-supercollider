@@ -5,6 +5,7 @@
 //
 //
 // TODO:
+// - Chainable commands
 // - Unary?
 // - Return statement should include function returns
 // - collection with name prefixed vs class clash
@@ -59,6 +60,7 @@ function sepBy1(sep, rule) {
 function sepBy(sep, rule) {
   return optional(sepBy1(sep, rule))
 }
+
 module.exports = grammar({
 	name: 'supercollider',
 
@@ -70,8 +72,8 @@ module.exports = grammar({
 	conflicts: $ => [
 		[$.unnamed_argument, $.named_argument],
 		[$.variable_definition, $.function_definition],
-		[$._collection_types, $.class]
-		// [$.function_call, $.variable],
+		[$._collection_types, $.class],
+		[$.instance_method_call, $.collection],
 		// [$._expression_statement, $._object],
 		// [$.function_block, $.function_definition, $.function_call],
 	],
@@ -91,7 +93,6 @@ module.exports = grammar({
 			$.function_call,
 			$.variable_definition,
 			$.binary_expression,
-			// $.naked_statement,
 			// $.return_statement
 		),
 
@@ -101,7 +102,7 @@ module.exports = grammar({
 			$.variable,
 			$.function_block,
 			$.binary_expression,
-			// $.collection
+			$.collection
 		),
 
 		/////////////////
@@ -302,25 +303,10 @@ module.exports = grammar({
 		///////////////////
 		//  Collections  //
 		///////////////////
-		// collection: $ => choice(
-		// 	$.unordered_collection, 
-		// 	$ordered_collection
-		// ),
-
-		// unordered_collection: $ => seq(
-		// 	optional($.unordered_collection_types),
-		// 	"[",
-		// 	$.collection_sequence,
-		// 	"]"
-		// ),
-
-// 		collection_sequence: $ => sepBy(",", 
-// 			choice(
-// 			seq($.symbol, "->", $._object)
-// 		),
+		
 		collection: $ => seq(
 			// Optional class prefix
-			optional($._collection_types),
+			// optional($._collection_types),
 			// The actual collection
 			choice(
 				seq("[", $._collection_sequence, "]"),
@@ -336,7 +322,7 @@ module.exports = grammar({
 					prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
 					seq($.identifier, ":")
 				), 
-				$._object
+				alias($._object, $.item)
 			),
 
 		_collection_types: $ => choice( $._unordered_collection_types, $._ordered_collection_types ),
