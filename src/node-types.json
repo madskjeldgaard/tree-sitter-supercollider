@@ -222,6 +222,21 @@
     "fields": {}
   },
   {
+    "type": "case",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "function_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "class_method_call",
     "named": true,
     "fields": {},
@@ -385,6 +400,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "case",
+          "named": true
+        },
         {
           "type": "for",
           "named": true
@@ -1382,6 +1401,10 @@
   {
     "type": "block_comment",
     "named": true
+  },
+  {
+    "type": "case",
+    "named": false
   },
   {
     "type": "char",

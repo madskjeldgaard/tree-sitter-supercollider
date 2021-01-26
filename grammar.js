@@ -445,7 +445,7 @@ module.exports = grammar({
         ////////////////////
 
         control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
-            $.if, $.while, $.for, $.forby
+            $.if, $.while, $.for, $.forby, $.case
         )),
 
         if: $ => choice(
@@ -515,5 +515,12 @@ module.exports = grammar({
             // startValue.forBy ( endValue, stepValue, function );
             seq($.integer, ".forBy", "(", $.integer, ",", $.integer, ",", $.function_block, ")")
         ),
+
+        case: $ => seq(
+            "case",
+            repeat($.function_block),
+            ";"
+        ),
+
     }
 });

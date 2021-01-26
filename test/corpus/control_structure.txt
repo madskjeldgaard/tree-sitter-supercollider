@@ -271,3 +271,50 @@ forBy(start, end, step, func)
               (environment_var )))
           (instance_method_call 
             (method_name )))))))
+
+==================
+case
+==================
+(
+x = case
+{ i == 1.5 } { \wrong }
+{ true }   { \wrong }
+{ i == 0 }   { \true };
+)
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      (variable 
+        (environment_var ))
+      (control_structure 
+        (case 
+          (function_block 
+            (binary_expression 
+              left: (variable 
+                (environment_var ))
+              right: (literal 
+                (number 
+                  (float )))))
+          (function_block 
+            (literal 
+              (symbol 
+                (identifier ))))
+          (function_block 
+            (literal 
+              (bool )))
+          (function_block 
+            (literal 
+              (symbol 
+                (identifier ))))
+          (function_block 
+            (binary_expression 
+              left: (variable 
+                (environment_var ))
+              right: (literal 
+                (number 
+                  (integer )))))
+          (function_block 
+            (literal 
+              (symbol 
+                (identifier )))))))))

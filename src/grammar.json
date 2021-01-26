@@ -1815,6 +1815,10 @@
           {
             "type": "SYMBOL",
             "name": "forby"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "case"
           }
         ]
       }
@@ -2267,6 +2271,26 @@
               "value": ")"
             }
           ]
+        }
+      ]
+    },
+    "case": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "case"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "function_block"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ";"
         }
       ]
     }
