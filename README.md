@@ -5,8 +5,6 @@ Note: This is massively a work in progress!
 
 ## TODO:
 - Conditionals
-- Things in paranthesis may be treated as an expression
-- Allow statements with no semicolon at the end
 - Chained methods
 - Syntax highlighting
 - A million other things

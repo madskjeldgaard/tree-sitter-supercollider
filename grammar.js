@@ -52,6 +52,8 @@ const PRECEDENCE = {
     or: 2,
     range: 1,
     assign: 0,
+    controlstruct: 3,
+    localvar: 4,
     closure: -1,
 }
 
@@ -75,7 +77,8 @@ module.exports = grammar({
         [$.unnamed_argument, $.named_argument],
         [$.variable_definition, $.function_definition],
         [$._collection_types, $.class],
-        [$.collection, $.code_block]
+        [$.collection, $.code_block],
+        [$.local_var, $.control_structure]
         // [$.instance_method_call, $.collection],
         // [$._expression_statement, $._object],
         // [$.function_block, $.function_definition, $.function_call],
@@ -107,12 +110,12 @@ module.exports = grammar({
 
         // These are the values that may be assigned to a variable or argument
         _object: $ => choice(
+            $.control_structure,
             $.literal,
             $.variable,
             $.function_block,
             $.binary_expression,
             $.collection,
-            $.control_structure
         ),
 
         /////////////////
@@ -158,11 +161,38 @@ module.exports = grammar({
             seq("(", optional($.parameter_call_list), ")")
         ),
 
-        function_block: $ => seq(
-            '{',
-            optional($.parameter_list),
-            repeat($._expression),
-            '}'
+        _expression_sequence: $ => seq(
+            repeat(prec.right(1, seq($._expression_statement, ";"))),
+            // Last statement in sequence
+            $._expression_statement,
+            optional(";")
+        ),
+
+        // TODO: Make tolerant to non semicoloned expression
+        code_block: $ => seq(
+            '(',
+            $._expression_sequence,
+            ')'
+        ),
+
+        function_block: $ => choice(
+            seq(
+                '{',
+                optional($.parameter_list),
+                // optional(seq($._expression_statement, ";")),
+                optional(
+                    $._expression_sequence
+                ),
+                '}'
+            ),
+            seq(
+                seq("(", "{"),
+                optional($.parameter_list),
+                optional(
+                    $._expression_sequence
+                ),
+                seq(")", "}"),
+            ),
         ),
 
 
@@ -248,11 +278,6 @@ module.exports = grammar({
         //////////////
         //  Blocks  //
         //////////////
-        code_block: $ => seq(
-            '(',
-            repeat($._expression),
-            ')'
-        ),
 
         /////////////////
         //  Variables  //
@@ -265,10 +290,10 @@ module.exports = grammar({
         ),
 
         // TODO: is this a good way to detect local variables in use?
-        local_var: $ => choice(
+        local_var: $ => prec(PRECEDENCE.localvar, choice(
             $.identifier,
             seq('var', $.identifier)
-        ),
+        )),
         classvar: $ => seq('classvar', $.identifier),
         environment_var: $ => choice(
             /[a-z]/,
@@ -319,13 +344,14 @@ module.exports = grammar({
             // The actual collection
             choice(
                 seq("[", $._collection_sequence, "]"),
-                seq("(", $._collection_sequence, ")"),
+                seq("(", $._paired_associative_sequence, ")"),
             )
         ),
         _collection_sequence: $ => sepBy1(",", choice(
             $.associative_item,
             $._object
         )),
+        _paired_associative_sequence: $ => sepBy1(",", $.associative_item),
         associative_item: $ => seq(
             choice(
                 prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
@@ -405,10 +431,9 @@ module.exports = grammar({
         //  Conditionals  //
         ////////////////////
 
-        control_structure: $ => choice(
-            $.if
-        ),
-
+        control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
+            $.if, $.while
+        )),
 
         if: $ => choice(
             // if (expr, trueFunc, falseFunc);
@@ -421,25 +446,59 @@ module.exports = grammar({
                 ")"
             ),
 
+            // TODO: Should/could this be covered by the instance method rules?
             // expr.if (trueFunc, falseFunc);
             seq(
-                field("expression", $._object),
-                ".if",
+                prec.left(1, seq(field("expression", $._object), seq(".", "if"))),
                 choice(
                     // expr.if{truefunc}
                     field("true", $.function_block),
-                    // expr.if({truefunc}, {falsefunc})
-                    seq(
-                        "(",
-                        field("true", $.function_block),
-                        optional(field("false",
-                            seq(",", $.function_block))),
-                        ")"
+                    choice(
+                        // expr.if({truefunc}) or expr.if{truefunc};
+                        choice(
+                            seq(field("true", $.function_block)),
+                            seq("(", field("true", $.function_block), ")"),
+                        ),
+                        // expr.if({truefunc}, {falsefunc})
+                        seq(
+                            "(",
+                            field("true", $.function_block),
+                            optional(field("false",
+                                seq(",", $.function_block))),
+                            ")"
+                        )
                     )
                 )
             )
-        )
+        ),
 
+        while: $ => choice(
+            // while ( testFunc, bodyFunc );
+            prec.left(1, seq(
+                "while",
+                "(",
+                field("test_func", $.function_block),
+                ",",
+                field("body_func", $.function_block),
+                ")"
+            )),
+            // testFunc.while( bodyFunc );
+            seq(
+                field("expression", $._object),
+                ".while",
+                field("body_func", $.function_block),
+            ),
+        ),
+
+        // for ( startValue, endValue, function )
+        // startValue.for ( endValue, function )
+        // for: $ => choice(),
+
+        // forBy ( startValue, endValue, stepValue, function );
+        // startValue.forBy ( endValue, stepValue, function );
+        // forby: $ => choice(),
+
+        // do: $ => choice()
 
 
     }

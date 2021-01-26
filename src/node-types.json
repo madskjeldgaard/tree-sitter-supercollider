@@ -253,14 +253,10 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "code_block",
           "named": true
         },
         {
@@ -367,6 +363,10 @@
         {
           "type": "if",
           "named": true
+        },
+        {
+          "type": "while",
+          "named": true
         }
       ]
     }
@@ -396,10 +396,6 @@
       "types": [
         {
           "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "code_block",
           "named": true
         },
         {
@@ -921,6 +917,62 @@
     }
   },
   {
+    "type": "while",
+    "named": true,
+    "fields": {
+      "body_func": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "function_block",
+            "named": true
+          }
+        ]
+      },
+      "expression": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "collection",
+            "named": true
+          },
+          {
+            "type": "control_structure",
+            "named": true
+          },
+          {
+            "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "variable",
+            "named": true
+          }
+        ]
+      },
+      "test_func": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "function_block",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "!=",
     "named": false
   },
@@ -977,7 +1029,7 @@
     "named": false
   },
   {
-    "type": ".if",
+    "type": ".while",
     "named": false
   },
   {
@@ -1238,6 +1290,10 @@
   },
   {
     "type": "var",
+    "named": false
+  },
+  {
+    "type": "while",
     "named": false
   },
   {

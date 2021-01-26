@@ -8,6 +8,19 @@ single number
   (literal 
     (number 
       (integer))))
+==================
+literal with method
+==================
+10.5.round;
+---
+(source_file 
+  (function_call 
+    (receiver 
+      (literal 
+        (number 
+          (float ))))
+    (instance_method_call 
+      (method_name ))))
 
 
 ==================
