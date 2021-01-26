@@ -1,0 +1,109 @@
+==================
+if with one clause
+==================
+if(1 == 1, { "is true".postln; });
+if(true, { "is true".postln; });
+
+---
+(source_file 
+  (control_structure 
+    (if 
+      expression: (binary_expression 
+        left: (literal 
+          (number 
+            (integer )))
+        right: (literal 
+          (number 
+            (integer ))))
+      true: (function_block 
+        (function_call 
+          (receiver 
+            (literal 
+              (string )))
+          (instance_method_call 
+            (method_name ))))))
+  (control_structure 
+    (if 
+      expression: (literal 
+        (bool ))
+      true: (function_block 
+        (function_call 
+          (receiver 
+            (literal 
+              (string )))
+          (instance_method_call 
+            (method_name )))))))
+
+==================
+if with two clauses
+==================
+if(1 == 2, { "is true".postln; }, { 2; });
+---
+(source_file 
+  (control_structure 
+    (if 
+      expression: (binary_expression 
+        left: (literal 
+          (number 
+            (integer )))
+        right: (literal 
+          (number 
+            (integer ))))
+      true: (function_block 
+        (function_call 
+          (receiver 
+            (literal 
+              (string )))
+          (instance_method_call 
+            (method_name ))))
+      false: (function_block 
+        (literal 
+          (number 
+            (integer )))))))
+
+==================
+expr.if with two clauses
+==================
+
+true.if({ "hello".postln; }, { "no".postln; });
+---
+(source_file 
+  (control_structure 
+    (if 
+      expression: (literal 
+        (bool ))
+      true: (function_block 
+        (function_call 
+          (receiver 
+            (literal 
+              (string )))
+          (instance_method_call 
+            (method_name ))))
+      false: (function_block 
+        (function_call 
+          (receiver 
+            (literal 
+              (string )))
+          (instance_method_call 
+            (method_name)))))))
+
+==================
+expr.if with one clause
+==================
+
+true.if({ "hello".postln; });
+
+---
+(source_file 
+  (control_structure 
+    (if 
+      expression: (literal 
+        (bool ))
+      true: (function_block 
+        (function_call 
+          (receiver 
+            (literal 
+              (string )))
+          (instance_method_call 
+            (method_name )))))))
+

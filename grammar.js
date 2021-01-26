@@ -5,6 +5,7 @@
 //
 //
 // TODO:
+//
 // - Chainable commands
 // - Conditional
 // - Unary?
@@ -74,6 +75,7 @@ module.exports = grammar({
         [$.unnamed_argument, $.named_argument],
         [$.variable_definition, $.function_definition],
         [$._collection_types, $.class],
+        [$.collection, $.code_block]
         // [$.instance_method_call, $.collection],
         // [$._expression_statement, $._object],
         // [$.function_block, $.function_definition, $.function_call],
@@ -109,7 +111,8 @@ module.exports = grammar({
             $.variable,
             $.function_block,
             $.binary_expression,
-            $.collection
+            $.collection,
+            $.control_structure
         ),
 
         /////////////////
@@ -397,6 +400,47 @@ module.exports = grammar({
 
         class: $ => /[A-Z][a-zA-Z\d_]*/,
         identifier: $ => /[a-z_][a-zA-Z\d_]*/,
+
+        ////////////////////
+        //  Conditionals  //
+        ////////////////////
+
+        control_structure: $ => choice(
+            $.if
+        ),
+
+
+        if: $ => choice(
+            // if (expr, trueFunc, falseFunc);
+            seq(
+                "if",
+                "(",
+                field("expression", $._object),
+                field("true", seq(",", $.function_block)),
+                optional(field("false", seq(",", $.function_block))),
+                ")"
+            ),
+
+            // expr.if (trueFunc, falseFunc);
+            seq(
+                field("expression", $._object),
+                ".if",
+                choice(
+                    // expr.if{truefunc}
+                    field("true", $.function_block),
+                    // expr.if({truefunc}, {falsefunc})
+                    seq(
+                        "(",
+                        field("true", $.function_block),
+                        optional(field("false",
+                            seq(",", $.function_block))),
+                        ")"
+                    )
+                )
+            )
+        )
+
+
 
     }
 });

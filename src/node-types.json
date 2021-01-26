@@ -77,6 +77,10 @@
             "named": true
           },
           {
+            "type": "control_structure",
+            "named": true
+          },
+          {
             "type": "function_block",
             "named": true
           },
@@ -185,6 +189,10 @@
             "named": true
           },
           {
+            "type": "control_structure",
+            "named": true
+          },
+          {
             "type": "function_block",
             "named": true
           },
@@ -260,6 +268,10 @@
           "named": true
         },
         {
+          "type": "control_structure",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -307,6 +319,10 @@
           "named": true
         },
         {
+          "type": "control_structure",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -335,6 +351,21 @@
         },
         {
           "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "control_structure",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "if",
           "named": true
         }
       ]
@@ -373,6 +404,10 @@
         },
         {
           "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
           "named": true
         },
         {
@@ -453,6 +488,70 @@
     }
   },
   {
+    "type": "if",
+    "named": true,
+    "fields": {
+      "expression": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "collection",
+            "named": true
+          },
+          {
+            "type": "control_structure",
+            "named": true
+          },
+          {
+            "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "variable",
+            "named": true
+          }
+        ]
+      },
+      "false": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "function_block",
+            "named": true
+          }
+        ]
+      },
+      "true": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "function_block",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "instance_method_call",
     "named": true,
     "fields": {},
@@ -485,6 +584,10 @@
         },
         {
           "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
           "named": true
         },
         {
@@ -641,6 +744,10 @@
           "named": true
         },
         {
+          "type": "control_structure",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -673,6 +780,10 @@
         },
         {
           "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
           "named": true
         },
         {
@@ -791,6 +902,10 @@
           "named": true
         },
         {
+          "type": "control_structure",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -859,6 +974,10 @@
   },
   {
     "type": ".",
+    "named": false
+  },
+  {
+    "type": ".if",
     "named": false
   },
   {
@@ -1096,6 +1215,10 @@
   {
     "type": "identifier",
     "named": true
+  },
+  {
+    "type": "if",
+    "named": false
   },
   {
     "type": "integer",
