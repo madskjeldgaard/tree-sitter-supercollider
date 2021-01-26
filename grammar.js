@@ -141,19 +141,24 @@ module.exports = grammar({
                     $.class,
                     $.class_method_call
                 ),
-                // Instance method
+
+                // Instance method (chainable)
                 seq(
                     alias($._object, $.receiver),
-                    $.instance_method_call
+                    repeat1(
+                        seq(
+                            $.instance_method_call
+                        )
+                    )
                 )
             ),
 
-        instance_method_call: $ => seq(
+        instance_method_call: $ => prec.left(seq(
             ".",
             optional(alias($.identifier, $.method_name)),
             // Instance.method or Instance.method()
             optional(seq("(", optional($.parameter_call_list), ")")),
-        ),
+        )),
 
         class_method_call: $ => choice(
             // Class.method - class method

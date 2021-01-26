@@ -286,3 +286,57 @@ f.value(arg1: \hej);
             (identifier )
             (literal 
               (symbol (identifier) ))))))))
+
+==================
+chained instance methods on literal
+==================
+"Hej % and %".format(20, 33).postln;
+---
+(source_file 
+  (function_call 
+    (receiver 
+      (literal 
+        (string )))
+    (instance_method_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (integer )))))
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (integer )))))))
+    (instance_method_call 
+      (method_name ))))
+
+==================
+chained instance methods on env var
+==================
+a = 10;
+a.pow(2).nextPowerOfThree;
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (environment_var ))
+    (literal 
+      (number 
+        (integer ))))
+  (function_call 
+    (receiver 
+      (variable 
+        (environment_var )))
+    (instance_method_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (integer )))))))
+    (instance_method_call 
+      (method_name ))))

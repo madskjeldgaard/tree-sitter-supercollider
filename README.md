@@ -6,7 +6,6 @@ Note: This is massively a work in progress!
 ## TODO:
 
 ### Parsing
-- Chained methods
 - Conditionals:
 	- switch
 	- case
