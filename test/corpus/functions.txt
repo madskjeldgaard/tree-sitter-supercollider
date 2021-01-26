@@ -75,7 +75,6 @@ f = {arg oneArg=10, anotherArg=2; oneArg+anotherArg; };
 Class method calls, explicit
 ==================
 SinOsc.ar(freq: 441, mul:0.25);
-Array.new;
 
 ---
 (source_file 
@@ -96,12 +95,6 @@ Array.new;
             (literal 
               (number 
                 (float))))))))
-  
-  (function_call 
-    (class )
-    (class_method_call 
-      (class_method_name )))
-
 )
 
 ==================
@@ -173,3 +166,123 @@ Instance method (linlin on a float)
               (number 
                 (float)))))))))
 
+==================
+instance method call with function as argument
+==================
+f = {|arg1|};
+f.value(arg1: { "hej".postln; });
+---
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block 
+      (parameter_list 
+        (argument 
+          (identifier )))))
+  (function_call 
+    (receiver 
+      (variable 
+        (environment_var )))
+    (instance_method_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (function_block 
+              (function_call 
+                (receiver 
+                  (literal 
+                    (string )))
+                (instance_method_call 
+                  (method_name ))))))))))
+
+==================
+instance method call with collection as argument
+==================
+f = {|arg1|};
+f.value(arg1: #[1,2,3]);
+---
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block 
+      (parameter_list 
+        (argument 
+          (identifier )))))
+  (function_call 
+    (receiver 
+      (variable 
+        (environment_var )))
+    (instance_method_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (collection 
+              (literal 
+                (number 
+                  (integer )))
+              (literal 
+                (number 
+                  (integer )))
+              (literal 
+                (number 
+                  (integer ))))))))))
+
+==================
+instance method call with string as argument
+==================
+f = {|arg1|};
+f.value(arg1: "hejhje hej");
+---
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block 
+      (parameter_list 
+        (argument 
+          (identifier )))))
+  (function_call 
+    (receiver 
+      (variable 
+        (environment_var )))
+    (instance_method_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (literal 
+              (string ))))))))
+
+==================
+instance method call with symbol as argument
+==================
+f = {|arg1|};
+f.value(arg1: \hej);
+---
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block 
+      (parameter_list 
+        (argument 
+          (identifier )))))
+  (function_call 
+    (receiver 
+      (variable 
+        (environment_var )))
+    (instance_method_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (literal 
+              (symbol (identifier) ))))))))

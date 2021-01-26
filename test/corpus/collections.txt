@@ -103,4 +103,43 @@ var event = (freq: 441.0, dur: 1.0);
             (number 
               (float ))))))))
 
+==================
+collection with type prefixed
+==================
+Bag[1,2,3];
 
+---
+(source_file 
+  (collection 
+    (collection_type )
+    (literal 
+      (number 
+        (integer )))
+    (literal 
+      (number 
+        (integer )))
+    (literal 
+      (number 
+        (integer)))))
+
+==================
+collection with type prefixed in variable declaration
+==================
+
+a = Set[1, 2, 3];
+---
+(source_file 
+  (variable_definition 
+    (variable 
+      (environment_var ))
+    (collection 
+      (collection_type )
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer ))))))

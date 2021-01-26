@@ -345,7 +345,10 @@ module.exports = grammar({
 
         collection: $ => seq(
             // Optional class prefix
-            // optional($._collection_types),
+            optional(choice(
+                alias($._collection_types, $.collection_type),
+                choice("#", "`")
+            )),
             // The actual collection
             choice(
                 seq("[", $._collection_sequence, "]"),

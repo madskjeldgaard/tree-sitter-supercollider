@@ -331,6 +331,10 @@
           "named": true
         },
         {
+          "type": "collection_type",
+          "named": true
+        },
+        {
           "type": "control_structure",
           "named": true
         },
@@ -348,6 +352,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "collection_type",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "comment",
@@ -1061,6 +1070,10 @@
     "named": false
   },
   {
+    "type": "#",
+    "named": false
+  },
+  {
     "type": "%",
     "named": false
   },
@@ -1302,6 +1315,10 @@
   },
   {
     "type": "^",
+    "named": false
+  },
+  {
+    "type": "`",
     "named": false
   },
   {
