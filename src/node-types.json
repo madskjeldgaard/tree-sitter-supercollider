@@ -73,6 +73,10 @@
             "named": true
           },
           {
+            "type": "code_block",
+            "named": true
+          },
+          {
             "type": "collection",
             "named": true
           },
@@ -185,6 +189,10 @@
             "named": true
           },
           {
+            "type": "code_block",
+            "named": true
+          },
+          {
             "type": "collection",
             "named": true
           },
@@ -260,6 +268,10 @@
           "named": true
         },
         {
+          "type": "code_block",
+          "named": true
+        },
+        {
           "type": "collection",
           "named": true
         },
@@ -308,6 +320,10 @@
         },
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
           "named": true
         },
         {
@@ -396,6 +412,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
           "named": true
         },
         {
@@ -496,6 +516,10 @@
             "named": true
           },
           {
+            "type": "code_block",
+            "named": true
+          },
+          {
             "type": "collection",
             "named": true
           },
@@ -576,6 +600,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
           "named": true
         },
         {
@@ -733,6 +761,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
           "named": true
         },
         {
@@ -894,6 +926,10 @@
           "named": true
         },
         {
+          "type": "code_block",
+          "named": true
+        },
+        {
           "type": "collection",
           "named": true
         },
@@ -936,6 +972,10 @@
         "types": [
           {
             "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "code_block",
             "named": true
           },
           {

@@ -71,6 +71,8 @@ module.exports = grammar({
     // Ignore whitespace and comments
     extras: $ => [/\s/, $.comment],
 
+    inline: $ => [$.keywords],
+
     // The name of a token that will match keywords for the purpose of the keyword extraction optimization.
     word: $ => $.identifier,
     conflicts: $ => [
@@ -78,7 +80,7 @@ module.exports = grammar({
         [$.variable_definition, $.function_definition],
         [$._collection_types, $.class],
         [$.collection, $.code_block],
-        [$.local_var, $.control_structure]
+        [$.local_var, $.if]
         // [$.instance_method_call, $.collection],
         // [$._expression_statement, $._object],
         // [$.function_block, $.function_definition, $.function_call],
@@ -110,6 +112,7 @@ module.exports = grammar({
 
         // These are the values that may be assigned to a variable or argument
         _object: $ => choice(
+            $.code_block,
             $.control_structure,
             $.literal,
             $.variable,
@@ -117,6 +120,8 @@ module.exports = grammar({
             $.binary_expression,
             $.collection,
         ),
+
+        keywords: $ => choice("if", "while"),
 
         /////////////////
         //  Functions  //
@@ -437,14 +442,14 @@ module.exports = grammar({
 
         if: $ => choice(
             // if (expr, trueFunc, falseFunc);
-            seq(
+            prec.right(seq(
                 "if",
                 "(",
                 field("expression", $._object),
                 field("true", seq(",", $.function_block)),
                 optional(field("false", seq(",", $.function_block))),
                 ")"
-            ),
+            )),
 
             // TODO: Should/could this be covered by the instance method rules?
             // expr.if (trueFunc, falseFunc);

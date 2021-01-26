@@ -114,19 +114,16 @@ true.if({ "hello".postln; });
 
 ---
 (source_file 
-  (code_block 
-    (binary_expression 
-      left: (literal 
-        (number 
-          (integer )))
-      right: (literal 
-        (number 
-          (integer )))))
   (control_structure 
     (if 
-      expression: (variable 
-        (local_var 
-          (identifier )))
+      expression: (code_block 
+        (binary_expression 
+          left: (literal 
+            (number 
+              (integer )))
+          right: (literal 
+            (number 
+              (integer )))))
       true: (function_block 
         (function_call 
           (receiver 
