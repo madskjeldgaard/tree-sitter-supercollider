@@ -35,363 +35,361 @@ builtins
 
 
 const PRECEDENCE = {
-	STRING: 2,
-  call: 14,
-  field: 13,
-  unary: 11,
-  multiplicative: 10,
-  additive: 9,
-  shift: 8,
-  bitand: 7,
-  bitxor: 6,
-  bitor: 5,
-  comparative: 4,
-  and: 3,
-  or: 2,
-  range: 1,
-  assign: 0,
-  closure: -1,
+    STRING: 2,
+    call: 14,
+    field: 13,
+    unary: 11,
+    multiplicative: 10,
+    additive: 9,
+    shift: 8,
+    bitand: 7,
+    bitxor: 6,
+    bitor: 5,
+    comparative: 4,
+    and: 3,
+    or: 2,
+    range: 1,
+    assign: 0,
+    closure: -1,
 }
 
 function sepBy1(sep, rule) {
-  return seq(rule, repeat(seq(sep, rule)))
+    return seq(rule, repeat(seq(sep, rule)))
 }
 
 function sepBy(sep, rule) {
-  return optional(sepBy1(sep, rule))
+    return optional(sepBy1(sep, rule))
 }
 
 module.exports = grammar({
-	name: 'supercollider',
+    name: 'supercollider',
 
-	// Ignore whitespace and comments
-	extras: $ => [/\s/, $.comment],
+    // Ignore whitespace and comments
+    extras: $ => [/\s/, $.comment],
 
-	// The name of a token that will match keywords for the purpose of the keyword extraction optimization.
-	word: $ => $.identifier,
-	conflicts: $ => [
-		[$.unnamed_argument, $.named_argument],
-		[$.variable_definition, $.function_definition],
-		[$._collection_types, $.class],
-		[$.instance_method_call, $.collection],
-		// [$._expression_statement, $._object],
-		// [$.function_block, $.function_definition, $.function_call],
-	],
+    // The name of a token that will match keywords for the purpose of the keyword extraction optimization.
+    word: $ => $.identifier,
+    conflicts: $ => [
+        [$.unnamed_argument, $.named_argument],
+        [$.variable_definition, $.function_definition],
+        [$._collection_types, $.class],
+        [$.instance_method_call, $.collection],
+        // [$._expression_statement, $._object],
+        // [$.function_block, $.function_definition, $.function_call],
+    ],
 
-	rules: {
+    rules: {
 
-		source_file: $ => repeat($._expression),
+        source_file: $ => repeat($._expression),
 
-		_expression: $ => choice(
-			$.code_block,
-			seq($._expression_statement, ";"),
-		),
+        _expression: $ => choice(
+            $.code_block,
+            seq($._expression_statement, ";"),
+        ),
 
-		_expression_statement: $ => choice(
-			$.function_block,
-			$.function_definition,
-			$.function_call,
-			$.variable_definition,
-			$.binary_expression,
-			// $.return_statement
-		),
+        _expression_statement: $ => choice(
+            $.function_block,
+            $.function_definition,
+            $.function_call,
+            $.variable_definition,
+            $.binary_expression,
+            // $.return_statement
+        ),
 
-		// These are the values that may be assigned to a variable or argument
-		_object: $ => choice(
-			$.literal,
-			$.variable,
-			$.function_block,
-			$.binary_expression,
-			$.collection
-		),
+        // These are the values that may be assigned to a variable or argument
+        _object: $ => choice(
+            $.literal,
+            $.variable,
+            $.function_block,
+            $.binary_expression,
+            $.collection
+        ),
 
-		/////////////////
-		//  Functions  //
-		/////////////////
-		
-		function_definition: $ => prec.left(1, seq(
-			$.variable,
-			'=',
-			$.function_block
-		)),
+        /////////////////
+        //  Functions  //
+        /////////////////
 
-		// TODO: Class vs instance/variable
-		function_call: $ => 
-		choice(
-			// Class method
-			seq(
-				$.class,
-				$.class_method_call
-			),
-			// Instance method
-			seq(
-				alias( $._object, $.object), 
-				$.instance_method_call
-			)
-		),
+        function_definition: $ => prec.left(1, seq(
+            $.variable,
+            '=',
+            $.function_block
+        )),
 
-		instance_method_call: $ => seq(
-			".", 
-			optional(alias($.identifier, $.method_name)), 
-			// Instance.method or Instance.method()
-			optional(seq("(", optional($.parameter_call_list), ")")),
-		),
+        // TODO: Class vs instance/variable
+        function_call: $ =>
+            choice(
+                // Class method
+                seq(
+                    $.class,
+                    $.class_method_call
+                ),
+                // Instance method
+                seq(
+                    alias($._object, $.object),
+                    $.instance_method_call
+                )
+            ),
 
-		class_method_call: $ => choice(
-			// Class.method - class method
-			seq(
-				".", 
-				alias($.identifier, $.class_method_name),
-				optional(seq("(", optional($.parameter_call_list), ")"))
-			),
-			// Class() - implicit .new
-			seq("(", optional($.parameter_call_list), ")")
-		),
+        instance_method_call: $ => seq(
+            ".",
+            optional(alias($.identifier, $.method_name)),
+            // Instance.method or Instance.method()
+            optional(seq("(", optional($.parameter_call_list), ")")),
+        ),
 
-		function_block: $ => seq(
-			'{',
-			optional($.parameter_list),
-			repeat($._expression),
-			'}'
-		),
+        class_method_call: $ => choice(
+            // Class.method - class method
+            seq(
+                ".",
+                alias($.identifier, $.class_method_name),
+                optional(seq("(", optional($.parameter_call_list), ")"))
+            ),
+            // Class() - implicit .new
+            seq("(", optional($.parameter_call_list), ")")
+        ),
+
+        function_block: $ => seq(
+            '{',
+            optional($.parameter_list),
+            repeat($._expression),
+            '}'
+        ),
 
 
-		// Definition of parameters in function
-		parameter_list: $ => choice(
-			seq('arg', sepBy(',', $.argument), ';'),
-			seq('|', sepBy(',', $.argument), '|')
-		),
+        // Definition of parameters in function
+        parameter_list: $ => choice(
+            seq('arg', sepBy(',', $.argument), ';'),
+            seq('|', sepBy(',', $.argument), '|')
+        ),
 
-		// For definition lists
-		argument: $ => seq($.identifier, optional(seq("=", $.literal))),
+        // For definition lists
+        argument: $ => seq($.identifier, optional(seq("=", $.literal))),
 
-		// When supplying arguments to a function call
-		parameter_call_list: $ => sepBy1(',', $.argument_calls),
+        // When supplying arguments to a function call
+        parameter_call_list: $ => sepBy1(',', $.argument_calls),
 
-		argument_calls: $ => choice(
-			$.named_argument,
-			$.unnamed_argument,
-		),
+        argument_calls: $ => choice(
+            $.named_argument,
+            $.unnamed_argument,
+        ),
 
-		unnamed_argument: $ => choice($.variable, $.literal),
-		named_argument: $ => prec.left(1, seq(
-			optional("\\"),
-			$.identifier,
-			optional(
-				seq(
-					choice('=', ':'), 
-					choice($.literal, $.variable)
-				)
-			)
-		)
-		),
+        unnamed_argument: $ => choice($.variable, $.literal),
+        named_argument: $ => prec.left(1, seq(
+            optional("\\"),
+            $.identifier,
+            optional(
+                seq(
+                    choice('=', ':'),
+                    choice($.literal, $.variable)
+                )
+            )
+        )),
 
-		///////////////////////
-		//  Define literal  //
-		///////////////////////
-		
-		literal: $ => choice(
-			$.number,
-			$.symbol,
-			$.char,
-			$.string,
-			$.bool
-		),
-		number: $ => choice(
-			$.integer, 
-			$.float,
-			$.hexinteger
-		),
-		integer: $=>/\d+/,
-		hexinteger: $=> /0x(\\d|[a-f]|[A-F])+/,
-		float: $=> /\d+\.\d+/,
-		symbol: $ => choice(
-			seq('\\', choice($.identifier, /[0-9]+/)),
-			seq("'", choice($.identifier, /[0-9]+/), "'"),
-		),
-		char: $ => /\$./,
+        ///////////////////////
+        //  Define literal  //
+        ///////////////////////
 
-		// Taken from https://github.com/tree-sitter/tree-sitter-javascript/blob/83f6a2d900a2dc245e4717ccd05c2a362443cd87/grammar.js#L808
-		string: $ => 
-			seq(
-				'"',
-				repeat(choice(
-					token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
-					$.escape_sequence
-				)),
-				'"'
-			),
+        literal: $ => choice(
+            $.number,
+            $.symbol,
+            $.char,
+            $.string,
+            $.bool
+        ),
+        number: $ => choice(
+            $.integer,
+            $.float,
+            $.hexinteger
+        ),
+        integer: $ => /\d+/,
+        hexinteger: $ => /0x(\\d|[a-f]|[A-F])+/,
+        float: $ => /\d+\.\d+/,
+        symbol: $ => choice(
+            seq('\\', choice($.identifier, /[0-9]+/)),
+            seq("'", choice($.identifier, /[0-9]+/), "'"),
+        ),
+        char: $ => /\$./,
 
-		bool: $ => choice("true", "false"),
+        // Taken from https://github.com/tree-sitter/tree-sitter-javascript/blob/83f6a2d900a2dc245e4717ccd05c2a362443cd87/grammar.js#L808
+        string: $ =>
+            seq(
+                '"',
+                repeat(choice(
+                    token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
+                    $.escape_sequence
+                )),
+                '"'
+            ),
 
-		// TODO: Is this necessary in SC?
-		escape_sequence: $ => token.immediate(seq(
-			'\\',
-			choice(
-				/[^xu0-7]/,
-				/[0-7]{1,3}/,
-				/x[0-9a-fA-F]{2}/,
-				/u[0-9a-fA-F]{4}/,
-				/u{[0-9a-fA-F]+}/
-			)
-		)),
+        bool: $ => choice("true", "false"),
 
-		//////////////
-		//  Blocks  //
-		//////////////
-		code_block: $ => seq(
-			'(',
-			repeat($._expression),
-			')'
-		),
+        // TODO: Is this necessary in SC?
+        escape_sequence: $ => token.immediate(seq(
+            '\\',
+            choice(
+                /[^xu0-7]/,
+                /[0-7]{1,3}/,
+                /x[0-9a-fA-F]{2}/,
+                /u[0-9a-fA-F]{4}/,
+                /u{[0-9a-fA-F]+}/
+            )
+        )),
 
-		/////////////////
-		//  Variables  //
-		/////////////////
-		
-		variable: $ => choice(
-			$.environment_var,
-			$.local_var,
-			$.classvar
-		),
+        //////////////
+        //  Blocks  //
+        //////////////
+        code_block: $ => seq(
+            '(',
+            repeat($._expression),
+            ')'
+        ),
 
-		// TODO: is this a good way to detect local variables in use?
-		local_var: $ => choice(
-			$.identifier,
-			seq('var', $.identifier)
-		),
-		classvar: $ => seq('classvar', $.identifier),
-		environment_var: $ => choice(
-			/[a-z]/,
-			seq('~', $.identifier),
-		),
+        /////////////////
+        //  Variables  //
+        /////////////////
 
-		variable_name: $ => $.identifier,
+        variable: $ => choice(
+            $.environment_var,
+            $.local_var,
+            $.classvar
+        ),
 
-		variable_definition: $ => seq($.variable, "=", $._object),
-		// naked_statement: $ => seq($._object),
+        // TODO: is this a good way to detect local variables in use?
+        local_var: $ => choice(
+            $.identifier,
+            seq('var', $.identifier)
+        ),
+        classvar: $ => seq('classvar', $.identifier),
+        environment_var: $ => choice(
+            /[a-z]/,
+            seq('~', $.identifier),
+        ),
 
-		///////////////
-		//  Classes  //
-		///////////////
+        variable_name: $ => $.identifier,
 
-		
-		// return_statement: $ => 
-		// choice(
-		// 	// $._end_of_function,
-		// 	seq("^", $._object),
-		// ),
-		// _end_of_function: $ => seq($._object, optional(";"), optional(/\n}/), "}"),
+        variable_definition: $ => seq($.variable, "=", $._object),
+        // naked_statement: $ => seq($._object),
 
-		////////////////
-		//  Comments  //
-		////////////////
+        ///////////////
+        //  Classes  //
+        ///////////////
 
-		comment: $ => choice(
-			$.line_comment,
-			$.block_comment
-		),
 
-		line_comment: $ => token(seq( '//', /.*/)),
+        // return_statement: $ => 
+        // choice(
+        // 	// $._end_of_function,
+        // 	seq("^", $._object),
+        // ),
+        // _end_of_function: $ => seq($._object, optional(";"), optional(/\n}/), "}"),
 
-		block_comment: $ => token(seq(
-			'/*',
-			/[^*]*\*+([^/*][^*]*\*+)*/,
-			'/'
-		)),
+        ////////////////
+        //  Comments  //
+        ////////////////
 
-		///////////////////
-		//  Collections  //
-		///////////////////
-		
-		collection: $ => seq(
-			// Optional class prefix
-			// optional($._collection_types),
-			// The actual collection
-			choice(
-				seq("[", $._collection_sequence, "]"),
-				seq("(", $._collection_sequence, ")"),
-			)
-		),
-		_collection_sequence: $ => sepBy1(",", choice(
-			$.associative_item,
-			$._object
-		)),
-		associative_item: $ => seq(
-				choice(
-					prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
-					seq($.identifier, ":")
-				), 
-				alias($._object, $.item)
-			),
+        comment: $ => choice(
+            $.line_comment,
+            $.block_comment
+        ),
 
-		_collection_types: $ => choice( $._unordered_collection_types, $._ordered_collection_types ),
-		_unordered_collection_types: $ => choice(
-			"Bag", 
-			"Dictionary", 
-			"Environment", 
-			"Event", 
-			"IdentityBag", 
-			"IdentityDictionary", 
-			"IdentitySet", 
-			"LazyEnvir", 
-			"MultiLevelIdentityDictionary", 
-			"ObjectTable", 
-			"Set", 
-			"TwoWayIdentityDictionary"
-		),
+        line_comment: $ => token(seq('//', /.*/)),
 
-		_ordered_collection_types: $ => choice(
-			"Array",
-			"Array2D",
-			"ArrayedCollection",
-			"DoubleArray",
-			"FloatArray",
-			"Int16Array",
-			"Int32Array",
-			"Int8Array",
-			"LinkedList",
-			"List",
-			"Order",
-			"OrderedIdentitySet",
-			"Pair",
-			"PriorityQueue",
-			"RawArray",
-			"SequenceableCollection",
-			"Signal",
-			"SortedList",
-			"SparseArray",
-			"String",
-			"SymbolArray",
-		),
+        block_comment: $ => token(seq(
+            '/*',
+            /[^*]*\*+([^/*][^*]*\*+)*/,
+            '/'
+        )),
 
-		///////////////////
-		//  Expressions  //
-		///////////////////
-		binary_expression: $ => {
-			const table = [
-				[PRECEDENCE.and, '&&'],
-				[PRECEDENCE.or, '||'],
-				[PRECEDENCE.bitand, '&'],
-				[PRECEDENCE.bitor, '|'],
-				[PRECEDENCE.bitxor, '^'],
-				[PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
-				[PRECEDENCE.shift, choice('<<', '>>')],
-				[PRECEDENCE.additive, choice('+', '-')],
-				[PRECEDENCE.multiplicative, choice('*', '/', '%')],
-				[PRECEDENCE.assign, '=']
-			];
+        ///////////////////
+        //  Collections  //
+        ///////////////////
 
-			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
-				field('left', $._object),
-				field('operator', operator),
-				field('right', $._object),
-			))));
-		},
+        collection: $ => seq(
+            // Optional class prefix
+            // optional($._collection_types),
+            // The actual collection
+            choice(
+                seq("[", $._collection_sequence, "]"),
+                seq("(", $._collection_sequence, ")"),
+            )
+        ),
+        _collection_sequence: $ => sepBy1(",", choice(
+            $.associative_item,
+            $._object
+        )),
+        associative_item: $ => seq(
+            choice(
+                prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
+                seq($.identifier, ":")
+            ),
+            alias($._object, $.item)
+        ),
 
-		class: $ => /[A-Z][a-zA-Z\d_]*/,
-		identifier: $ => /[a-z_][a-zA-Z\d_]*/,
+        _collection_types: $ => choice($._unordered_collection_types, $._ordered_collection_types),
+        _unordered_collection_types: $ => choice(
+            "Bag",
+            "Dictionary",
+            "Environment",
+            "Event",
+            "IdentityBag",
+            "IdentityDictionary",
+            "IdentitySet",
+            "LazyEnvir",
+            "MultiLevelIdentityDictionary",
+            "ObjectTable",
+            "Set",
+            "TwoWayIdentityDictionary"
+        ),
 
-	}
+        _ordered_collection_types: $ => choice(
+            "Array",
+            "Array2D",
+            "ArrayedCollection",
+            "DoubleArray",
+            "FloatArray",
+            "Int16Array",
+            "Int32Array",
+            "Int8Array",
+            "LinkedList",
+            "List",
+            "Order",
+            "OrderedIdentitySet",
+            "Pair",
+            "PriorityQueue",
+            "RawArray",
+            "SequenceableCollection",
+            "Signal",
+            "SortedList",
+            "SparseArray",
+            "String",
+            "SymbolArray",
+        ),
+
+        ///////////////////
+        //  Expressions  //
+        ///////////////////
+        binary_expression: $ => {
+            const table = [
+                [PRECEDENCE.and, '&&'],
+                [PRECEDENCE.or, '||'],
+                [PRECEDENCE.bitand, '&'],
+                [PRECEDENCE.bitor, '|'],
+                [PRECEDENCE.bitxor, '^'],
+                [PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
+                [PRECEDENCE.shift, choice('<<', '>>')],
+                [PRECEDENCE.additive, choice('+', '-')],
+                [PRECEDENCE.multiplicative, choice('*', '/', '%')],
+                [PRECEDENCE.assign, '=']
+            ];
+
+            return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
+                field('left', $._object),
+                field('operator', operator),
+                field('right', $._object),
+            ))));
+        },
+
+        class: $ => /[A-Z][a-zA-Z\d_]*/,
+        identifier: $ => /[a-z_][a-zA-Z\d_]*/,
+
+    }
 });
-
