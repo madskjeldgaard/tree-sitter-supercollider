@@ -1,4 +1,16 @@
 ==================
+single number
+==================
+1;
+
+---
+(source_file 
+  (literal 
+    (number 
+      (integer))))
+
+
+==================
 literal number
 ==================
 var number = 100;

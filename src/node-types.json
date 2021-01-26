@@ -256,6 +256,10 @@
           "named": true
         },
         {
+          "type": "collection",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -265,6 +269,14 @@
         },
         {
           "type": "function_definition",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "variable",
           "named": true
         },
         {
@@ -360,6 +372,10 @@
           "named": true
         },
         {
+          "type": "collection",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -372,7 +388,15 @@
           "named": true
         },
         {
+          "type": "literal",
+          "named": true
+        },
+        {
           "type": "parameter_list",
+          "named": true
+        },
+        {
+          "type": "variable",
           "named": true
         },
         {
@@ -403,7 +427,7 @@
           "named": true
         },
         {
-          "type": "object",
+          "type": "receiver",
           "named": true
         }
       ]
@@ -571,37 +595,6 @@
     }
   },
   {
-    "type": "object",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "collection",
-          "named": true
-        },
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "variable",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "parameter_call_list",
     "named": true,
     "fields": {},
@@ -632,6 +625,37 @@
     }
   },
   {
+    "type": "receiver",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "fields": {},
@@ -648,6 +672,10 @@
           "named": true
         },
         {
+          "type": "collection",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -657,6 +685,14 @@
         },
         {
           "type": "function_definition",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "variable",
           "named": true
         },
         {

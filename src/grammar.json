@@ -36,10 +36,6 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "function_block"
-        },
-        {
-          "type": "SYMBOL",
           "name": "function_definition"
         },
         {
@@ -48,11 +44,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "variable_definition"
+          "name": "_object"
         },
         {
           "type": "SYMBOL",
-          "name": "binary_expression"
+          "name": "variable_definition"
         }
       ]
     },
@@ -128,7 +124,7 @@
                 "name": "_object"
               },
               "named": true,
-              "value": "object"
+              "value": "receiver"
             },
             {
               "type": "SYMBOL",
@@ -1639,10 +1635,6 @@
     [
       "_collection_types",
       "class"
-    ],
-    [
-      "instance_method_call",
-      "collection"
     ]
   ],
   "externals": [],

@@ -145,7 +145,7 @@ Instance method (linlin on a float)
 ---
 (source_file 
   (function_call 
-    (object 
+    (receiver 
       (literal 
         (number 
           (float ))))

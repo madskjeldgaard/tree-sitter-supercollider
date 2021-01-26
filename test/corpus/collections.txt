@@ -5,7 +5,6 @@ integer array
 
 ---
 (source_file 
-    (object 
       (collection 
         (literal 
           (number 
@@ -18,7 +17,7 @@ integer array
             (integer )))
         (literal 
           (number 
-            (integer )))))
+            (integer ))))
     )
 
 ==================
@@ -28,7 +27,6 @@ Associative array
 
 ---
 (source_file 
-    (object 
       (collection 
         (associative_item 
           (symbol 
@@ -50,7 +48,7 @@ Associative array
           (item 
             (literal 
               (number 
-                (float )))))))
+                (float ))))))
     )
 
 
@@ -78,12 +76,7 @@ var array = [1,2,3,4];
       (literal 
         (number 
           (integer )))
-      (literal 
-        (number 
-          (integer )))
-      (literal 
-        (number 
-          (integer))))))
+      )))
 
 ==================
 Simple event

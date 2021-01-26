@@ -6,6 +6,7 @@
 //
 // TODO:
 // - Chainable commands
+// - Conditional
 // - Unary?
 // - Return statement should include function returns
 // - collection with name prefixed vs class clash
@@ -73,10 +74,15 @@ module.exports = grammar({
         [$.unnamed_argument, $.named_argument],
         [$.variable_definition, $.function_definition],
         [$._collection_types, $.class],
-        [$.instance_method_call, $.collection],
+        // [$.instance_method_call, $.collection],
         // [$._expression_statement, $._object],
         // [$.function_block, $.function_definition, $.function_call],
     ],
+
+    // supertypes: $ => [
+    //     $._object,
+    //     $._expression_statement,
+    // ],
 
     rules: {
 
@@ -88,11 +94,12 @@ module.exports = grammar({
         ),
 
         _expression_statement: $ => choice(
-            $.function_block,
+            // $.function_block,
             $.function_definition,
             $.function_call,
+            $._object,
             $.variable_definition,
-            $.binary_expression,
+            // $.binary_expression,
             // $.return_statement
         ),
 
@@ -125,7 +132,7 @@ module.exports = grammar({
                 ),
                 // Instance method
                 seq(
-                    alias($._object, $.object),
+                    alias($._object, $.receiver),
                     $.instance_method_call
                 )
             ),
