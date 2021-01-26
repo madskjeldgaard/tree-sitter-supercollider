@@ -81,7 +81,8 @@ SinOsc.ar(freq: 441, mul:0.25);
   (function_call 
     (class )
     (class_method_call 
-      (class_method_name )
+      (class_method_name ))
+    (class_method_call 
       (parameter_call_list 
         (argument_calls 
           (named_argument 
@@ -94,8 +95,7 @@ SinOsc.ar(freq: 441, mul:0.25);
             (identifier )
             (literal 
               (number 
-                (float))))))))
-)
+                (float )))))))))
 
 ==================
 Class method calls, implicit

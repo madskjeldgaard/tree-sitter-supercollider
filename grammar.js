@@ -228,14 +228,15 @@ module.exports = grammar({
             $.unnamed_argument,
         ),
 
-        unnamed_argument: $ => $._object,
+        // function call is added here to allow things like Array() in params
+        unnamed_argument: $ => choice($.function_call, $._object),
         named_argument: $ => prec.left(1, seq(
             optional("\\"),
             $.identifier,
             optional(
                 seq(
                     choice('=', ':'),
-                    $._object,
+                    choice($.function_call, $._object),
                 )
             )
         )),

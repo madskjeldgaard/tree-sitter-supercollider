@@ -6,6 +6,7 @@ Note: This is massively a work in progress!
 ## TODO:
 
 ### Parsing
+- implicit Class.new ( Class() ) in parameter lists
 - nil, thisProcess and similar "special" words
 - Syntax shortcuts: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- instance var setter method
@@ -47,6 +48,67 @@ These are found in `test/corpus` and named `<subject>.txt`. See [this part of th
 Run them like this:
 ```bash
 tree-sitter generate && tree-sitter test
+```
+
+## Parsing examples
+
+This call to a UGen
+```
+SinOsc.ar(freq: 441, mul:0.25);
+```
+Is parsed as the following node tree:
+
+```
+(source_file 
+  (function_call 
+    (class )
+    (class_method_call 
+      (class_method_name ))
+    (class_method_call 
+      (parameter_call_list 
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (literal 
+              (number 
+                (integer )))))
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (literal 
+              (number 
+                (float )))))))))
+```
+
+This simply function definition 
+```
+f = {arg oneArg=10, anotherArg=2; oneArg+anotherArg; };
+```
+is parsed as
+```
+(source_file 
+  (function_definition 
+    (variable 
+      (environment_var ))
+    (function_block 
+      (parameter_list 
+        (argument 
+          (identifier )
+          (literal 
+            (number 
+              (integer ))))
+        (argument 
+          (identifier )
+          (literal 
+            (number 
+              (integer )))))
+      (binary_expression 
+        left: (variable 
+          (local_var 
+            (identifier )))
+        right: (variable 
+          (local_var 
+            (identifier )))))))
 ```
 
 ## Resources

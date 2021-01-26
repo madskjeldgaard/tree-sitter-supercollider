@@ -640,8 +640,17 @@
       ]
     },
     "unnamed_argument": {
-      "type": "SYMBOL",
-      "name": "_object"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "function_call"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_object"
+        }
+      ]
     },
     "named_argument": {
       "type": "PREC_LEFT",
@@ -685,8 +694,17 @@
                     ]
                   },
                   {
-                    "type": "SYMBOL",
-                    "name": "_object"
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "function_call"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "_object"
+                      }
+                    ]
                   }
                 ]
               },
