@@ -5,6 +5,7 @@ Note: This is massively a work in progress!
 
 ## TODO:
 - Conditionals
+- Single expressions with no semicolon in a file
 - Chained methods
 - Syntax highlighting
 - A million other things

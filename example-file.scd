@@ -1,1 +1,3 @@
-var hlelo = { "yo".postln(); };
+(
+	2.do({|i| i.postln})
+)

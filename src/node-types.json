@@ -684,6 +684,26 @@
       "required": true,
       "types": [
         {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -879,6 +899,26 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
         {
           "type": "literal",
           "named": true

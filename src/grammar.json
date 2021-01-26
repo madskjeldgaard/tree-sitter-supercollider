@@ -616,17 +616,8 @@
       ]
     },
     "unnamed_argument": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "variable"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "literal"
-        }
-      ]
+      "type": "SYMBOL",
+      "name": "_object"
     },
     "named_argument": {
       "type": "PREC_LEFT",
@@ -670,17 +661,8 @@
                     ]
                   },
                   {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "SYMBOL",
-                        "name": "literal"
-                      },
-                      {
-                        "type": "SYMBOL",
-                        "name": "variable"
-                      }
-                    ]
+                    "type": "SYMBOL",
+                    "name": "_object"
                   }
                 ]
               },
