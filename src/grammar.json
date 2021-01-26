@@ -74,10 +74,6 @@
         {
           "type": "SYMBOL",
           "name": "binary_expression"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "collection"
         }
       ]
     },
@@ -103,17 +99,44 @@
       }
     },
     "function_call": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_value"
-          },
-          "named": true,
-          "value": "receiver"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "class"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "class_method_call"
+            }
+          ]
         },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_value"
+              },
+              "named": true,
+              "value": "object"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "instance_method_call"
+            }
+          ]
+        }
+      ]
+    },
+    "instance_method_call": {
+      "type": "SEQ",
+      "members": [
         {
           "type": "STRING",
           "value": "."
@@ -128,7 +151,7 @@
                 "name": "identifier"
               },
               "named": true,
-              "value": "method"
+              "value": "method_name"
             },
             {
               "type": "BLANK"
@@ -137,37 +160,115 @@
         },
         {
           "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "parameter_call_list"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "STRING",
+                  "value": ")"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "class_method_call": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "."
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              "named": true,
+              "value": "class_method_name"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "("
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "parameter_call_list"
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "STRING",
+                      "value": ")"
+                    }
+                  ]
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
           "members": [
             {
               "type": "STRING",
               "value": "("
             },
             {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "parameter_call_list"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "parameter_call_list"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
             },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
             {
               "type": "STRING",
               "value": ")"
-            },
-            {
-              "type": "BLANK"
             }
           ]
         }
@@ -815,17 +916,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_unordered_collection_types"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_ordered_collection_types"
-                }
-              ]
+              "type": "SYMBOL",
+              "name": "_collection_types"
             },
             {
               "type": "BLANK"
@@ -970,6 +1062,19 @@
         {
           "type": "SYMBOL",
           "name": "_value"
+        }
+      ]
+    },
+    "_collection_types": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_unordered_collection_types"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_ordered_collection_types"
         }
       ]
     },
@@ -1506,6 +1611,10 @@
         }
       ]
     },
+    "class": {
+      "type": "PATTERN",
+      "value": "[A-Z][a-zA-Z\\d_]*"
+    },
     "identifier": {
       "type": "PATTERN",
       "value": "[a-z_][a-zA-Z\\d_]*"
@@ -1529,6 +1638,10 @@
     [
       "variable_definition",
       "function_definition"
+    ],
+    [
+      "_collection_types",
+      "class"
     ]
   ],
   "externals": [],

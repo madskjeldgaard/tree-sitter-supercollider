@@ -5,8 +5,9 @@
 //
 //
 // TODO:
-// - Unary
-// Return statement should include function returns
+// - Unary?
+// - Return statement should include function returns
+// - collection with name prefixed vs class clash
 
 /*
 
@@ -69,6 +70,7 @@ module.exports = grammar({
 	conflicts: $ => [
 		[$.unnamed_argument, $.named_argument],
 		[$.variable_definition, $.function_definition],
+		[$._collection_types, $.class]
 		// [$.function_call, $.variable],
 		// [$._expression_statement, $._value],
 		// [$.function_block, $.function_definition, $.function_call],
@@ -99,7 +101,7 @@ module.exports = grammar({
 			$.variable,
 			$.function_block,
 			$.binary_expression,
-			$.collection
+			// $.collection
 		),
 
 		/////////////////
@@ -112,16 +114,39 @@ module.exports = grammar({
 			$.function_block
 		)),
 
+		// TODO: Class vs instance/variable
 		function_call: $ => 
+		choice(
+			// Class method
 			seq(
-			alias($._value, $.receiver), 
-			".", 
-			optional(alias($.identifier, $.method)), 
-			optional("("), 
-			optional($.parameter_call_list), 
-			optional(")")
+				$.class,
+				$.class_method_call
+			),
+			// Instance method
+			seq(
+				alias( $._value, $.object), 
+				$.instance_method_call
+			)
 		),
-		
+
+		instance_method_call: $ => seq(
+			".", 
+			optional(alias($.identifier, $.method_name)), 
+			// Instance.method or Instance.method()
+			optional(seq("(", optional($.parameter_call_list), ")")),
+		),
+
+		class_method_call: $ => choice(
+			// Class.method - class method
+			seq(
+				".", 
+				alias($.identifier, $.class_method_name),
+				optional(seq("(", optional($.parameter_call_list), ")"))
+			),
+			// Class() - implicit .new
+			seq("(", optional($.parameter_call_list), ")")
+		),
+
 		function_block: $ => seq(
 			'{',
 			optional($.parameter_list),
@@ -295,7 +320,7 @@ module.exports = grammar({
 // 		),
 		collection: $ => seq(
 			// Optional class prefix
-			optional(choice($._unordered_collection_types, $._ordered_collection_types)),
+			optional($._collection_types),
 			// The actual collection
 			choice(
 				seq("[", $._collection_sequence, "]"),
@@ -314,6 +339,7 @@ module.exports = grammar({
 				$._value
 			),
 
+		_collection_types: $ => choice( $._unordered_collection_types, $._ordered_collection_types ),
 		_unordered_collection_types: $ => choice(
 			"Bag", 
 			"Dictionary", 
@@ -377,7 +403,7 @@ module.exports = grammar({
 			))));
 		},
 
-		// class: $ => /[A-Z_][a-zA-Z\d_]*/,
+		class: $ => /[A-Z][a-zA-Z\d_]*/,
 		identifier: $ => /[a-z_][a-zA-Z\d_]*/,
 
 	}

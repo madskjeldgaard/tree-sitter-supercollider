@@ -70,3 +70,106 @@ f = {arg oneArg=10, anotherArg=2; oneArg+anotherArg; };
         right: (variable 
           (local_var 
             (identifier )))))))
+
+==================
+Class method calls, explicit
+==================
+SinOsc.ar(freq: 441, mul:0.25);
+Array.new;
+
+---
+(source_file 
+  (function_call 
+    (class )
+    (class_method_call 
+      (class_method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (literal 
+              (number 
+                (integer )))))
+        (argument_calls 
+          (named_argument 
+            (identifier )
+            (literal 
+              (number 
+                (float))))))))
+  
+  (function_call 
+    (class )
+    (class_method_call 
+      (class_method_name )))
+
+)
+
+==================
+Class method calls, implicit
+==================
+
+Synth();
+Synth(1,3,2);
+
+---
+(source_file 
+
+(function_call 
+	 (class )
+	 (class_method_call ))
+
+  (function_call 
+    (class )
+    (class_method_call 
+      (parameter_call_list 
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (integer )))))
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (integer )))))
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (integer )))))))))
+
+==================
+Instance method (linlin on a float)
+==================
+0.5.linlin(0.0,1.0,1.0,10.0);
+---
+(source_file 
+  (function_call 
+    (object 
+      (literal 
+        (number 
+          (float ))))
+    (instance_method_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (float )))))
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (float )))))
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (float )))))
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (number 
+                (float)))))))))
+

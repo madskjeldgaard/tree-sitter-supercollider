@@ -50,10 +50,6 @@
           "named": true
         },
         {
-          "type": "collection",
-          "named": true
-        },
-        {
           "type": "function_block",
           "named": true
         },
@@ -86,10 +82,6 @@
         "types": [
           {
             "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "collection",
             "named": true
           },
           {
@@ -197,10 +189,6 @@
             "named": true
           },
           {
-            "type": "collection",
-            "named": true
-          },
-          {
             "type": "function_block",
             "named": true
           },
@@ -220,6 +208,25 @@
     "type": "bool",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "class_method_call",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "class_method_name",
+          "named": true
+        },
+        {
+          "type": "parameter_call_list",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "classvar",
@@ -266,41 +273,6 @@
         },
         {
           "type": "variable_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "collection",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "associative_item",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "collection",
-          "named": true
-        },
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -388,15 +360,19 @@
       "required": true,
       "types": [
         {
-          "type": "method",
+          "type": "class",
           "named": true
         },
         {
-          "type": "parameter_call_list",
+          "type": "class_method_call",
           "named": true
         },
         {
-          "type": "receiver",
+          "type": "instance_method_call",
+          "named": true
+        },
+        {
+          "type": "object",
           "named": true
         }
       ]
@@ -416,6 +392,25 @@
         },
         {
           "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "instance_method_call",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "method_name",
+          "named": true
+        },
+        {
+          "type": "parameter_call_list",
           "named": true
         }
       ]
@@ -514,6 +509,33 @@
     }
   },
   {
+    "type": "object",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "parameter_call_list",
     "named": true,
     "fields": {},
@@ -538,37 +560,6 @@
       "types": [
         {
           "type": "argument",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "receiver",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "collection",
-          "named": true
-        },
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -691,10 +682,6 @@
       "types": [
         {
           "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "collection",
           "named": true
         },
         {
@@ -973,6 +960,14 @@
     "named": true
   },
   {
+    "type": "class",
+    "named": true
+  },
+  {
+    "type": "class_method_name",
+    "named": true
+  },
+  {
     "type": "classvar",
     "named": false
   },
@@ -1005,7 +1000,7 @@
     "named": true
   },
   {
-    "type": "method",
+    "type": "method_name",
     "named": true
   },
   {
