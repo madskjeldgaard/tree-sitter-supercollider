@@ -440,7 +440,7 @@ module.exports = grammar({
         ////////////////////
 
         control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
-            $.if, $.while
+            $.if, $.while, $.for, $.forby
         )),
 
         if: $ => choice(
@@ -498,16 +498,17 @@ module.exports = grammar({
             ),
         ),
 
-        // for ( startValue, endValue, function )
-        // startValue.for ( endValue, function )
-        // for: $ => choice(),
-
-        // forBy ( startValue, endValue, stepValue, function );
-        // startValue.forBy ( endValue, stepValue, function );
-        // forby: $ => choice(),
-
-        // do: $ => choice()
-
-
+        for: $ => choice(
+            // for ( startValue, endValue, function )
+            seq("for", "(", $.integer, ",", $.integer, ",", $.function_block, ")"),
+            // startValue.for ( endValue, function )
+            seq($.integer, ".for", "(", $.integer, ",", $.function_block, ")")
+        ),
+        forby: $ => choice(
+            // forBy ( startValue, endValue, stepValue, function );
+            seq("forBy", "(", $.integer, ",", $.integer, ",", $.integer, ",", $.function_block, ")"),
+            // startValue.forBy ( endValue, stepValue, function );
+            seq($.integer, ".forBy", "(", $.integer, ",", $.integer, ",", $.function_block, ")")
+        ),
     }
 });

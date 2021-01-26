@@ -4,11 +4,16 @@
 Note: This is massively a work in progress!
 
 ## TODO:
-- Conditionals
-- Single expressions with no semicolon in a file
+
+### Parsing
 - Chained methods
-- Syntax highlighting
-- A million other things
+- Conditionals:
+	- switch
+	- case
+- Single expressions with no semicolon in a file (this even legal sc?)
+
+### Syntax highlighting
+- All Syntax highlighting :)
 
 ## Try it out
 

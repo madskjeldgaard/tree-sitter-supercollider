@@ -185,4 +185,89 @@ func.while{func}
           (instance_method_call 
             (method_name )))))))
 
+==================
+for(start, end, func)
+==================
 
+for(1,10,{|i| i.postln});
+---
+(source_file 
+  (control_structure 
+    (for 
+      (integer )
+      (integer )
+      (function_block 
+        (parameter_list 
+          (argument 
+            (identifier )))
+        (function_call 
+          (receiver 
+            (variable 
+              (environment_var )))
+          (instance_method_call 
+            (method_name )))))))
+
+==================
+start.for(end, func)
+==================
+1.for(10,{|i| i.postln});
+---
+(source_file 
+  (control_structure 
+    (for 
+      (integer )
+      (integer )
+      (function_block 
+        (parameter_list 
+          (argument 
+            (identifier )))
+        (function_call 
+          (receiver 
+            (variable 
+              (environment_var )))
+          (instance_method_call 
+            (method_name )))))))
+
+==================
+start.forBy(end, step, func)
+==================
+1.forBy(2,10,{|i| i.postln});
+---
+(source_file 
+  (control_structure 
+    (forby 
+      (integer)
+      (integer)
+      (integer)
+      (function_block 
+        (parameter_list 
+          (argument 
+            (identifier )))
+        (function_call 
+          (receiver 
+            (variable 
+              (environment_var )))
+          (instance_method_call 
+            (method_name )))))))
+
+==================
+forBy(start, end, step, func)
+==================
+1.forBy(2,10,{|i| i.postln});
+---
+(source_file 
+  (control_structure 
+    (forby 
+      (integer )
+      (integer )
+      (integer )
+      (function_block 
+        (parameter_list 
+          (argument 
+            (identifier )))
+        (function_call 
+          (receiver 
+            (variable 
+              (environment_var )))
+          (instance_method_call 
+            (method_name )))))))

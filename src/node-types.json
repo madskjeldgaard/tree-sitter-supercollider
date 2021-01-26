@@ -386,6 +386,14 @@
       "required": true,
       "types": [
         {
+          "type": "for",
+          "named": true
+        },
+        {
+          "type": "forby",
+          "named": true
+        },
+        {
           "type": "if",
           "named": true
         },
@@ -406,6 +414,44 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "for",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "forby",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "integer",
           "named": true
         }
       ]
@@ -1122,6 +1168,14 @@
     "named": false
   },
   {
+    "type": ".for",
+    "named": false
+  },
+  {
+    "type": ".forBy",
+    "named": false
+  },
+  {
     "type": ".while",
     "named": false
   },
@@ -1356,6 +1410,14 @@
   {
     "type": "float",
     "named": true
+  },
+  {
+    "type": "for",
+    "named": false
+  },
+  {
+    "type": "forBy",
+    "named": false
   },
   {
     "type": "hexinteger",
