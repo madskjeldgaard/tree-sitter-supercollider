@@ -80,7 +80,8 @@ module.exports = grammar({
         [$.variable_definition, $.function_definition],
         [$._collection_types, $.class],
         [$.collection, $.code_block],
-        [$.local_var, $.if]
+        [$.local_var, $.if],
+        [$.switch]
         // [$.instance_method_call, $.collection],
         // [$._expression_statement, $._object],
         // [$.function_block, $.function_definition, $.function_call],
@@ -445,7 +446,7 @@ module.exports = grammar({
         ////////////////////
 
         control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
-            $.if, $.while, $.for, $.forby, $.case
+            $.if, $.while, $.for, $.forby, $.case, $.switch
         )),
 
         if: $ => choice(
@@ -520,6 +521,32 @@ module.exports = grammar({
             "case",
             repeat($.function_block),
             ";"
+        ),
+
+        switch: $ => choice(
+            seq(
+                "switch",
+                "(",
+                $._object,
+                ",",
+                sepBy(
+                    ",",
+                    seq($._object, ",", $.function_block)
+                ),
+                ",",
+                seq($._object, ",", $.function_block),
+                optional(seq(",", $.function_block)),
+                ")"
+            ),
+            prec.right(seq(
+                "switch",
+                $.code_block,
+                // "(", $._object, ")",
+                repeat(
+                    seq($._object, $.function_block)
+                ),
+                seq($._object, $.function_block),
+            ))
         ),
 
     }

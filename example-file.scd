@@ -1,6 +1,7 @@
 (
-x = case
-{ i == 1.5 } { \wrong }
-{ true }   { \wrong }
-{ i == 0 }   { \true };
+switch (201)
+    {1}   { \no }
+    {1.1} { \wrong }
+    {2}   { \wrong }
+    {0}   { \true };
 )

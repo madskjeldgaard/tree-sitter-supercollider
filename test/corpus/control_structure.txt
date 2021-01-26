@@ -318,3 +318,165 @@ x = case
             (literal 
               (symbol 
                 (identifier )))))))))
+
+==================
+simple switch with literal as test value
+==================
+(
+switch(0,
+	{1},   { \no },
+	{0},   { \true });
+)
+---
+(source_file 
+  (code_block 
+    (control_structure 
+      (switch 
+        (literal 
+          (number 
+            (integer )))
+        (function_block 
+          (literal 
+            (number 
+              (integer ))))
+        (function_block 
+          (literal 
+            (symbol 
+              (identifier ))))
+        (function_block 
+          (literal 
+            (number 
+              (integer ))))
+        (function_block 
+          (literal 
+            (symbol 
+              (identifier ))))))))
+
+============
+Weird kind of switch (no commas)
+============
+(
+switch (201)
+    {1}   { \no }
+    {1.1} { \wrong }
+    {2}   { \wrong }
+    {0}   { \true };
+)
+---
+
+(source_file 
+  (code_block 
+    (control_structure 
+      (switch 
+        (code_block 
+          (literal 
+            (number 
+              (integer ))))
+        (function_block 
+          (literal 
+            (number 
+              (integer ))))
+        (function_block 
+          (literal 
+            (symbol 
+              (identifier ))))
+        (function_block 
+          (literal 
+            (number 
+              (float ))))
+        (function_block 
+          (literal 
+            (symbol 
+              (identifier ))))
+        (function_block 
+          (literal 
+            (number 
+              (integer ))))
+        (function_block 
+          (literal 
+            (symbol 
+              (identifier ))))
+        (function_block 
+          (literal 
+            (number 
+              (integer ))))
+        (function_block 
+          (literal 
+            (symbol 
+              (identifier ))))))))
+
+===========
+Switch with variable.choose as input
+===========
+(
+y = [0,1,2,3];
+x = switch (y.choose)
+    {1}   { \no }
+    {2} { \wrong }
+    {3}   { \wrong }
+    {0}   { \true };
+)
+
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      (variable 
+        (environment_var ))
+      (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    (variable_definition 
+      (variable 
+        (environment_var ))
+      (control_structure 
+        (switch 
+          (code_block 
+            (function_call 
+              (receiver 
+                (variable 
+                  (environment_var )))
+              (instance_method_call 
+                (method_name ))))
+          (function_block 
+            (literal 
+              (number 
+                (integer ))))
+          (function_block 
+            (literal 
+              (symbol 
+                (identifier ))))
+          (function_block 
+            (literal 
+              (number 
+                (integer ))))
+          (function_block 
+            (literal 
+              (symbol 
+                (identifier ))))
+          (function_block 
+            (literal 
+              (number 
+                (integer ))))
+          (function_block 
+            (literal 
+              (symbol 
+                (identifier ))))
+          (function_block 
+            (literal 
+              (number 
+                (integer ))))
+          (function_block 
+            (literal 
+              (symbol 
+                (identifier )))))))))

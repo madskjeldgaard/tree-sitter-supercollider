@@ -417,6 +417,10 @@
           "named": true
         },
         {
+          "type": "switch",
+          "named": true
+        },
+        {
           "type": "while",
           "named": true
         }
@@ -951,6 +955,45 @@
     }
   },
   {
+    "type": "switch",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "symbol",
     "named": true,
     "fields": {},
@@ -1465,6 +1508,10 @@
   {
     "type": "method_name",
     "named": true
+  },
+  {
+    "type": "switch",
+    "named": false
   },
   {
     "type": "true",

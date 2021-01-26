@@ -6,8 +6,6 @@ Note: This is massively a work in progress!
 ## TODO:
 
 ### Parsing
-- Conditionals:
-	- switch
 - Single expressions with no semicolon in a file (this even legal sc?)
 
 ### Syntax highlighting
