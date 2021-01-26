@@ -218,14 +218,14 @@ module.exports = grammar({
             $.unnamed_argument,
         ),
 
-        unnamed_argument: $ => choice($.variable, $.literal),
+        unnamed_argument: $ => $._object,
         named_argument: $ => prec.left(1, seq(
             optional("\\"),
             $.identifier,
             optional(
                 seq(
                     choice('=', ':'),
-                    choice($.literal, $.variable)
+                    $._object,
                 )
             )
         )),
