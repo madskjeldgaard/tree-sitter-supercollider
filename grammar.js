@@ -140,7 +140,11 @@ module.exports = grammar({
                 // Class method
                 seq(
                     $.class,
-                    $.class_method_call
+                    repeat1(
+                        seq(
+                            $.class_method_call
+                        )
+                    )
                 ),
 
                 // Instance method (chainable)
@@ -161,7 +165,7 @@ module.exports = grammar({
             optional(seq("(", optional($.parameter_call_list), ")")),
         )),
 
-        class_method_call: $ => choice(
+        class_method_call: $ => prec.left(choice(
             // Class.method - class method
             seq(
                 ".",
@@ -170,7 +174,7 @@ module.exports = grammar({
             ),
             // Class() - implicit .new
             seq("(", optional($.parameter_call_list), ")")
-        ),
+        )),
 
         _expression_sequence: $ => seq(
             repeat(prec.right(1, seq($._expression_statement, ";"))),
