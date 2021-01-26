@@ -72,7 +72,7 @@ module.exports = grammar({
 		[$.variable_definition, $.function_definition],
 		[$._collection_types, $.class]
 		// [$.function_call, $.variable],
-		// [$._expression_statement, $._value],
+		// [$._expression_statement, $._object],
 		// [$.function_block, $.function_definition, $.function_call],
 	],
 
@@ -96,7 +96,7 @@ module.exports = grammar({
 		),
 
 		// These are the values that may be assigned to a variable or argument
-		_value: $ => choice(
+		_object: $ => choice(
 			$.literal,
 			$.variable,
 			$.function_block,
@@ -124,7 +124,7 @@ module.exports = grammar({
 			),
 			// Instance method
 			seq(
-				alias( $._value, $.object), 
+				alias( $._object, $.object), 
 				$.instance_method_call
 			)
 		),
@@ -267,8 +267,8 @@ module.exports = grammar({
 
 		variable_name: $ => $.identifier,
 
-		variable_definition: $ => seq($.variable, "=", $._value),
-		// naked_statement: $ => seq($._value),
+		variable_definition: $ => seq($.variable, "=", $._object),
+		// naked_statement: $ => seq($._object),
 
 		///////////////
 		//  Classes  //
@@ -278,9 +278,9 @@ module.exports = grammar({
 		// return_statement: $ => 
 		// choice(
 		// 	// $._end_of_function,
-		// 	seq("^", $._value),
+		// 	seq("^", $._object),
 		// ),
-		// _end_of_function: $ => seq($._value, optional(";"), optional(/\n}/), "}"),
+		// _end_of_function: $ => seq($._object, optional(";"), optional(/\n}/), "}"),
 
 		////////////////
 		//  Comments  //
@@ -316,7 +316,7 @@ module.exports = grammar({
 
 // 		collection_sequence: $ => sepBy(",", 
 // 			choice(
-// 			seq($.symbol, "->", $._value)
+// 			seq($.symbol, "->", $._object)
 // 		),
 		collection: $ => seq(
 			// Optional class prefix
@@ -329,14 +329,14 @@ module.exports = grammar({
 		),
 		_collection_sequence: $ => sepBy1(",", choice(
 			$.associative_item,
-			$._value
+			$._object
 		)),
 		associative_item: $ => seq(
 				choice(
 					prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
 					seq($.identifier, ":")
 				), 
-				$._value
+				$._object
 			),
 
 		_collection_types: $ => choice( $._unordered_collection_types, $._ordered_collection_types ),
@@ -397,9 +397,9 @@ module.exports = grammar({
 			];
 
 			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
-				field('left', $._value),
+				field('left', $._object),
 				field('operator', operator),
-				field('right', $._value),
+				field('right', $._object),
 			))));
 		},
 
