@@ -97,8 +97,11 @@ module.exports = grammar({
             $.variable,
             $.binary_expression,
             $.collection,
-            $.indexed_collection
+            $.indexed_collection,
+            $.partial
         ),
+
+        partial: $ => "_",
 
         // keywords: $ => choice("if", "while"),
 
