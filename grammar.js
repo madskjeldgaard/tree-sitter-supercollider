@@ -494,7 +494,7 @@ module.exports = grammar({
                 [PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
                 [PRECEDENCE.shift, choice('<<', '>>')],
                 [PRECEDENCE.additive, choice('+', '-')],
-                [PRECEDENCE.multiplicative, choice('*', '/', '%')],
+                [PRECEDENCE.multiplicative, choice('*', '/', '%', prec.left("**"))],
                 [PRECEDENCE.assign, '=']
             ];
 
