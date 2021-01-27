@@ -96,7 +96,7 @@ module.exports = grammar({
             $.variable,
             $.function_block,
             $.binary_expression,
-            $.collection,
+            $.collection
         ),
 
         // keywords: $ => choice("if", "while"),
@@ -319,7 +319,7 @@ module.exports = grammar({
         variable_definition: $ => seq(
             field("name", $.variable),
             "=",
-            field("value", $._object)
+            field("value", choice($.class, $._object))
         ),
         // naked_statement: $ => seq($._object),
 
