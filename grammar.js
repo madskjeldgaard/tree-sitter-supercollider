@@ -55,10 +55,10 @@ module.exports = grammar({
     conflicts: $ => [
         [$.unnamed_argument, $.named_argument],
         [$.variable_definition, $.function_definition],
-        [$._collection_types, $.class],
+        [$._collection_types, $.class, $._ordered_collection_types, $._unordered_collection_types],
         [$.collection, $.code_block],
         [$.local_var, $.if],
-        [$.switch]
+        [$.switch],
         // [$.instance_method_call, $.collection],
         // [$._expression_statement, $._object],
         // [$.function_block, $.function_definition, $.function_call],
@@ -91,10 +91,10 @@ module.exports = grammar({
         // These are the values that may be assigned to a variable or argument
         _object: $ => choice(
             $.code_block,
+            $.function_block,
             $.control_structure,
             $.literal,
             $.variable,
-            $.function_block,
             $.binary_expression,
             $.collection
         ),
@@ -113,7 +113,7 @@ module.exports = grammar({
 
         // TODO: Class vs instance/variable
         function_call: $ =>
-            choice(
+            prec.right(choice(
                 // Class method
                 seq(
                     $.class,
@@ -133,7 +133,7 @@ module.exports = grammar({
                         )
                     )
                 )
-            ),
+            )),
 
         instance_method_call: $ => prec.left(seq(
             ".",
@@ -144,11 +144,11 @@ module.exports = grammar({
 
         class_method_call: $ => prec.left(choice(
             // Class.method - class method
-            seq(
+            prec.left(seq(
                 ".",
                 field("name", alias($.identifier, $.class_method_name)),
                 optional(seq("(", optional($.parameter_call_list), ")"))
-            ),
+            )),
             // Class() - implicit .new
             seq("(", optional($.parameter_call_list), ")")
         )),
@@ -356,18 +356,31 @@ module.exports = grammar({
         //  Collections  //
         ///////////////////
 
-        collection: $ => seq(
+        collection: $ => prec.left(seq(
             // Optional class prefix
-            optional(choice(
-                alias($._collection_types, $.collection_type),
-                choice("#", "`")
-            )),
             // The actual collection
             choice(
-                seq("[", $._collection_sequence, "]"),
-                seq("(", $._paired_associative_sequence, ")"),
+                prec.left(seq(
+                    optional(
+                        choice(
+                            "#",
+                            "`",
+                            optional(
+                                alias($._collection_types, $.collection_type)
+                            )
+                        )
+                    ),
+                    "[",
+                    $._collection_sequence,
+                    "]"
+                )),
+                seq(
+                    "(",
+                    $._paired_associative_sequence,
+                    ")"
+                ),
             )
-        ),
+        )),
         _collection_sequence: $ => sepBy1(",", choice(
             $.associative_item,
             $._object
@@ -462,7 +475,9 @@ module.exports = grammar({
                 seq(
                     field("name", "if"),
                     "(",
-                    field("expression", $._object),
+                    field("expression", prec.left(
+                        choice($.function_call, $._object)
+                    )),
                     field("true", seq(",", $.function_block)),
                     optional(field("false", seq(",", $.function_block))),
                     ")"
@@ -474,7 +489,7 @@ module.exports = grammar({
             seq(
                 prec.left(1,
                     seq(
-                        field("expression", $._object),
+                        field("expression", choice($.function_call, $._object)),
                         field("name", seq(".", "if"))
                     )
                 ),
@@ -512,7 +527,7 @@ module.exports = grammar({
             )),
             // testFunc.while( bodyFunc );
             seq(
-                field("expression", $._object),
+                field("expression", choice($.function_call, $._object)),
                 field("name", ".while"),
                 field("body_func", $.function_block),
             ),
@@ -562,7 +577,7 @@ module.exports = grammar({
             seq(
                 field("name", "switch"),
                 "(",
-                $._object,
+                choice($.function_call, $._object),
                 ",",
                 sepBy(
                     ",",
@@ -578,9 +593,15 @@ module.exports = grammar({
                 $.code_block,
                 // "(", $._object, ")",
                 repeat(
-                    seq($._object, $.function_block)
+                    seq(
+                        choice($.function_call, $._object),
+                        $.function_block
+                    )
                 ),
-                seq($._object, $.function_block),
+                seq(
+                    choice($.function_call, $._object),
+                    $.function_block
+                ),
             ))
         ),
 
