@@ -1,13 +1,29 @@
-# [WIP] tree-sitter-supercollider
-[SuperCollider](https://supercollider.github.io/) grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter)
+# tree-sitter-supercollider
+[SuperCollider](https://supercollider.github.io/) grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter).
 
-Note: This is massively a work in progress!
+SuperCollider is a programming language for sound. Tree-sitter is a really smart code parser.
+
+This project defines a grammar (the "rules" of the language) for SuperCollider in a way that allows tree-sitter to do fast and very precise analysis of the code, while it is being typed. 
+
+This allows a very high level of precision in syntax highlighting (see below) and error detection making it faster and easier to write code. 
+
+Note: This grammar is experimental
+
+## Features
+
+![screenshot of grammar in action](/assets/screen1.png)
+
+- Scoped syntax highlighting (tree-sitter can tell the difference between local variables, environment variables and arguments inside of code blocks / functions)
+- Very precise error messages (if a node fails, tree-sitter can tell pretty easily where it failed and why - for example if you are missing a semi colon in the middle of a function)
+- Editor agnostic - tree-sitter grammars can be implemented in any editor via [tree-sitter's language bindings](https://tree-sitter.github.io/tree-sitter/using-parsers)
 
 ## TODO:
 
-### Parsing
-- Class method calls as object (and class names)
+This grammar is still a work in progress. Here are some of the things still missing:
+
+- Make function calls _objects
 - implicit Class.new ( Class() ) in parameter lists
+- Allow both Array[1,2,3] and Array.new() at the same time
 - Syntax shortcuts: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- instance var setter method
 	- trailing-block arguments
@@ -21,11 +37,8 @@ Note: This is massively a work in progress!
 		- Assign to array indices ala x[2] = "yo";
 	- index slicing in arrays / subranges
 - Classes
-	- Class return statements
+	- Class return statements - should these be demarcated somehow?
 - Single expressions with no semicolon in a file (this even legal sc?)
-
-### Syntax highlighting
-- All Syntax highlighting :)
 
 ## Try it out
 
@@ -33,13 +46,86 @@ See node tree parsing in action
 ```bash
 tree-sitter generate && tree-sitter parse example-file.scd
 ```
-
 See highlighting in action
 ```bash
 tree-sitter generate && tree-sitter highlight example-file.scd
 ```
 
-## Testing
+## Parsing examples
+
+Here are some examples of code parsing using this grammar where you can see the precision of tree-sitter in action.
+
+This call to a UGen
+```
+(
+SinOsc.ar(freq: 441, mul:0.25);
+)
+```
+Is parsed as the following node tree:
+
+```
+(source_file [0, 0] - [3, 0]
+  (code_block [0, 0] - [2, 1]
+    (function_call [1, 0] - [1, 30]
+      (class [1, 0] - [1, 6])
+      (class_method_call [1, 6] - [1, 9]
+        name: (class_method_name [1, 7] - [1, 9]))
+      (class_method_call [1, 9] - [1, 30]
+        (parameter_call_list [1, 10] - [1, 29]
+          (argument_calls [1, 10] - [1, 19]
+            (named_argument [1, 10] - [1, 19]
+              name: (identifier [1, 10] - [1, 14])
+              name: (literal [1, 16] - [1, 19]
+                (number [1, 16] - [1, 19]
+                  (integer [1, 16] - [1, 19])))))
+          (argument_calls [1, 21] - [1, 29]
+            (named_argument [1, 21] - [1, 29]
+              name: (identifier [1, 21] - [1, 24])
+              name: (literal [1, 25] - [1, 29]
+                (number [1, 25] - [1, 29]
+                  (float [1, 25] - [1, 29]))))))))))
+```
+This simple function definition 
+```
+(
+f = {
+	arg oneArg=10, anotherArg=2; 
+	oneArg+anotherArg 
+};
+)
+```
+is parsed as
+```
+(source_file [0, 0] - [6, 0]
+  (code_block [0, 0] - [5, 1]
+    (function_definition [1, 0] - [4, 1]
+      name: (variable [1, 0] - [1, 1]
+        (environment_var [1, 0] - [1, 1]
+          name: (identifier [1, 0] - [1, 1])))
+      value: (function_block [1, 4] - [4, 1]
+        (parameter_list [2, 1] - [2, 29]
+          (argument [2, 5] - [2, 14]
+            name: (identifier [2, 5] - [2, 11])
+            value: (literal [2, 12] - [2, 14]
+              (number [2, 12] - [2, 14]
+                (integer [2, 12] - [2, 14]))))
+          (argument [2, 16] - [2, 28]
+            name: (identifier [2, 16] - [2, 26])
+            value: (literal [2, 27] - [2, 28]
+              (number [2, 27] - [2, 28]
+                (integer [2, 27] - [2, 28])))))
+        (binary_expression [3, 1] - [3, 18]
+          left: (variable [3, 1] - [3, 7]
+            (local_var [3, 1] - [3, 7]
+              name: (identifier [3, 1] - [3, 7])))
+          right: (variable [3, 8] - [3, 18]
+            (local_var [3, 8] - [3, 18]
+              name: (identifier [3, 8] - [3, 18]))))))))
+```
+
+## Development
+
+### Testing
 
 Ideally, all rules in the grammar should be accompanied by at least one unit test. 
 
@@ -48,67 +134,6 @@ These are found in `test/corpus` and named `<subject>.txt`. See [this part of th
 Run them like this:
 ```bash
 tree-sitter generate && tree-sitter test
-```
-
-## Parsing examples
-
-This call to a UGen
-```
-SinOsc.ar(freq: 441, mul:0.25);
-```
-Is parsed as the following node tree:
-
-```
-(source_file 
-  (function_call 
-    (class )
-    (class_method_call 
-      (class_method_name ))
-    (class_method_call 
-      (parameter_call_list 
-        (argument_calls 
-          (named_argument 
-            (identifier )
-            (literal 
-              (number 
-                (integer )))))
-        (argument_calls 
-          (named_argument 
-            (identifier )
-            (literal 
-              (number 
-                (float )))))))))
-```
-
-This simply function definition 
-```
-f = {arg oneArg=10, anotherArg=2; oneArg+anotherArg; };
-```
-is parsed as
-```
-(source_file 
-  (function_definition 
-    (variable 
-      (environment_var ))
-    (function_block 
-      (parameter_list 
-        (argument 
-          (identifier )
-          (literal 
-            (number 
-              (integer ))))
-        (argument 
-          (identifier )
-          (literal 
-            (number 
-              (integer )))))
-      (binary_expression 
-        left: (variable 
-          (local_var 
-            (identifier )))
-        right: (variable 
-          (local_var 
-            (identifier )))))))
 ```
 
 ## Resources

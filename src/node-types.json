@@ -720,6 +720,10 @@
             "named": true
           },
           {
+            "type": "function_call",
+            "named": true
+          },
+          {
             "type": "literal",
             "named": true
           },
@@ -1143,6 +1147,10 @@
           "named": true
         },
         {
+          "type": "function_call",
+          "named": true
+        },
+        {
           "type": "literal",
           "named": true
         },
@@ -1261,6 +1269,10 @@
             "named": true
           },
           {
+            "type": "class",
+            "named": true
+          },
+          {
             "type": "code_block",
             "named": true
           },
@@ -1274,6 +1286,10 @@
           },
           {
             "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "function_call",
             "named": true
           },
           {
@@ -1324,6 +1340,10 @@
           },
           {
             "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "function_call",
             "named": true
           },
           {

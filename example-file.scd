@@ -5,16 +5,14 @@ x = \zymbol;
 
 thisProcess.openUDPPort(1234);
 
-if(nil.isNil, { "Nil!!!!".postln });
-
-while ( { i < 5 }, { i = i + 1; "boing \$".postln });
+while ( { i < 5 }, { i = i + 1; "boing an escape sequence: \$".postln });
 
 // Make a function
 f = {|aNumber, anotherNumber|
 	var aLocalVar = 1000;
 	var numIndices = 10;
 
-	numIndices.do{|index| 
+	10.do{|index| 
 		index.postln 
 	};
 
@@ -23,3 +21,4 @@ f = {|aNumber, anotherNumber|
 
 f.value(aNumber: 2, anotherNumber: 10);
 )
+

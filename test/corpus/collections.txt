@@ -1,4 +1,23 @@
 ==================
+class method call on collection type
+==================
+(
+var serve = Array.new;
+)
+
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (function_call 
+        (class )
+        (class_method_call 
+          name: (class_method_name ))))))
+
+==================
 integer array
 ==================
 [1,2,3,4];
