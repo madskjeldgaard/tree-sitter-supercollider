@@ -1,17 +1,3 @@
-// Good information here:
-//
-// The SCIDE lexer file:
-// https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp
-//
-//
-// TODO:
-//
-// - Chainable commands
-// - Conditional
-// - Unary?
-// - Return statement should include function returns
-// - collection with name prefixed vs class clash
-
 /*
 
 keywords 
@@ -23,15 +9,6 @@ keywords
 "var"
 
 builtins
-"inf"
-"nil"
-"thisFunction"
-"thisFunctionDef"
-"thisMethod"
-"thisProcess"
-"thisThread"
-"currentEnvironment"
-"topEnvironment"
 
 */
 
@@ -122,16 +99,16 @@ module.exports = grammar({
             $.collection,
         ),
 
-        keywords: $ => choice("if", "while"),
+        // keywords: $ => choice("if", "while"),
 
         /////////////////
         //  Functions  //
         /////////////////
 
         function_definition: $ => prec.left(1, seq(
-            $.variable,
+            field("name", $.variable),
             '=',
-            $.function_block
+            field("value", $.function_block)
         )),
 
         // TODO: Class vs instance/variable
@@ -160,7 +137,7 @@ module.exports = grammar({
 
         instance_method_call: $ => prec.left(seq(
             ".",
-            optional(alias($.identifier, $.method_name)),
+            field("name", optional(alias($.identifier, $.method_name))),
             // Instance.method or Instance.method()
             optional(seq("(", optional($.parameter_call_list), ")")),
         )),
@@ -169,7 +146,7 @@ module.exports = grammar({
             // Class.method - class method
             seq(
                 ".",
-                alias($.identifier, $.class_method_name),
+                field("name", alias($.identifier, $.class_method_name)),
                 optional(seq("(", optional($.parameter_call_list), ")"))
             ),
             // Class() - implicit .new
@@ -218,7 +195,10 @@ module.exports = grammar({
         ),
 
         // For definition lists
-        argument: $ => seq($.identifier, optional(seq("=", $.literal))),
+        argument: $ => seq(
+            field("name", $.identifier),
+            field("value", optional(seq("=", $.literal)))
+        ),
 
         // When supplying arguments to a function call
         parameter_call_list: $ => sepBy1(',', $.argument_calls),
@@ -230,16 +210,18 @@ module.exports = grammar({
 
         // function call is added here to allow things like Array() in params
         unnamed_argument: $ => choice($.function_call, $._object),
-        named_argument: $ => prec.left(1, seq(
-            optional("\\"),
-            $.identifier,
+        named_argument: $ => prec.left(1, field("name", seq(
+            field("name",
+                seq(optional("\\"),
+                    $.identifier)
+            ),
             optional(
                 seq(
                     choice('=', ':'),
                     choice($.function_call, $._object),
                 )
             )
-        )),
+        ))),
 
         ///////////////////////
         //  Define literal  //
@@ -302,23 +284,43 @@ module.exports = grammar({
         variable: $ => choice(
             $.environment_var,
             $.local_var,
-            $.classvar
+            $.classvar,
+            $.builtin_var
         ),
+        builtin_var: $ => field("name", choice(
+            "inf",
+            "nil",
+            "thisFunction",
+            "thisFunctionDef",
+            "thisMethod",
+            "thisProcess",
+            "thisThread",
+            "currentEnvironment",
+            "topEnvironment"
+        )),
 
         // TODO: is this a good way to detect local variables in use?
         local_var: $ => prec(PRECEDENCE.localvar, choice(
-            $.identifier,
-            seq('var', $.identifier)
+            field("name", $.identifier),
+            seq(
+                'var',
+                field("name", $.identifier)
+            )
         )),
-        classvar: $ => seq('classvar', $.identifier),
+
+        classvar: $ => seq('classvar', field("name", $.identifier)),
         environment_var: $ => choice(
-            /[a-z]/,
-            seq('~', $.identifier),
+            field("name", alias(/[a-z]/, $.identifier)),
+            field("name", seq('~', $.identifier)),
         ),
 
         variable_name: $ => $.identifier,
 
-        variable_definition: $ => seq($.variable, "=", $._object),
+        variable_definition: $ => seq(
+            field("name", $.variable),
+            "=",
+            field("value", $._object)
+        ),
         // naked_statement: $ => seq($._object),
 
         ///////////////
@@ -443,7 +445,7 @@ module.exports = grammar({
             ))));
         },
 
-        class: $ => /[A-Z][a-zA-Z\d_]*/,
+        class: $ => field("name", /[A-Z]+[a-zA-Z\d_]*/),
         identifier: $ => /[a-z_][a-zA-Z\d_]*/,
 
         ////////////////////
@@ -456,19 +458,26 @@ module.exports = grammar({
 
         if: $ => choice(
             // if (expr, trueFunc, falseFunc);
-            prec.right(seq(
-                "if",
-                "(",
-                field("expression", $._object),
-                field("true", seq(",", $.function_block)),
-                optional(field("false", seq(",", $.function_block))),
-                ")"
-            )),
+            prec.right(
+                seq(
+                    field("name", "if"),
+                    "(",
+                    field("expression", $._object),
+                    field("true", seq(",", $.function_block)),
+                    optional(field("false", seq(",", $.function_block))),
+                    ")"
+                )
+            ),
 
             // TODO: Should/could this be covered by the instance method rules?
             // expr.if (trueFunc, falseFunc);
             seq(
-                prec.left(1, seq(field("expression", $._object), seq(".", "if"))),
+                prec.left(1,
+                    seq(
+                        field("expression", $._object),
+                        field("name", seq(".", "if"))
+                    )
+                ),
                 choice(
                     // expr.if{truefunc}
                     field("true", $.function_block),
@@ -494,7 +503,7 @@ module.exports = grammar({
         while: $ => choice(
             // while ( testFunc, bodyFunc );
             prec.left(1, seq(
-                "while",
+                field("name", "while"),
                 "(",
                 field("test_func", $.function_block),
                 ",",
@@ -504,7 +513,7 @@ module.exports = grammar({
             // testFunc.while( bodyFunc );
             seq(
                 field("expression", $._object),
-                ".while",
+                field("name", ".while"),
                 field("body_func", $.function_block),
             ),
         ),
@@ -517,20 +526,41 @@ module.exports = grammar({
         ),
         forby: $ => choice(
             // forBy ( startValue, endValue, stepValue, function );
-            seq("forBy", "(", $.integer, ",", $.integer, ",", $.integer, ",", $.function_block, ")"),
+            seq(
+                field("name", "forBy"),
+                "(",
+                $.integer,
+                ",",
+                $.integer,
+                ",",
+                $.integer,
+                ",",
+                $.function_block,
+                ")"
+            ),
             // startValue.forBy ( endValue, stepValue, function );
-            seq($.integer, ".forBy", "(", $.integer, ",", $.integer, ",", $.function_block, ")")
+            seq(
+                $.integer,
+                field("name", ".forBy"),
+                "(",
+                $.integer,
+                ",",
+                $.integer,
+                ",",
+                $.function_block,
+                ")"
+            )
         ),
 
         case: $ => seq(
-            "case",
+            field("name", "case"),
             repeat($.function_block),
             ";"
         ),
 
         switch: $ => choice(
             seq(
-                "switch",
+                field("name", "switch"),
                 "(",
                 $._object,
                 ",",
@@ -544,7 +574,7 @@ module.exports = grammar({
                 ")"
             ),
             prec.right(seq(
-                "switch",
+                field("name", "switch"),
                 $.code_block,
                 // "(", $._object, ")",
                 repeat(

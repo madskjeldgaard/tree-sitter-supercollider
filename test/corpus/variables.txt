@@ -9,30 +9,30 @@ classvar classy = 4;
 ---
 (source_file 
   (variable_definition 
-    (variable 
-      (local_var 
+   name: (variable 
+      (local_var name: (identifier) 
+        ))
+    value: (literal 
+      (number 
+        (integer ))))
+  (variable_definition 
+   name: (variable 
+      (environment_var name: (identifier) ))
+    value: (literal 
+      (number 
+        (integer ))))
+  (variable_definition 
+   name: (variable 
+      (environment_var name:
         (identifier )))
-    (literal 
+    value: (literal 
       (number 
         (integer ))))
   (variable_definition 
-    (variable 
-      (environment_var ))
-    (literal 
-      (number 
-        (integer ))))
-  (variable_definition 
-    (variable 
-      (environment_var 
-        (identifier )))
-    (literal 
-      (number 
-        (integer ))))
-  (variable_definition 
-    (variable 
+   name: (variable 
       (classvar 
-        (identifier )))
-    (literal 
+        name: (identifier )))
+    value: (literal 
       (number 
         (integer)))))
 
@@ -46,29 +46,29 @@ var num3 = num1 + num2;
 ---
 (source_file 
   (variable_definition 
-    (variable 
-      (local_var 
+   name: (variable 
+      (local_var name: 
         (identifier )))
-    (literal 
+    value: (literal 
       (number 
         (integer ))))
   (variable_definition 
-    (variable 
-      (local_var 
+   name: (variable 
+      (local_var name: 
         (identifier )))
-    (literal 
+    value: (literal 
       (number 
         (integer ))))
   (variable_definition 
-    (variable 
-      (local_var 
+   name: (variable 
+      (local_var name: 
         (identifier )))
-    (binary_expression 
+    value: (binary_expression 
       left: (variable 
-        (local_var 
+        (local_var name: 
           (identifier )))
       right: (variable 
-        (local_var 
+        (local_var name: 
           (identifier))))))
 
 

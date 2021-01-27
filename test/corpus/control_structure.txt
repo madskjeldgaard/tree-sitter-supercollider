@@ -21,7 +21,7 @@ if(true, { "is true".postln; });
             (literal 
               (string )))
           (instance_method_call 
-            (method_name ))))))
+            name: (method_name ))))))
   (control_structure 
     (if 
       expression: (literal 
@@ -32,7 +32,7 @@ if(true, { "is true".postln; });
             (literal 
               (string )))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 if with two clauses
@@ -55,7 +55,7 @@ if(1 == 2, { "is true".postln; }, { 2; });
             (literal 
               (string )))
           (instance_method_call 
-            (method_name ))))
+            name: (method_name ))))
       false: (function_block 
         (literal 
           (number 
@@ -78,14 +78,14 @@ true.if({ "hello".postln; }, { "no".postln; });
             (literal 
               (string )))
           (instance_method_call 
-            (method_name ))))
+            name: (method_name ))))
       false: (function_block 
         (function_call 
           (receiver 
             (literal 
               (string )))
           (instance_method_call 
-            (method_name)))))))
+            name: (method_name)))))))
 
 ==================
 expr.if with one clause
@@ -105,7 +105,7 @@ true.if({ "hello".postln; });
             (literal 
               (string )))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 (expr).if with one clause
@@ -130,7 +130,7 @@ true.if({ "hello".postln; });
             (literal 
               (string )))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 
 ==================
@@ -156,7 +156,7 @@ while( {1 < 10;}, { "still counting".println;});
             (literal 
               (string )))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 func.while{func}
@@ -183,7 +183,7 @@ func.while{func}
             (literal 
               (string )))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 for(start, end, func)
@@ -198,14 +198,14 @@ for(1,10,{|i| i.postln});
       (integer )
       (function_block 
         (parameter_list 
-          (argument 
+          (argument name: 
             (identifier )))
         (function_call 
           (receiver 
             (variable 
-              (environment_var )))
+              (environment_var name: (identifier))))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 start.for(end, func)
@@ -219,14 +219,14 @@ start.for(end, func)
       (integer )
       (function_block 
         (parameter_list 
-          (argument 
+          (argument name: 
             (identifier )))
         (function_call 
           (receiver 
             (variable 
-              (environment_var )))
+              (environment_var name: (identifier))))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 start.forBy(end, step, func)
@@ -241,14 +241,14 @@ start.forBy(end, step, func)
       (integer)
       (function_block 
         (parameter_list 
-          (argument 
+          (argument name: 
             (identifier )))
         (function_call 
           (receiver 
             (variable 
-              (environment_var )))
+              (environment_var name: (identifier))))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 forBy(start, end, step, func)
@@ -263,14 +263,14 @@ forBy(start, end, step, func)
       (integer )
       (function_block 
         (parameter_list 
-          (argument 
+          (argument name: 
             (identifier )))
         (function_call 
           (receiver 
             (variable 
-              (environment_var )))
+              (environment_var name: (identifier))))
           (instance_method_call 
-            (method_name )))))))
+            name: (method_name )))))))
 
 ==================
 case
@@ -284,15 +284,15 @@ x = case
 ---
 (source_file 
   (code_block 
-    (variable_definition 
+    (variable_definition name: 
       (variable 
-        (environment_var ))
-      (control_structure 
+        (environment_var name: (identifier)))
+      value: (control_structure 
         (case 
           (function_block 
             (binary_expression 
               left: (variable 
-                (environment_var ))
+                (environment_var name: (identifier)))
               right: (literal 
                 (number 
                   (float )))))
@@ -310,7 +310,7 @@ x = case
           (function_block 
             (binary_expression 
               left: (variable 
-                (environment_var ))
+                (environment_var name: (identifier)))
               right: (literal 
                 (number 
                   (integer )))))
@@ -420,10 +420,10 @@ x = switch (y.choose)
 ---
 (source_file 
   (code_block 
-    (variable_definition 
+    (variable_definition name:
       (variable 
-        (environment_var ))
-      (collection 
+        (environment_var name: (identifier)))
+      value: (collection 
         (literal 
           (number 
             (integer )))
@@ -436,18 +436,18 @@ x = switch (y.choose)
         (literal 
           (number 
             (integer )))))
-    (variable_definition 
-      (variable 
-        (environment_var ))
-      (control_structure 
+    (variable_definition name:
+      (variable
+        (environment_var name: (identifier)))
+      value: (control_structure 
         (switch 
           (code_block 
             (function_call 
               (receiver 
                 (variable 
-                  (environment_var )))
+                  (environment_var name: (identifier))))
               (instance_method_call 
-                (method_name ))))
+                name: (method_name ))))
           (function_block 
             (literal 
               (number 

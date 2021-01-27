@@ -6,8 +6,8 @@ Note: This is massively a work in progress!
 ## TODO:
 
 ### Parsing
+- Class method calls as object (and class names)
 - implicit Class.new ( Class() ) in parameter lists
-- nil, thisProcess and similar "special" words
 - Syntax shortcuts: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- instance var setter method
 	- trailing-block arguments

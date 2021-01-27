@@ -7,7 +7,7 @@ f = {};
 (source_file 
   (function_definition 
     (variable 
-      (environment_var ))
+      (environment_var (identifier)))
     (function_block )))
 
 ==================
@@ -19,26 +19,26 @@ f = {|oneArg=10, anotherArg=2| oneArg+anotherArg; };
 
 (source_file 
   (function_definition 
-    (variable 
-      (environment_var ))
-    (function_block 
+    name: (variable 
+      (environment_var name: (identifier)))
+    value: (function_block 
       (parameter_list 
-        (argument 
+        (argument name:
           (identifier )
-          (literal 
+          value: (literal 
             (number 
               (integer ))))
         (argument 
-          (identifier )
-          (literal 
+          name: (identifier )
+          value: (literal 
             (number 
               (integer )))))
       (binary_expression 
         left: (variable 
-          (local_var 
+          (local_var name:
             (identifier )))
         right: (variable 
-          (local_var 
+          (local_var name:
             (identifier )))))))
 ==================
 Add two numbers in function with arg list
@@ -49,27 +49,27 @@ f = {arg oneArg=10, anotherArg=2; oneArg+anotherArg; };
 
 (source_file 
   (function_definition 
-    (variable 
-      (environment_var ))
-    (function_block 
+    name: (variable 
+      (environment_var name: (identifier)))
+    value: (function_block 
       (parameter_list 
         (argument 
-          (identifier )
-          (literal 
+          name: (identifier )
+          value: (literal 
             (number 
               (integer ))))
         (argument 
-          (identifier )
-          (literal 
+          name: (identifier )
+          value: (literal 
             (number 
               (integer )))))
       (binary_expression 
         left: (variable 
           (local_var 
-            (identifier )))
+            name: (identifier )))
         right: (variable 
           (local_var 
-            (identifier )))))))
+            name: (identifier )))))))
 
 ==================
 Class method calls, explicit
@@ -175,7 +175,7 @@ f.value(arg1: { "hej".postln; });
 (source_file 
   (function_definition 
     (variable 
-      (environment_var ))
+      (environment_var (identifier)))
     (function_block 
       (parameter_list 
         (argument 
@@ -183,7 +183,7 @@ f.value(arg1: { "hej".postln; });
   (function_call 
     (receiver 
       (variable 
-        (environment_var )))
+        (environment_var (identifier))))
     (instance_method_call 
       (method_name )
       (parameter_call_list 
@@ -207,7 +207,7 @@ f.value(arg1: #[1,2,3]);
 (source_file 
   (function_definition 
     (variable 
-      (environment_var ))
+      (environment_var (identifier)))
     (function_block 
       (parameter_list 
         (argument 
@@ -215,7 +215,7 @@ f.value(arg1: #[1,2,3]);
   (function_call 
     (receiver 
       (variable 
-        (environment_var )))
+        (environment_var (identifier))))
     (instance_method_call 
       (method_name )
       (parameter_call_list 
@@ -242,7 +242,7 @@ f.value(arg1: "hejhje hej");
 (source_file 
   (function_definition 
     (variable 
-      (environment_var ))
+      (environment_var (identifier)))
     (function_block 
       (parameter_list 
         (argument 
@@ -250,7 +250,7 @@ f.value(arg1: "hejhje hej");
   (function_call 
     (receiver 
       (variable 
-        (environment_var )))
+        (environment_var (identifier))))
     (instance_method_call 
       (method_name )
       (parameter_call_list 
@@ -269,7 +269,7 @@ f.value(arg1: \hej);
 (source_file 
   (function_definition 
     (variable 
-      (environment_var ))
+      (environment_var (identifier)))
     (function_block 
       (parameter_list 
         (argument 
@@ -277,7 +277,7 @@ f.value(arg1: \hej);
   (function_call 
     (receiver 
       (variable 
-        (environment_var )))
+        (environment_var (identifier))))
     (instance_method_call 
       (method_name )
       (parameter_call_list 
@@ -322,14 +322,14 @@ a.pow(2).nextPowerOfThree;
 (source_file 
   (variable_definition 
     (variable 
-      (environment_var ))
+      (environment_var (identifier)))
     (literal 
       (number 
         (integer ))))
   (function_call 
     (receiver 
       (variable 
-        (environment_var )))
+        (environment_var (identifier))))
     (instance_method_call 
       (method_name )
       (parameter_call_list 
