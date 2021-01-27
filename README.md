@@ -24,15 +24,16 @@ This grammar is still a work in progress. Here are some of the things still miss
 
 - implicit Class.new ( Class() ) in parameter lists
 - Allow both Array[1,2,3] and Array.new() at the same time
-- Syntax shortcuts: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
+- Syntax shortcuts / esoteric stuff: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
+	- selector (method name) as a binary operator
 	- trailing-block arguments
-	- partial application
 	- selectors for binary operators
 	- list comprehensions
-	- a ref \`
+	- Ref using the \` shorthand
+	- be able to parse `(:1..) select: _.isPrime nextN: 10;` properly
+	- multiple assignment
 - Classes
 	- Class return statements - should these be demarcated somehow?
-
 - Make function calls _objects
 - Single expressions with no semicolon in a file (this even legal sc?)
 
