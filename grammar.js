@@ -250,11 +250,13 @@ module.exports = grammar({
             $.string,
             $.bool
         ),
+
         number: $ => choice(
             $.integer,
             $.float,
             $.hexinteger
         ),
+
         integer: $ => /\d+/,
         hexinteger: $ => /0x(\\d|[a-f]|[A-F])+/,
         float: $ => /\d+\.\d+/,
@@ -288,10 +290,6 @@ module.exports = grammar({
                 /u{[0-9a-fA-F]+}/
             )
         )),
-
-        //////////////
-        //  Blocks  //
-        //////////////
 
         /////////////////
         //  Variables  //
@@ -376,6 +374,7 @@ module.exports = grammar({
             // Optional class prefix
             // The actual collection
             choice(
+                $.arithmetic_series,
                 prec.left(seq(
                     optional(
                         choice(
@@ -397,11 +396,14 @@ module.exports = grammar({
                 ),
             )
         )),
+
         _collection_sequence: $ => sepBy1(",", choice(
             $.associative_item,
             $._object
         )),
+
         _paired_associative_sequence: $ => sepBy1(",", $.associative_item),
+
         associative_item: $ => seq(
             choice(
                 prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
@@ -452,7 +454,11 @@ module.exports = grammar({
 
         indexed_collection: $ => seq(
             $.variable,
-            "[",
+            repeat($._index),
+            $._index
+        ),
+
+        _index: $ => seq("[",
             field("index", choice(
                 $.literal,
                 // Subrange
@@ -463,6 +469,16 @@ module.exports = grammar({
                 )
             )),
             "]"
+        ),
+
+        arithmetic_series: $ => seq(
+            "(",
+            choice(
+                seq($.number, ",", $.number, "..", $.number),
+                seq("..", $.number),
+                seq($.number, "..", $.number),
+            ),
+            ")"
         ),
 
         ///////////////////
