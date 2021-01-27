@@ -1,4 +1,28 @@
 ==================
+function call in if expression
+==================
+(
+if(nil.isNil, { "hello".postln });
+)
+---
+(source_file 
+  (code_block 
+    (control_structure 
+      (if 
+        expression: (function_call 
+          (receiver 
+            (variable 
+              (builtin_var )))
+          (instance_method_call 
+            name: (method_name )))
+        true: (function_block 
+          (function_call 
+            (receiver 
+              (literal 
+                (string )))
+            (instance_method_call 
+              name: (method_name ))))))))
+==================
 if with one clause
 ==================
 if(1 == 1, { "is true".postln; });
