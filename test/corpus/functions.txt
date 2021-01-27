@@ -1,4 +1,29 @@
 ==================
+instance variable setter method
+==================
+(
+s.options.blockSize_(256);
+)
+---
+(source_file 
+  (code_block 
+    (function_call 
+      (receiver 
+        (variable 
+          (environment_var 
+            name: (identifier ))))
+      (instance_method_call 
+        name: (method_name ))
+      (instance_method_call 
+        name: (method_name )
+        (parameter_call_list 
+          (argument_calls 
+            (unnamed_argument 
+              (literal 
+                (number 
+                  (integer ))))))))))
+
+==================
 class method call explicit
 ==================
 
