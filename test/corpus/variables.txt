@@ -1,4 +1,19 @@
 ==================
+class alias in environment var
+==================
+(
+s = Server;
+)
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (environment_var 
+          name: (identifier )))
+      value: (class ))))
+
+==================
 variable types
 ==================
 var localvar = 1;
