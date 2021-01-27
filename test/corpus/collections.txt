@@ -1,4 +1,53 @@
 ==================
+arithmetic series (1.0, 1.0..2.0)
+==================
+
+(
+(1.0, 1.1 .. 2.0)
+)
+---
+(source_file 
+  (code_block 
+    (collection 
+      (arithmetic_series 
+        (number 
+          (float ))
+        (number 
+          (float ))
+        (number 
+          (float ))))))
+
+==================
+arithmetic series (..1)
+==================
+(
+(..1)
+)
+---
+(source_file 
+  (code_block 
+    (collection 
+      (arithmetic_series 
+        (number 
+          (integer ))))))
+
+==================
+arithmetic series (1..10)
+==================
+(
+(1..10)
+)
+---
+(source_file 
+  (code_block 
+    (collection 
+      (arithmetic_series 
+        (number 
+          (integer ))
+        (number 
+          (integer ))))))
+
+==================
 index_collection multidimensional array
 ==================
 (
