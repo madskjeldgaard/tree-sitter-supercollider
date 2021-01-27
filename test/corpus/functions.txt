@@ -1,4 +1,80 @@
 ==================
+function call in binary operator
+==================
+(
+var sig = sig * EnvGen.kr(
+	Env([0.0,1.0,1.0,0], [fadeIn, fadeOut], releaseNode: 2),  
+	gate: killgate,  
+	doneAction: 2
+);
+)
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (binary_expression 
+        left: (variable 
+          (local_var 
+            name: (identifier )))
+        right: (function_call 
+          (class )
+          (class_method_call 
+            name: (class_method_name ))
+          (class_method_call 
+            (parameter_call_list 
+              (argument_calls 
+                (unnamed_argument 
+                  (function_call 
+                    (class )
+                    (class_method_call 
+                      (parameter_call_list 
+                        (argument_calls 
+                          (unnamed_argument 
+                            (collection 
+                              (literal 
+                                (number 
+                                  (float )))
+                              (literal 
+                                (number 
+                                  (float )))
+                              (literal 
+                                (number 
+                                  (float )))
+                              (literal 
+                                (number 
+                                  (integer ))))))
+                        (argument_calls 
+                          (unnamed_argument 
+                            (collection 
+                              (variable 
+                                (local_var 
+                                  name: (identifier )))
+                              (variable 
+                                (local_var 
+                                  name: (identifier ))))))
+                        (argument_calls 
+                          (named_argument 
+                            name: (identifier )
+                            name: (literal 
+                              (number 
+                                (integer ))))))))))
+              (argument_calls 
+                (named_argument 
+                  name: (identifier )
+                  name: (variable 
+                    (local_var 
+                      name: (identifier )))))
+              (argument_calls 
+                (named_argument 
+                  name: (identifier )
+                  name: (literal 
+                    (number 
+                      (integer ))))))))))))
+
+==================
 instance variable setter method
 ==================
 (

@@ -517,9 +517,9 @@ module.exports = grammar({
             ];
 
             return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
-                field('left', $._object),
+                field('left', choice($.function_call, $._object)),
                 field('operator', operator),
-                field('right', $._object),
+                field('right', choice($.function_call, $._object)),
             ))));
         },
 

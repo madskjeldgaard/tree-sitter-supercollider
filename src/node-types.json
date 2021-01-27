@@ -115,6 +115,10 @@
             "named": true
           },
           {
+            "type": "function_call",
+            "named": true
+          },
+          {
             "type": "indexed_collection",
             "named": true
           },
@@ -240,6 +244,10 @@
           },
           {
             "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "function_call",
             "named": true
           },
           {
