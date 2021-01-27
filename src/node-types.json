@@ -49,6 +49,21 @@
     }
   },
   {
+    "type": "arithmetic_series",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "associative_item",
     "named": true,
     "fields": {},
@@ -100,7 +115,15 @@
             "named": true
           },
           {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
             "named": true
           },
           {
@@ -131,6 +154,10 @@
           },
           {
             "type": "*",
+            "named": false
+          },
+          {
+            "type": "**",
             "named": false
           },
           {
@@ -216,7 +243,15 @@
             "named": true
           },
           {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
             "named": true
           },
           {
@@ -390,7 +425,15 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -399,6 +442,10 @@
         },
         {
           "type": "variable_definition",
+          "named": true
+        },
+        {
+          "type": "variable_definition_sequence",
           "named": true
         }
       ]
@@ -412,6 +459,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "arithmetic_series",
+          "named": true
+        },
         {
           "type": "associative_item",
           "named": true
@@ -441,7 +492,15 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -620,11 +679,23 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
           "named": true
         },
         {
+          "type": "method_name",
+          "named": true
+        },
+        {
           "type": "parameter_list",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -633,6 +704,10 @@
         },
         {
           "type": "variable_definition",
+          "named": true
+        },
+        {
+          "type": "variable_definition_sequence",
           "named": true
         }
       ]
@@ -656,6 +731,10 @@
         },
         {
           "type": "instance_method_call",
+          "named": true
+        },
+        {
+          "type": "instance_variable_setter_call",
           "named": true
         },
         {
@@ -724,7 +803,15 @@
             "named": true
           },
           {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
             "named": true
           },
           {
@@ -778,7 +865,67 @@
     }
   },
   {
+    "type": "indexed_collection",
+    "named": true,
+    "fields": {
+      "index": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "..",
+            "named": false
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "instance_method_call",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "method_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "parameter_call_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "instance_variable_setter_call",
     "named": true,
     "fields": {
       "name": {
@@ -832,7 +979,15 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -938,7 +1093,15 @@
             "named": true
           },
           {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
             "named": true
           },
           {
@@ -1003,6 +1166,11 @@
     }
   },
   {
+    "type": "partial",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "receiver",
     "named": true,
     "fields": {},
@@ -1031,7 +1199,15 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -1078,7 +1254,15 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -1087,6 +1271,10 @@
         },
         {
           "type": "variable_definition",
+          "named": true
+        },
+        {
+          "type": "variable_definition_sequence",
           "named": true
         }
       ]
@@ -1151,7 +1339,15 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -1209,7 +1405,15 @@
           "named": true
         },
         {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "partial",
           "named": true
         },
         {
@@ -1293,7 +1497,15 @@
             "named": true
           },
           {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
             "named": true
           },
           {
@@ -1302,6 +1514,25 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "variable_definition_sequence",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "variable",
+          "named": true
+        },
+        {
+          "type": "variable_definition",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1347,7 +1578,15 @@
             "named": true
           },
           {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
             "named": true
           },
           {
@@ -1423,6 +1662,10 @@
     "named": false
   },
   {
+    "type": "**",
+    "named": false
+  },
+  {
     "type": "+",
     "named": false
   },
@@ -1440,6 +1683,10 @@
   },
   {
     "type": ".",
+    "named": false
+  },
+  {
+    "type": "..",
     "named": false
   },
   {
@@ -1644,6 +1891,10 @@
   },
   {
     "type": "^",
+    "named": false
+  },
+  {
+    "type": "_",
     "named": false
   },
   {

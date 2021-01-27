@@ -23,6 +23,7 @@ Note: This grammar is experimental
 This grammar is still a work in progress. Here are some of the things still missing:
 
 - implicit Class.new ( Class() ) in parameter lists
+- assign to multiple variables
 - Allow both Array[1,2,3] and Array.new() at the same time
 - Syntax shortcuts / esoteric stuff: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- selector (method name) as a binary operator
@@ -32,6 +33,7 @@ This grammar is still a work in progress. Here are some of the things still miss
 	- Ref using the \` shorthand
 	- be able to parse `(:1..) select: _.isPrime nextN: 10;` properly
 	- multiple assignment
+	- special partial operator situation: (a: _);
 - Classes
 	- Class return statements - should these be demarcated somehow?
 - Make function calls _objects

@@ -31,6 +31,8 @@ const PRECEDENCE = {
     assign: 0,
     controlstruct: 3,
     localvar: 4,
+    vardef: 3,
+    vardef_sequence: 2,
     closure: -1,
 }
 
@@ -59,6 +61,7 @@ module.exports = grammar({
         [$.collection, $.code_block],
         [$.local_var, $.if],
         [$.switch],
+        [$.variable_definition_sequence]
         // [$.instance_method_call, $.collection],
         // [$._expression_statement, $._object],
         // [$.function_block, $.function_definition, $.function_call],
@@ -84,6 +87,7 @@ module.exports = grammar({
             $.function_call,
             $._object,
             $.variable_definition,
+            $.variable_definition_sequence,
             // $.binary_expression,
             // $.return_statement
         ),
@@ -187,6 +191,11 @@ module.exports = grammar({
         ),
 
         function_block: $ => choice(
+            $._function_content,
+            prec.left(seq(alias($.identifier, $.method_name), $._function_content)),
+        ),
+
+        _function_content: $ => choice(
             seq(
                 '{',
                 optional($.parameter_list),
@@ -333,11 +342,17 @@ module.exports = grammar({
 
         variable_name: $ => $.identifier,
 
-        variable_definition: $ => seq(
+        variable_definition_sequence: $ => prec(PRECEDENCE.vardef_sequence,
+            seq(
+                sepBy(",", choice($.variable_definition, $.variable)),
+                ",", choice($.variable_definition, $.variable)
+            )
+        ),
+        variable_definition: $ => prec(PRECEDENCE.vardef, seq(
             field("name", $.variable),
             "=",
             field("value", choice($.class, $._object, $.function_call))
-        ),
+        )),
         // naked_statement: $ => seq($._object),
 
         ///////////////

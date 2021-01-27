@@ -1,4 +1,37 @@
 ==================
+multiple variable assignment
+==================
+
+(
+var v1, v2, v3=1000, v4=\yo;
+)
+
+---
+(source_file 
+  (code_block 
+    (variable_definition_sequence 
+      (variable 
+        (local_var 
+          name: (identifier )))
+      (variable 
+        (local_var 
+          name: (identifier )))
+      (variable_definition 
+        name: (variable 
+          (local_var 
+            name: (identifier )))
+        value: (literal 
+          (number 
+            (integer ))))
+      (variable_definition 
+        name: (variable 
+          (local_var 
+            name: (identifier )))
+        value: (literal 
+          (symbol 
+            (identifier )))))))
+
+==================
 class alias in environment var
 ==================
 (
