@@ -1,4 +1,106 @@
 ==================
+index_collection array[1..3]
+==================
+(
+var array = [1,2,3,4];
+array[1..3];
+)
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    (indexed_collection 
+      (variable 
+        (local_var 
+          name: (identifier )))
+      index: (integer )
+      index: (integer ))))
+
+==================
+index_collection array[1..]
+==================
+(
+var array = [1,2,3,4];
+array[..1];
+)
+---
+
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    (indexed_collection 
+      (variable 
+        (local_var 
+          name: (identifier )))
+      index: (integer ))))
+
+==================
+index_collection array[..1]
+==================
+(
+var array = [1,2,3,4];
+array[..1];
+)
+---
+
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    (indexed_collection 
+      (variable 
+        (local_var 
+          name: (identifier )))
+      index: (integer ))))
+
+==================
 class method call on collection type
 ==================
 (
