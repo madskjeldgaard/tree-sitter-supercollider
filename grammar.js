@@ -319,7 +319,7 @@ module.exports = grammar({
         variable_definition: $ => seq(
             field("name", $.variable),
             "=",
-            field("value", choice($.class, $._object))
+            field("value", choice($.class, $._object, $.function_call))
         ),
         // naked_statement: $ => seq($._object),
 
