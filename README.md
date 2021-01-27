@@ -22,23 +22,18 @@ Note: This grammar is experimental
 
 This grammar is still a work in progress. Here are some of the things still missing:
 
-- Make function calls _objects
 - implicit Class.new ( Class() ) in parameter lists
 - Allow both Array[1,2,3] and Array.new() at the same time
 - Syntax shortcuts: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
-	- instance var setter method
 	- trailing-block arguments
 	- partial application
 	- selectors for binary operators
 	- list comprehensions
 	- a ref \`
-- Collections
-	- (from(,step)..to) arithmetic series
-	- Array indices
-		- Assign to array indices ala x[2] = "yo";
-	- index slicing in arrays / subranges
 - Classes
 	- Class return statements - should these be demarcated somehow?
+
+- Make function calls _objects
 - Single expressions with no semicolon in a file (this even legal sc?)
 
 ## Try it out
