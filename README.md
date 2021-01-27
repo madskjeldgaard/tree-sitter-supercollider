@@ -7,6 +7,7 @@ This project defines a grammar (the "rules" of the language) for SuperCollider i
 
 This allows a very high level of precision in syntax highlighting (see below) and error detection making it faster and easier to write code. 
 
+## Status: Experimental
 Note: This grammar is experimental
 
 ## Features
