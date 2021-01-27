@@ -96,7 +96,8 @@ module.exports = grammar({
             $.literal,
             $.variable,
             $.binary_expression,
-            $.collection
+            $.collection,
+            $.indexed_collection
         ),
 
         // keywords: $ => choice("if", "while"),
@@ -128,9 +129,12 @@ module.exports = grammar({
                 seq(
                     alias($._object, $.receiver),
                     repeat1(
-                        seq(
-                            $.instance_method_call
+                        choice(
+                            $.instance_method_call,
+                            // This is already covered by the identifier rule, should it be more specific though?
+                            $.instance_variable_setter_call,
                         )
+
                     )
                 )
             )),
@@ -141,6 +145,18 @@ module.exports = grammar({
             // Instance.method or Instance.method()
             optional(seq("(", optional($.parameter_call_list), ")")),
         )),
+
+        // This is unused
+        instance_variable_setter_call: $ => prec.left(2,
+            seq(
+                ".",
+                field("name", optional(alias($.identifier, $.method_name))),
+                "_",
+                // Instance.method or Instance.method()
+                optional(seq("(", optional($.parameter_call_list), ")")),
+
+            )
+        ),
 
         class_method_call: $ => prec.left(choice(
             // Class.method - class method
@@ -432,6 +448,21 @@ module.exports = grammar({
             "SparseArray",
             "String",
             "SymbolArray",
+        ),
+
+        indexed_collection: $ => seq(
+            $.variable,
+            "[",
+            field("index", choice(
+                $.literal,
+                // Subrange
+                choice(
+                    seq($.integer, ".."),
+                    seq("..", $.integer),
+                    seq($.integer, "..", $.integer),
+                )
+            )),
+            "]"
         ),
 
         ///////////////////
