@@ -53,6 +53,10 @@
         {
           "type": "SYMBOL",
           "name": "variable_definition_sequence"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "duplicated_statement"
         }
       ]
     },
@@ -104,6 +108,35 @@
     "partial": {
       "type": "STRING",
       "value": "_"
+    },
+    "duplicated_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "duplicated_object",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_object"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "operator",
+          "content": {
+            "type": "STRING",
+            "value": "!"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "duplication_times",
+          "content": {
+            "type": "SYMBOL",
+            "name": "number"
+          }
+        }
+      ]
     },
     "function_definition": {
       "type": "PREC_LEFT",

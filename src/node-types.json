@@ -429,6 +429,10 @@
           "named": true
         },
         {
+          "type": "duplicated_statement",
+          "named": true
+        },
+        {
           "type": "function_block",
           "named": true
         },
@@ -594,6 +598,78 @@
     }
   },
   {
+    "type": "duplicated_statement",
+    "named": true,
+    "fields": {
+      "duplicated_object": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "code_block",
+            "named": true
+          },
+          {
+            "type": "collection",
+            "named": true
+          },
+          {
+            "type": "control_structure",
+            "named": true
+          },
+          {
+            "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variable",
+            "named": true
+          }
+        ]
+      },
+      "duplication_times": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "!",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "environment_var",
     "named": true,
     "fields": {
@@ -684,6 +760,10 @@
         },
         {
           "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "duplicated_statement",
           "named": true
         },
         {
@@ -959,6 +1039,10 @@
         },
         {
           "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "duplicated_statement",
           "named": true
         },
         {
@@ -1354,6 +1438,10 @@
         },
         {
           "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "duplicated_statement",
           "named": true
         },
         {
@@ -1817,6 +1905,10 @@
         ]
       }
     }
+  },
+  {
+    "type": "!",
+    "named": false
   },
   {
     "type": "!=",

@@ -85,6 +85,7 @@ module.exports = grammar({
             $._object,
             $.variable_definition,
             $.variable_definition_sequence,
+			$.duplicated_statement,
             // $.binary_expression,
             // $.return_statement
         ),
@@ -104,6 +105,11 @@ module.exports = grammar({
         ),
 
         partial: $ => "_",
+		duplicated_statement: $ => seq(
+			field("duplicated_object", $._object), 
+			field("operator","!"), 
+			field("duplication_times", $.number)
+		),
 
         // keywords: $ => choice("if", "while"),
 

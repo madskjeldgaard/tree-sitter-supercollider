@@ -1,4 +1,24 @@
 ====================
+Basic duplication
+====================
+
+(
+2!0xfff
+)
+
+---
+(source_file 
+  (code_block 
+    (duplicated_statement 
+      duplicated_object: (literal 
+        (number 
+          (integer )))
+      duplication_times: (number 
+        (hexinteger )))))
+
+
+
+====================
 partial: [a, b, _]
 ====================
 (
