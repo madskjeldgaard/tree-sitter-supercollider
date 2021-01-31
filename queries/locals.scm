@@ -16,9 +16,8 @@
 ; Definitions
 (argument name: (identifier) @local.definition) 
 
-(variable_definition
-  name: (variable (local_var (identifier))) 
-  @local.definition
-)
+;(variable_definition name: (identifier) @local.definition)
+;(variable_definition name: (variable (local_var(identifier))) @local.definition) 
+;(variable) @local.definition
 
 (identifier) @local.reference
