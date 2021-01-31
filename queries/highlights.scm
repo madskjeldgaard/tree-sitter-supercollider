@@ -1,24 +1,5 @@
 ; highlights.scm
-; See how nvim treesitter uses tags: https://github.com/nvim-treesitter/nvim-treesitter/blob/7edf1d1c2bfb4bdc53319494697ca2947920b69e/lua/nvim-treesitter/highlight.lua
-; Otherwise,
-;Available tags:
-;@constant
-;@function
-;@function.method
-;@variable
-;@variable.parameter
-;@variable.builtin
-;@property
-;@punctuation.bracket
-;@punctuation.delimiter
-;@punctuation.special
-;@keyword
-;@string
-;@string.special
-;@embedded
-;@constructor
-;@attribute
-;@escape
+; See this for full list: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md
 
 ; comments
 (comment) @comment
@@ -32,7 +13,7 @@
 ; Variables
 (local_var name: (identifier) @variable)
 (environment_var name:(identifier) @variable.builtin)
-(builtin_var) @constant
+(builtin_var) @constant.builtin
 
 ; (variable) @variable
 
@@ -51,7 +32,7 @@
         name: (class_method_name) @method)
 
 ; Classes
-(class) @keyword
+(class) @type
 
 ; Literals
 (number) @number
@@ -93,7 +74,7 @@
 ; "super"
 ; "this"
 "var"
-] @type
+] @type.builtin
 
 ; Brackets
 [
@@ -119,7 +100,7 @@
 (escape_sequence) @escape
 
 ; SinOsc.ar()!2
-;(duplicated_statement) @repeat
+(duplicated_statement) @repeat
 
 ; Builtins
 ; ((identifier) @variable.builtin
