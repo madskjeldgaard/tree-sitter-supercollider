@@ -57,14 +57,11 @@ module.exports = grammar({
     conflicts: $ => [
         [$.unnamed_argument, $.named_argument],
         [$.variable_definition, $.function_definition],
-        [$._collection_types, $.class, $._ordered_collection_types, $._unordered_collection_types],
         [$.collection, $.code_block],
         [$.local_var, $.if],
         [$.switch],
         [$.variable_definition_sequence],
-        // [$.instance_method_call, $.collection],
         [$._expression, $._object],
-        // [$.function_block, $.function_definition, $.function_call],
     ],
 
     // supertypes: $ => [
@@ -399,7 +396,7 @@ module.exports = grammar({
                             "#",
                             "`",
                             optional(
-                                alias($._collection_types, $.collection_type)
+                                alias($.class, $.collection_type)
                             )
                         )
                     ),
@@ -430,6 +427,7 @@ module.exports = grammar({
             alias($._object, $.item)
         ),
 
+		// These are unused at the moment
         _collection_types: $ => choice($._unordered_collection_types, $._ordered_collection_types),
         _unordered_collection_types: $ => choice(
             "Bag",
@@ -445,7 +443,6 @@ module.exports = grammar({
             "Set",
             "TwoWayIdentityDictionary"
         ),
-
         _ordered_collection_types: $ => choice(
             "Array",
             "Array2D",
