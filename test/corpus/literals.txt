@@ -1,4 +1,32 @@
 ==================
+2.0pi
+==================
+(
+2.0pi
+)
+---
+(source_file 
+  (code_block 
+    (literal 
+      (pi_statement 
+        (number 
+          (float ))))))
+
+==================
+2pi
+==================
+(
+2pi
+)
+---
+(source_file 
+  (code_block 
+    (literal 
+      (pi_statement 
+        (number 
+          (integer ))))))
+
+==================
 single number
 ==================
 1;

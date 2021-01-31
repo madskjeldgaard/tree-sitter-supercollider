@@ -260,9 +260,11 @@ function_block: $ => choice(
             $.symbol,
             $.char,
             $.string,
-            $.bool
+            $.bool,
+			$.pi_statement
         ),
 
+		pi_statement: $ => seq(optional($.number), "pi"),
         number: $ => choice(
             $.integer,
             $.float,
