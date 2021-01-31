@@ -51,6 +51,10 @@ module.exports = grammar({
     // Ignore whitespace and comments
     extras: $ => [/\s/, $.comment],
 
+externals: $ => [
+        $.block_comment,
+    ],
+
     inline: $ => [$.keywords],
 
     // The name of a token that will match keywords for the purpose of the keyword extraction optimization.
@@ -390,7 +394,7 @@ function_block: $ => choice(
 
         line_comment: $ => token(seq('//', /.*/)),
 
-        block_comment: $ => token(seq(
+        bbblock_comment: $ => token(seq(
             '/*',
             /[^*]*\*+([^/*][^*]*\*+)*/,
             '/'

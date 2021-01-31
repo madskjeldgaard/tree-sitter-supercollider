@@ -1461,7 +1461,7 @@
         ]
       }
     },
-    "block_comment": {
+    "bbblock_comment": {
       "type": "TOKEN",
       "content": {
         "type": "SEQ",
@@ -3518,7 +3518,12 @@
       "_object"
     ]
   ],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "block_comment"
+    }
+  ],
   "inline": [
     "ReferenceError"
   ],
