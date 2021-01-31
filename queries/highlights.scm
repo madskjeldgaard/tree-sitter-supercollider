@@ -55,6 +55,8 @@
 
 ; Literals
 (number) @number
+(pi_statement) @number
+
 (string) @string
 (symbol) @string.special
 
