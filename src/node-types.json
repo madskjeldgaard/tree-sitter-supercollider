@@ -382,11 +382,75 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "duplicated_statement",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_definition",
+          "named": true
+        },
+        {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
           "type": "parameter_call_list",
+          "named": true
+        },
+        {
+          "type": "parameter_list",
+          "named": true
+        },
+        {
+          "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        },
+        {
+          "type": "variable_definition",
+          "named": true
+        },
+        {
+          "type": "variable_definition_sequence",
           "named": true
         }
       ]
