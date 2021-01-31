@@ -1,4 +1,62 @@
 ==================
+10.do{|index| index.postln}
+==================
+(
+10.do{|index| index.postln}
+)
+---
+(source_file 
+  (code_block 
+    (function_call 
+      (receiver 
+        (literal 
+          (number 
+            (integer ))))
+      (instance_method_call 
+        name: (method_name )
+        (parameter_list 
+          (argument 
+            name: (identifier )))
+        (function_call 
+          (receiver 
+            (variable 
+              (local_var 
+                name: (identifier ))))
+          (instance_method_call 
+            name: (method_name )))))))
+
+==================
+10.do({|index| index.postln})
+==================
+(
+10.do({|index| index.postln})
+)
+---
+(source_file 
+  (code_block 
+    (function_call 
+      (receiver 
+        (literal 
+          (number 
+            (integer ))))
+      (instance_method_call 
+        name: (method_name )
+        (parameter_call_list 
+          (argument_calls 
+            (unnamed_argument 
+              (function_block 
+                (parameter_list 
+                  (argument 
+                    name: (identifier )))
+                (function_call 
+                  (receiver 
+                    (variable 
+                      (local_var 
+                        name: (identifier ))))
+                  (instance_method_call 
+                    name: (method_name )))))))))))
+
+==================
 arithmetic series (1.0, 1.0..2.0)
 ==================
 
