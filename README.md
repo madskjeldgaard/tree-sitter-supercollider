@@ -140,6 +140,34 @@ Run them like this:
 tree-sitter generate && tree-sitter test
 ```
 
+### Trying with nvim-treesitter
+
+I am not sure what the best way to try out this grammar with the NeoVim plugin [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is but this seems to work until the grammar is done and officially part of that project as well. 
+
+You need to symbolically link this repository's queries files to that of nvim-treesitter (on Linux this looks like):
+
+```bash
+ln -s $HOME/code/tree-sitter-supercollider/queries $HOME/.local/share/nvim/plugged/nvim-treesitter/queries/supercollider
+```
+
+Then add this to your nvim config (change path in `url` to that of the tree sitter supercollider repo on your system):
+
+```
+-- tree-sitter-supercollider
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.supercollider = {
+	install_info = {
+		-- url = "~/code/tree-sitter-supercollider",
+		url = "https://github.com/madskjeldgaard/tree-sitter-supercollider",
+		files = {"src/parser.c"},
+		maintainer = "@madskjeldgaard"
+	},
+	filetype = "supercollider", -- if filetype does not agrees with parser name
+}
+```
+
+This allows you to run `:TSInstall supercollider` from within nvim. Repeat every time the grammar is changed.
+
 ## Resources
 
 - [The javascript tree-sitter grammar is a good reference](https://github.com/tree-sitter/tree-sitter-javascript)
