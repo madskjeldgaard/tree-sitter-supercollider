@@ -26,7 +26,7 @@
 ; Argument definition
 
 ; Fixme: Should be attribute but nvim-treesitter doesn't supprt it at the moment
-(argument name: (identifier) @attribute) 
+(argument name: (identifier) @parameter) 
 ;(argument name: (identifier) @parameter)  
 
 ; Variables
@@ -46,16 +46,17 @@
 
 ; Methods
 (instance_method_call 
-        name: (method_name) @function.method)
+        name: (method_name) @function)
 (class_method_call 
-        name: (class_method_name) @constructor)
+        name: (class_method_name) @method)
 
 ; Classes
 (class) @keyword
 
 ; Literals
 (number) @number
-(pi_statement) @number
+(pi_statement) @constant.builtin
+(float) @float
 
 (string) @string
 (symbol) @string.special
@@ -113,9 +114,12 @@
 ] @punctuation.delimiter
 
 ; control structure
-(control_structure) @keyword
+(control_structure) @conditional
 
 (escape_sequence) @escape
+
+; SinOsc.ar()!2
+;(duplicated_statement) @repeat
 
 ; Builtins
 ; ((identifier) @variable.builtin

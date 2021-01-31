@@ -11,13 +11,26 @@
 (code_block)
 (function_block)
 (control_structure)
-] @local.scope
+] @scope
 
 ; Definitions
-(argument name: (identifier) @local.definition) 
+(argument 
+	name: (identifier) @definition.parameter
+	(set! "definition.var.scope" "local")
+) 
 
-;(variable_definition name: (identifier) @local.definition)
+(variable_definition 
+	name: (variable (local_var (identifier) @definition.var
+	)))
+
+(variable_definition 
+	name: (variable (environment_var (identifier) @definition.var))
+	(set! "definition.var.scope" "global"))
+
+(function_definition name: (variable) @definition.var
+	 (set! "definition.var.scope" "parent")
+)
 ;(variable_definition name: (variable (local_var(identifier))) @local.definition) 
 ;(variable) @local.definition
 
-(identifier) @local.reference
+(identifier) @reference
