@@ -14,6 +14,7 @@ builtins
 
 
 const PRECEDENCE = {
+	stringConcat:16,
     STRING: 2,
     call: 14,
     field: 13,
@@ -105,11 +106,12 @@ module.exports = grammar({
         ),
 
         partial: $ => "_",
-		duplicated_statement: $ => seq(
-			field("duplicated_object", $._object), 
-			field("operator","!"), 
-			field("duplication_times", $.number)
-		),
+
+	duplicated_statement: $ => seq(
+		field("duplicated_object", $._object), 
+		field("operator","!"), 
+		field("duplication_times", $.number)
+	),
 
         // keywords: $ => choice("if", "while"),
 
@@ -521,7 +523,8 @@ function_block: $ => choice(
                 [PRECEDENCE.shift, choice('<<', '>>')],
                 [PRECEDENCE.additive, choice('+', '-')],
                 [PRECEDENCE.multiplicative, choice('*', '/', '%', prec.left("**"))],
-                [PRECEDENCE.assign, '=']
+                [PRECEDENCE.assign, '='],
+		[PRECEDENCE.stringConcat, "+/+"]
             ];
 
             return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
