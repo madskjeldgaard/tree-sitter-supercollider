@@ -131,6 +131,10 @@
             "named": true
           },
           {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
             "type": "variable",
             "named": true
           }
@@ -260,6 +264,10 @@
           },
           {
             "type": "partial",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
             "named": true
           },
           {
@@ -445,6 +453,10 @@
           "named": true
         },
         {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
           "type": "variable",
           "named": true
         },
@@ -509,6 +521,10 @@
         },
         {
           "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         },
         {
@@ -588,10 +604,6 @@
           {
             "type": "identifier",
             "named": true
-          },
-          {
-            "type": "~",
-            "named": false
           }
         ]
       }
@@ -704,6 +716,10 @@
         },
         {
           "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         },
         {
@@ -820,6 +836,10 @@
           },
           {
             "type": "partial",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
             "named": true
           },
           {
@@ -999,6 +1019,10 @@
           "named": true
         },
         {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
           "type": "variable",
           "named": true
         }
@@ -1069,10 +1093,6 @@
             "named": false
           },
           {
-            "type": "\\",
-            "named": false
-          },
-          {
             "type": "binary_expression",
             "named": true
           },
@@ -1110,6 +1130,10 @@
           },
           {
             "type": "partial",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
             "named": true
           },
           {
@@ -1219,6 +1243,10 @@
           "named": true
         },
         {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
           "type": "variable",
           "named": true
         }
@@ -1271,6 +1299,10 @@
         },
         {
           "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         },
         {
@@ -1359,6 +1391,10 @@
           "named": true
         },
         {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
           "type": "variable",
           "named": true
         }
@@ -1378,6 +1414,68 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "unary_expression",
+    "named": true,
+    "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "code_block",
+            "named": true
+          },
+          {
+            "type": "collection",
+            "named": true
+          },
+          {
+            "type": "control_structure",
+            "named": true
+          },
+          {
+            "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "partial",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variable",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1422,6 +1520,10 @@
         },
         {
           "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         },
         {
@@ -1517,6 +1619,10 @@
             "named": true
           },
           {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
             "type": "variable",
             "named": true
           }
@@ -1595,6 +1701,10 @@
           },
           {
             "type": "partial",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
             "named": true
           },
           {
@@ -2043,10 +2153,6 @@
   },
   {
     "type": "}",
-    "named": false
-  },
-  {
-    "type": "~",
     "named": false
   }
 ]

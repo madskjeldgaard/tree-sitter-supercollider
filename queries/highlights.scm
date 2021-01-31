@@ -1,4 +1,6 @@
 ; highlights.scm
+; See how nvim treesitter uses tags: https://github.com/nvim-treesitter/nvim-treesitter/blob/7edf1d1c2bfb4bdc53319494697ca2947920b69e/lua/nvim-treesitter/highlight.lua
+; Otherwise,
 ;Available tags:
 ;@constant
 ;@function
@@ -22,10 +24,13 @@
 (comment) @comment
 
 ; Argument definition
+
+; Fixme: Should be attribute but nvim-treesitter doesn't supprt it at the moment
 (argument name: (identifier) @attribute) 
+;(argument name: (identifier) @parameter)  
 
 ; Variables
-(local_var name: (identifier) @variable.parameter)
+(local_var name: (identifier) @variable)
 (environment_var name:(identifier) @variable.builtin)
 (builtin_var) @constant
 

@@ -57,32 +57,34 @@ classvar classy = 4;
 ---
 (source_file 
   (variable_definition 
-   name: (variable 
-      (local_var name: (identifier) 
-        ))
+    name: (variable 
+      (local_var 
+        name: (identifier )))
     value: (literal 
       (number 
         (integer ))))
   (variable_definition 
-   name: (variable 
-      (environment_var name: (identifier) ))
+    name: (variable 
+      (environment_var 
+        name: (identifier )))
     value: (literal 
       (number 
         (integer ))))
   (variable_definition 
-   name: (variable 
-      (environment_var name:
-        (identifier )))
+    name: (variable 
+      (environment_var 
+        name: (identifier )
+        name: (identifier )))
     value: (literal 
       (number 
         (integer ))))
   (variable_definition 
-   name: (variable 
+    name: (variable 
       (classvar 
         name: (identifier )))
     value: (literal 
       (number 
-        (integer)))))
+        (integer )))))
 
 ==================
 binary variable operation

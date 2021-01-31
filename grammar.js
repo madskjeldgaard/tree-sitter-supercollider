@@ -17,7 +17,7 @@ const PRECEDENCE = {
     STRING: 2,
     call: 14,
     field: 13,
-    unary: 11,
+    unary: 15,
     multiplicative: 10,
     additive: 9,
     shift: 8,
@@ -61,9 +61,9 @@ module.exports = grammar({
         [$.collection, $.code_block],
         [$.local_var, $.if],
         [$.switch],
-        [$.variable_definition_sequence]
+        [$.variable_definition_sequence],
         // [$.instance_method_call, $.collection],
-        // [$._expression_statement, $._object],
+        [$._expression, $._object],
         // [$.function_block, $.function_definition, $.function_call],
     ],
 
@@ -100,6 +100,7 @@ module.exports = grammar({
             $.literal,
             $.variable,
             $.binary_expression,
+	$.unary_expression,
             $.collection,
             $.indexed_collection,
             $.partial
@@ -240,9 +241,8 @@ module.exports = grammar({
         unnamed_argument: $ => choice($.function_call, $._object),
         named_argument: $ => prec.left(1, field("name", seq(
             field("name",
-                seq(optional("\\"),
-                    $.identifier)
-            ),
+                alias(seq(optional("\\"), $.identifier), $.identifier)
+			),
             optional(
                 seq(
                     choice('=', ':'),
@@ -337,7 +337,7 @@ module.exports = grammar({
         classvar: $ => seq('classvar', field("name", $.identifier)),
         environment_var: $ => choice(
             field("name", alias(/[a-z]/, $.identifier)),
-            field("name", seq('~', $.identifier)),
+            field("name", alias(seq('~', $.identifier), $.identifier)),
         ),
 
         variable_name: $ => $.identifier,
@@ -522,6 +522,17 @@ module.exports = grammar({
                 field('right', choice($.function_call, $._object)),
             ))));
         },
+
+	unary_expression: $ => {
+		const table = [
+			[PRECEDENCE.unary, '-'],
+		];
+
+		return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
+			field("operator", operator),
+			field("right", choice($._object))
+		))));
+	},
 
         class: $ => field("name", /[A-Z]+[a-zA-Z\d_]*/),
         identifier: $ => /[a-z_][a-zA-Z\d_]*/,

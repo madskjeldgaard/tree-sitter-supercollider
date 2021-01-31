@@ -23,6 +23,9 @@ Note: This grammar is experimental
 
 ## TODO:
 
+- folds.scm
+- indents.scm
+
 This grammar is still a work in progress. Here are some of the things still missing:
 
 - implicit Class.new ( Class() ) in parameter lists

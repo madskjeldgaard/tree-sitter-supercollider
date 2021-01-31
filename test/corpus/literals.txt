@@ -8,6 +8,38 @@ single number
   (literal 
     (number 
       (integer))))
+
+==================
+unary single number
+==================
+-1;
+
+---
+(source_file
+  (unary_expression
+    right: 
+	(literal 
+		(number
+        	(integer )))))
+
+==================
+unary numbers in binary expression
+==================
+-1 * -2;
+
+---
+(source_file
+  (binary_expression
+    left: (unary_expression
+      right: (literal
+        (number
+          (integer ))))
+    right: (unary_expression
+      right: (literal
+        (number
+          (integer ))))
+		  ))
+
 ==================
 literal with method
 ==================
