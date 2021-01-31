@@ -144,13 +144,7 @@ tree-sitter generate && tree-sitter test
 
 I am not sure what the best way to try out this grammar with the NeoVim plugin [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is but this seems to work until the grammar is done and officially part of that project as well. 
 
-You need to symbolically link this repository's queries files to that of nvim-treesitter (on Linux this looks like):
-
-```bash
-ln -s $HOME/code/tree-sitter-supercollider/queries $HOME/.local/share/nvim/plugged/nvim-treesitter/queries/supercollider
-```
-
-Then add this to your nvim config (change path in `url` to that of the tree sitter supercollider repo on your system):
+Add this to your nvim config (change path in `url` to that of the tree sitter supercollider repo on your system if it you've downloaded it somewhere):
 
 ```lua
 -- tree-sitter-supercollider
@@ -167,6 +161,13 @@ parser_config.supercollider = {
 ```
 
 This allows you to run `:TSInstall supercollider` from within nvim. Repeat every time the grammar is changed.
+
+#### No highlighting?
+If the highlighting isn't happening, you probably need to symbolically link this repository's queries files to that of nvim-treesitter (on Linux this looks like):
+
+```bash
+ln -s $HOME/code/tree-sitter-supercollider/queries $HOME/.local/share/nvim/plugged/nvim-treesitter/queries/supercollider
+```
 
 ## Resources
 
