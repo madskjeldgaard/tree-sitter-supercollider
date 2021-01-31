@@ -152,7 +152,7 @@ ln -s $HOME/code/tree-sitter-supercollider/queries $HOME/.local/share/nvim/plugg
 
 Then add this to your nvim config (change path in `url` to that of the tree sitter supercollider repo on your system):
 
-```
+```lua
 -- tree-sitter-supercollider
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 parser_config.supercollider = {
