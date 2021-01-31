@@ -148,8 +148,11 @@ module.exports = grammar({
             ".",
             field("name", optional(alias($.identifier, $.method_name))),
             // Instance.method or Instance.method()
-            optional(seq("(", optional($.parameter_call_list), ")")),
-        )),
+			optional(choice(
+				seq("(", optional($.parameter_call_list), ")"),
+				$._function_content
+			))
+		)),
 
         // This is unused
         instance_variable_setter_call: $ => prec.left(2,
@@ -188,7 +191,7 @@ module.exports = grammar({
             ')'
         ),
 
-        function_block: $ => choice(
+function_block: $ => choice(
             $._function_content,
             prec.left(seq(alias($.identifier, $.method_name), $._function_content)),
         ),
