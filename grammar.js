@@ -179,8 +179,10 @@ module.exports = grammar({
             prec.left(seq(
                 ".",
                 field("name", alias($.identifier, $.class_method_name)),
-                optional(seq("(", optional($.parameter_call_list), ")"))
-            )),
+				optional(choice(
+
+				seq("(", optional($.parameter_call_list), ")"), $._function_content)
+            ))),
             // Class() - implicit .new
             seq("(", optional($.parameter_call_list), ")")
         )),
