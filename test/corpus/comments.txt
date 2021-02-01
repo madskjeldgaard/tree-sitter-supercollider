@@ -17,4 +17,4 @@ Multi line with code
 */ 
 
 ---
-(source_file (comment (block_comment)))
+(source_file (block_comment))

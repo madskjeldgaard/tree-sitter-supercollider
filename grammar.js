@@ -49,7 +49,7 @@ module.exports = grammar({
     name: 'supercollider',
 
     // Ignore whitespace and comments
-    extras: $ => [/\s/, $.comment],
+    extras: $ => [/\s/, $.line_comment, $.block_comment],
 
 externals: $ => [
         $.block_comment,
@@ -393,12 +393,6 @@ function_block: $ => choice(
         ),
 
         line_comment: $ => token(seq('//', /.*/)),
-
-        bbblock_comment: $ => token(seq(
-            '/*',
-            /[^*]*\*+([^/*][^*]*\*+)*/,
-            '/'
-        )),
 
         ///////////////////
         //  Collections  //
