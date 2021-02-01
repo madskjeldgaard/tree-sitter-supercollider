@@ -173,6 +173,10 @@
             "named": false
           },
           {
+            "type": "++",
+            "named": false
+          },
+          {
             "type": "+/+",
             "named": false
           },
@@ -1313,6 +1317,10 @@
             "named": true
           },
           {
+            "type": "class",
+            "named": true
+          },
+          {
             "type": "code_block",
             "named": true
           },
@@ -1660,6 +1668,10 @@
         "required": true,
         "types": [
           {
+            "type": "*",
+            "named": false
+          },
+          {
             "type": "-",
             "named": false
           }
@@ -1723,6 +1735,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "class",
           "named": true
         },
         {
@@ -2027,6 +2043,10 @@
     "named": false
   },
   {
+    "type": "++",
+    "named": false
+  },
+  {
     "type": "+/+",
     "named": false
   },
@@ -2048,6 +2068,10 @@
   },
   {
     "type": "..",
+    "named": false
+  },
+  {
+    "type": "...",
     "named": false
   },
   {

@@ -26,6 +26,7 @@ Note: This grammar is experimental
 This grammar is still a work in progress. Here are some of the things still missing:
 
 - implicit Class.new ( Class() ) in parameter lists
+- `|@|`, `@@`, `@|@` index methods
 - Syntax shortcuts / esoteric stuff: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- selector (method name) as a binary operator
 	- trailing-block arguments

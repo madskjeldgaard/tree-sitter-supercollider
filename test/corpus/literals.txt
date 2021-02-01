@@ -1,4 +1,19 @@
 ==================
+string concat
+==================
+(
+"hej" ++ "med dig";
+)
+---
+(source_file 
+  (code_block 
+    (binary_expression 
+      left: (literal 
+        (string ))
+      right: (literal 
+        (string )))))
+
+==================
 2.0pi
 ==================
 (

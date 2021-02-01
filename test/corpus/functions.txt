@@ -1,3 +1,89 @@
+=====================
+unfold argument list with *
+=====================
+
+(
+	f = {|a1, a2, a3| [a1,a2,a3].postln};
+	f.value(*[2,3,4])
+)
+---
+(source_file 
+  (code_block 
+    (function_definition 
+      name: (variable 
+        (environment_var 
+          name: (identifier )))
+      value: (function_block 
+        (parameter_list 
+          (argument 
+            name: (identifier ))
+          (argument 
+            name: (identifier ))
+          (argument 
+            name: (identifier )))
+        (function_call 
+          (receiver 
+            (collection 
+              (variable 
+                (local_var 
+                  name: (identifier )))
+              (variable 
+                (local_var 
+                  name: (identifier )))
+              (variable 
+                (local_var 
+                  name: (identifier )))))
+          (instance_method_call 
+            name: (method_name )))))
+    (function_call 
+      (receiver 
+        (variable 
+          (environment_var 
+            name: (identifier ))))
+      (instance_method_call 
+        name: (method_name )
+        (parameter_call_list 
+          (argument_calls 
+            (unnamed_argument 
+              (unary_expression 
+                right: (collection 
+                  (literal 
+                    (number 
+                      (integer )))
+                  (literal 
+                    (number 
+                      (integer )))
+                  (literal 
+                    (number 
+                      (integer ))))))))))))
+
+==================
+arg with ...
+==================
+(
+f = {arg ...args; };
+e = {|...args| };
+)
+---
+(source_file 
+  (code_block 
+    (function_definition 
+      name: (variable 
+        (environment_var 
+          name: (identifier )))
+      value: (function_block 
+        (parameter_list 
+          (argument 
+            name: (identifier )))))
+    (function_definition 
+      name: (variable 
+        (environment_var 
+          name: (identifier )))
+      value: (function_block 
+        (parameter_list 
+          (argument 
+            name: (identifier )))))))
+
 ==================
 function call in binary operator
 ==================

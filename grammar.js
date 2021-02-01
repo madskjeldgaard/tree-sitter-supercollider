@@ -233,8 +233,8 @@ function_block: $ => choice(
 
         // Definition of parameters in function
         parameter_list: $ => choice(
-            seq('arg', sepBy(',', $.argument), ';'),
-            seq('|', sepBy(',', $.argument), '|')
+            seq('arg', sepBy(',', $.argument), optional(seq("...", $.argument)), ';'),
+            seq('|', sepBy(',', $.argument), optional(seq("...", $.argument)), '|')
         ),
 
         // For definition lists
@@ -252,7 +252,7 @@ function_block: $ => choice(
         ),
 
         // function call is added here to allow things like Array() in params
-        unnamed_argument: $ => choice($.function_call, $._object),
+        unnamed_argument: $ => choice($.function_call, $._object, $.class),
         named_argument: $ => prec.left(1, field("name", seq(
             field("name",
                 alias(seq(optional("\\"), $.identifier), $.identifier)
@@ -260,7 +260,7 @@ function_block: $ => choice(
             optional(
                 seq(
                     choice('=', ':'),
-                    choice($.function_call, $._object),
+                    choice($.function_call, $._object, $.class),
                 )
             )
         ))),
@@ -527,10 +527,10 @@ function_block: $ => choice(
                 [PRECEDENCE.bitxor, '^'],
                 [PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
                 [PRECEDENCE.shift, choice('<<', '>>')],
-                [PRECEDENCE.additive, choice('+', '-')],
+                [PRECEDENCE.additive, choice('+', '-', '++')],
                 [PRECEDENCE.multiplicative, choice('*', '/', '%', prec.left("**"))],
                 [PRECEDENCE.assign, '='],
-		[PRECEDENCE.stringConcat, "+/+"]
+			[PRECEDENCE.stringConcat, "+/+"]
             ];
 
             return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
@@ -543,7 +543,9 @@ function_block: $ => choice(
 	unary_expression: $ => {
 		const table = [
 			[PRECEDENCE.unary, '-'],
-		];
+				[PRECEDENCE.unary, '*'],
+
+			];
 
 		return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
 			field("operator", operator),
