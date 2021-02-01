@@ -2,7 +2,8 @@
 ; See this for full list: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md
 
 ; comments
-(comment) @comment
+(line_comment) @comment
+(block_comment) @comment
 
 ; Argument definition
 

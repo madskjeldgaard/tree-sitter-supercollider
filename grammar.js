@@ -85,6 +85,7 @@ externals: $ => [
 
         _expression_statement: $ => choice(
             // $.function_block,
+			$.comment,
             $.function_definition,
             $.function_call,
             $._object,
