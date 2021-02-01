@@ -5,7 +5,7 @@ SuperCollider is a programming language for sound. Tree-sitter is a really smart
 
 This project defines a grammar (the "rules" of the language) for SuperCollider in a way that allows tree-sitter to do fast and very precise analysis of the code, while it is being typed. 
 
-This allows a very high level of precision in syntax highlighting (see below) and error detection making it faster and easier to write code. 
+Among other things, this allows for a very high level of precision in syntax highlighting (see below) and analyzing/traversing source code with equal precision.
 
 ## Status: Experimental
 Note: This grammar is experimental
