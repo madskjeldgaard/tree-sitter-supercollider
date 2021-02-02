@@ -1048,6 +1048,10 @@
         {
           "type": "SYMBOL",
           "name": "hexinteger"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "exponential"
         }
       ]
     },
@@ -1062,6 +1066,10 @@
     "float": {
       "type": "PATTERN",
       "value": "\\d+\\.\\d+"
+    },
+    "exponential": {
+      "type": "PATTERN",
+      "value": "-?\\d+(\\.\\d+)?[eE]-?\\d+"
     },
     "symbol": {
       "type": "CHOICE",

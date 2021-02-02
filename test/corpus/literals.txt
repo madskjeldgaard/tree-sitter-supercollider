@@ -104,6 +104,11 @@ literal number
 var number = 100;
 var anotherNumber = 100.81238;
 var aHexyNumber = 0xFFFFFF;
+var expNegative = 1e-10;
+var expPositive = 14e10;
+var expDecimal = 1.4e4;
+var expUpperCase = 1E8;
+var expNegativePre = -1E8;
 
 ---
 (source_file 
@@ -128,7 +133,41 @@ var aHexyNumber = 0xFFFFFF;
     (literal 
       (number 
         (hexinteger ))))
-
+(variable_definition
+    (variable
+      (local_var
+        (identifier )))
+    (literal
+      (number
+        (exponential ))))
+(variable_definition
+    (variable
+      (local_var
+        (identifier )))
+    (literal
+      (number
+        (exponential ))))
+(variable_definition
+    (variable
+      (local_var
+        (identifier )))
+    (literal
+      (number
+        (exponential ))))
+(variable_definition
+    (variable
+      (local_var
+        (identifier )))
+    (literal
+      (number
+        (exponential ))))
+(variable_definition
+    (variable
+      (local_var
+        (identifier )))
+    (literal
+      (number
+        (exponential ))))
 	)
 
 ==================
