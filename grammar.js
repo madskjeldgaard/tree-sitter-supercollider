@@ -283,12 +283,14 @@ function_block: $ => choice(
         number: $ => choice(
             $.integer,
             $.float,
-            $.hexinteger
+            $.hexinteger,
+            $.exponential
         ),
 
         integer: $ => /\d+/,
         hexinteger: $ => /0x(\\d|[a-f]|[A-F])+/,
         float: $ => /\d+\.\d+/,
+        exponential: $ => /-?\d+(\.\d+)?[eE]-?\d+/,
         symbol: $ => choice(
             seq('\\', choice($.identifier, /[0-9]+/)),
             seq("'", choice($.identifier, /[0-9]+/), "'"),

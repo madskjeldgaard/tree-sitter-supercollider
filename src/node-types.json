@@ -1393,6 +1393,10 @@
       "required": true,
       "types": [
         {
+          "type": "exponential",
+          "named": true
+        },
+        {
           "type": "float",
           "named": true
         },
@@ -2336,6 +2340,10 @@
   },
   {
     "type": "escape_sequence",
+    "named": true
+  },
+  {
+    "type": "exponential",
     "named": true
   },
   {
