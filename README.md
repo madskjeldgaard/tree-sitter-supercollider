@@ -170,6 +170,7 @@ ln -s $HOME/code/tree-sitter-supercollider/queries $HOME/.local/share/nvim/plugg
 
 - [The javascript tree-sitter grammar is a good reference](https://github.com/tree-sitter/tree-sitter-javascript)
 - [A nice talk about what tree-sitter is and what it does](https://www.youtube.com/watch?v=Jes3bD6P0To)
+- [Literals in SuperCollider](http://doc.sccode.org/Reference/Literals.html)
 - [Symbolic notation in SuperCollider](http://doc.sccode.org/Overviews/SymbolicNotations.html)
 - [Syntax shortcuts in SuperCollider](http://doc.sccode.org/Reference/Syntax-Shortcuts.html)
 - [Creating parsers](https://tree-sitter.github.io/tree-sitter/creating-parsers)
