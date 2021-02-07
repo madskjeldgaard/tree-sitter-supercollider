@@ -1,4 +1,93 @@
 ==================
+collection@|@1
+==================
+(
+var arr = [1,2,3];
+arr@|@1
+)
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    (indexed_collection 
+      (variable 
+        (local_var 
+          name: (identifier )))
+      index: (integer ))))
+
+==================
+collection@@1
+==================
+(
+var arr = [1,2,3];
+arr@@1
+)
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    (indexed_collection 
+      (variable 
+        (local_var 
+          name: (identifier )))
+      index: (integer ))))
+==================
+collection|@|1
+==================
+(
+var arr = [1,2,3];
+arr|@|1
+)
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (collection 
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))
+        (literal 
+          (number 
+            (integer )))))
+    (indexed_collection 
+      (variable 
+        (local_var 
+          name: (identifier )))
+      index: (integer ))))
+
+==================
 10.do{|index| index.postln}
 ==================
 (
