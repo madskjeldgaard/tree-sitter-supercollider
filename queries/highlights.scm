@@ -6,10 +6,7 @@
 (block_comment) @comment
 
 ; Argument definition
-
-; Fixme: Should be attribute but nvim-treesitter doesn't supprt it at the moment
 (argument name: (identifier) @parameter) 
-;(argument name: (identifier) @parameter)  
 
 ; Variables
 (local_var name: (identifier) @variable)
@@ -75,7 +72,7 @@
 ; "super"
 ; "this"
 "var"
-] @type.builtin
+] @keyword
 
 ; Brackets
 [
@@ -98,12 +95,7 @@
 ; control structure
 (control_structure) @conditional
 
-(escape_sequence) @escape
+(escape_sequence) @string.special
 
 ; SinOsc.ar()!2
 (duplicated_statement) @repeat
-
-; Builtins
-; ((identifier) @variable.builtin
-;  (#match? @variable.builtin "^(inf|nil|thisFunction|thisFunctionDef|thisMethod|thisProcess|thisThread|currentEnvironment|topEnvironment)$")
-;  (#is-not? local))
