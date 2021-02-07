@@ -144,6 +144,12 @@ module.exports = grammar({
                     )
                 ),
 
+			// Class method prefixed: ar(SinOsc, 110)
+			seq(
+				alias($.identifier, $.class_method_name), 
+				seq("(", optional($.parameter_call_list), ")"), 
+			),
+
                 // Instance method (chainable)
                 seq(
                     alias($._object, $.receiver),
@@ -546,10 +552,12 @@ function_block: $ => choice(
         },
 
 	unary_expression: $ => {
-		const table = [
-			[PRECEDENCE.unary, '-'],
+			const table = [
+				[PRECEDENCE.unary, '-'],
 				[PRECEDENCE.unary, '*'],
-
+				// Example of this in usage to create a routine: 
+				// (:1..) 
+				[PRECEDENCE.unary, ':'],
 			];
 
 		return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
