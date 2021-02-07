@@ -203,7 +203,7 @@ module.exports = grammar({
         // TODO: Make tolerant to non semicoloned expression
         code_block: $ => seq(
             '(',
-            $._expression_sequence,
+            optional($._expression_sequence),
             ')'
         ),
 
