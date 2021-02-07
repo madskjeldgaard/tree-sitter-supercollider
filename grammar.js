@@ -14,6 +14,7 @@ builtins
 
 
 const PRECEDENCE = {
+	comment: 1000,
 	stringConcat:16,
     STRING: 2,
     call: 14,
@@ -51,9 +52,9 @@ module.exports = grammar({
     // Ignore whitespace and comments
     extras: $ => [/\s/, $.line_comment, $.block_comment],
 
-externals: $ => [
-        $.block_comment,
-    ],
+	externals: $ => [
+		$.block_comment,
+	],
 
     inline: $ => [$.keywords],
 
@@ -85,7 +86,7 @@ externals: $ => [
 
         _expression_statement: $ => choice(
             // $.function_block,
-			$.comment,
+			// $.comment,
             $.function_definition,
             $.function_call,
             $._object,
@@ -202,7 +203,7 @@ externals: $ => [
         // TODO: Make tolerant to non semicoloned expression
         code_block: $ => seq(
             '(',
-            $._expression_sequence,
+            optional($._expression_sequence),
             ')'
         ),
 
@@ -395,7 +396,7 @@ function_block: $ => choice(
             $.block_comment
         ),
 
-        line_comment: $ => token(seq('//', /.*/)),
+        line_comment: $ => prec(PRECEDENCE.comment, token(seq('//', /.*/))),
 
         ///////////////////
         //  Collections  //
