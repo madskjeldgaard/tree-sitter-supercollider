@@ -23,10 +23,9 @@ Note: This grammar is experimental
 
 ## TODO:
 
-This grammar is still a work in progress. Here are some of the things still missing:
+Most of the language has been implemented in the grammar, except for some of the more esoteric parts of the language:
 
-- implicit Class.new ( Class() ) in parameter lists
-- `|@|`, `@@`, `@|@` index methods
+- Empty symbols as names eg `SynthDef(\, {})`
 - Syntax shortcuts / esoteric stuff: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- selector (method name) as a binary operator
 	- trailing-block arguments
@@ -40,6 +39,7 @@ This grammar is still a work in progress. Here are some of the things still miss
 	- Class return statements - should these be demarcated somehow?
 - Make function calls _objects
 - Single expressions with no semicolon in a file (this even legal sc?)
+- implicit Class.new ( Class() ) in parameter lists
 
 ## Try it out
 
