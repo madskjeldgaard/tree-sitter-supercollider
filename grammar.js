@@ -490,9 +490,9 @@ function_block: $ => choice(
             $._index
         ),
 
-        _index: $ => seq("[",
-            field("index", choice(
-                $.literal,
+        _index: $ => choice(seq("[",
+            field("index", 
+				choice($.literal,
                 // Subrange
                 choice(
                     seq($.integer, ".."),
@@ -501,7 +501,14 @@ function_block: $ => choice(
                 )
             )),
             "]"
-        ),
+        ), 
+			// clipAt
+			seq("|@|", field("index", $.integer)),
+			// wrapAt
+			seq("@@", field("index", $.integer)),
+			// foldAt
+			seq("@|@", field("index", $.integer)),
+		),
 
         arithmetic_series: $ => seq(
             "(",
