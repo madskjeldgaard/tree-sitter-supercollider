@@ -1,4 +1,13 @@
 =====================
+class method prefixed class: ar(SinOsc, 110)
+=====================
+(
+ar(SinOsc, 110);
+)
+---
+(source_file (code_block (function_call (class_method_name) (parameter_call_list (argument_calls (unnamed_argument (class))) (argument_calls (unnamed_argument (literal (number (integer)))))))))
+
+=====================
 unfold argument list with *
 =====================
 

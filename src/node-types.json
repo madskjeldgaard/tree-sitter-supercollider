@@ -402,10 +402,6 @@
           "named": true
         },
         {
-          "type": "comment",
-          "named": true
-        },
-        {
           "type": "control_structure",
           "named": true
         },
@@ -486,7 +482,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "binary_expression",
@@ -498,10 +494,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "comment",
           "named": true
         },
         {
@@ -622,25 +614,6 @@
     "type": "collection_type",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "comment",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        },
-        {
-          "type": "line_comment",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "control_structure",
@@ -836,10 +809,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "comment",
           "named": true
         },
         {
@@ -1122,10 +1091,6 @@
           "named": true
         },
         {
-          "type": "comment",
-          "named": true
-        },
-        {
           "type": "control_structure",
           "named": true
         },
@@ -1260,6 +1225,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "line_comment",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "literal",
@@ -1530,10 +1500,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "comment",
           "named": true
         },
         {
@@ -2380,10 +2346,6 @@
   },
   {
     "type": "integer",
-    "named": true
-  },
-  {
-    "type": "line_comment",
     "named": true
   },
   {
