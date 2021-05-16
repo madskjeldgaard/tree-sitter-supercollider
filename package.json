@@ -2,7 +2,7 @@
   "name": "tree-sitter-supercollider",
   "version": "0.1.2",
   "description": "Tree sitter parser for the SuperCollider programming language",
-  "main": "index.js",
+  "main": "bindings/node",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,11 +14,13 @@
   "devDependencies": {
     "tree-sitter-cli": "^0.18.0"
   },
-"tree-sitter": [
-{
-	"scope": "source.scd",
-	"file-types": [
-	"scd", "sc"
-	]
-}]
+  "tree-sitter": [
+    {
+      "scope": "source.scd",
+      "file-types": [
+        "scd",
+        "sc"
+      ]
+    }
+  ]
 }
