@@ -90,9 +90,11 @@ module.exports = grammar({
             $.function_definition,
             $.function_call,
             $._object,
+
+		$.class,
             $.variable_definition,
             $.variable_definition_sequence,
-			$.duplicated_statement,
+		$.duplicated_statement,
             // $.binary_expression,
             // $.return_statement
         ),
@@ -300,8 +302,8 @@ function_block: $ => choice(
         float: $ => /\d+\.\d+/,
         exponential: $ => /-?\d+(\.\d+)?[eE]-?\d+/,
         symbol: $ => choice(
-            prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/)))),
-            prec.left(seq("'", optional(choice($.identifier, /[0-9]+/)), "'")),
+            prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/, $.escape_sequence)))),
+            prec.left(seq("'", optional(choice($.identifier, /[0-9]+/, $.escape_sequence)), "'")),
         ),
         char: $ => /\$./,
 
@@ -568,7 +570,7 @@ function_block: $ => choice(
 	},
 
         class: $ => field("name", /[A-Z]+[a-zA-Z\d_]*/),
-        identifier: $ => /[a-z_][a-zA-Z\d_]*/,
+        identifier: $ => /(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
 
         ////////////////////
         //  Conditionals  //
