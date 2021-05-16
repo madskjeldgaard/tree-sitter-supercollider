@@ -300,8 +300,8 @@ function_block: $ => choice(
         float: $ => /\d+\.\d+/,
         exponential: $ => /-?\d+(\.\d+)?[eE]-?\d+/,
         symbol: $ => choice(
-            seq('\\', choice($.identifier, /[0-9]+/)),
-            seq("'", choice($.identifier, /[0-9]+/), "'"),
+            prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/)))),
+            prec.left(seq("'", optional(choice($.identifier, /[0-9]+/)), "'")),
         ),
         char: $ => /\$./,
 
