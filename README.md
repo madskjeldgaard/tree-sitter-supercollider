@@ -136,6 +136,17 @@ The source code is divided up like this:
 - **queries/*.scm** - Syntax highlighting, code folding and indentation
 - **src/scanner.c** - A C file defining external scanners for more complex matching tasks
 
+### Resources
+Here are some helpful resources for developers who want to contribute:
+
+- [The javascript tree-sitter grammar is a good reference](https://github.com/tree-sitter/tree-sitter-javascript)
+- [A nice talk about what tree-sitter is and what it does](https://www.youtube.com/watch?v=Jes3bD6P0To)
+- [Literals in SuperCollider](http://doc.sccode.org/Reference/Literals.html)
+- [Symbolic notation in SuperCollider](http://doc.sccode.org/Overviews/SymbolicNotations.html)
+- [Syntax shortcuts in SuperCollider](http://doc.sccode.org/Reference/Syntax-Shortcuts.html)
+- [Creating parsers](https://tree-sitter.github.io/tree-sitter/creating-parsers)
+- [the SCIDE lexer](https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp) 
+
 ### Testing
 
 Ideally, all rules in the grammar should be accompanied by at least one unit test. 
@@ -153,13 +164,4 @@ Before pushing a pull request, make sure that it passes all tests.
 
 Install [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) to use this grammar with NeoVim and follow their instructions for installing grammars.
 
-## Resources
-
-- [The javascript tree-sitter grammar is a good reference](https://github.com/tree-sitter/tree-sitter-javascript)
-- [A nice talk about what tree-sitter is and what it does](https://www.youtube.com/watch?v=Jes3bD6P0To)
-- [Literals in SuperCollider](http://doc.sccode.org/Reference/Literals.html)
-- [Symbolic notation in SuperCollider](http://doc.sccode.org/Overviews/SymbolicNotations.html)
-- [Syntax shortcuts in SuperCollider](http://doc.sccode.org/Reference/Syntax-Shortcuts.html)
-- [Creating parsers](https://tree-sitter.github.io/tree-sitter/creating-parsers)
-- [the SCIDE lexer](https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp) 
 
