@@ -1,7 +1,9 @@
 ==================
 Empty symbol with single quotes
 ==================
+(
 var sym = '';
+)
 
 ---
 (source_file 
@@ -16,7 +18,9 @@ var sym = '';
 ==================
 Empty symbol with single slash
 ==================
+(
 var sym = \;
+)
 
 ---
 (source_file 
