@@ -8,7 +8,7 @@ This project defines a grammar (the "rules" of the language) for SuperCollider i
 Among other things, this allows for a very high level of precision in syntax highlighting (see below) and analyzing/traversing source code with equal precision.
 
 ## Status: Experimental
-Note: This grammar is experimental
+Note: This grammar is experimental. Most of sclang is now implemented 
 
 ## Features
 
@@ -125,6 +125,16 @@ is parsed as
 ```
 
 ## Development
+I welcome everyone to commit pull requests to fix up things, add features or help out.
+If you just experience an issue and don't feel like making a pull request, feel free to open an issue and we will hopefully solve it ASAP.
+
+### Overview
+The source code is divided up like this:
+
+- **grammar.js** - This is where the syntax and grammar is defined.
+- **test/corpus/** - All unit tests sit here as .txt files
+- **queries/*.scm** - Syntax highlighting, code folding and indentation
+- **src/scanner.c** - A C file defining external scanners for more complex matching tasks
 
 ### Testing
 
@@ -137,34 +147,11 @@ Run them like this:
 tree-sitter generate && tree-sitter test
 ```
 
-### Trying with nvim-treesitter
+Before pushing a pull request, make sure that it passes all tests.
 
-I am not sure what the best way to try out this grammar with the NeoVim plugin [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is but this seems to work until the grammar is done and officially part of that project as well. 
+## Trying with nvim-treesitter
 
-Add this to your nvim config (change path in `url` to that of the tree sitter supercollider repo on your system if it you've downloaded it somewhere):
-
-```lua
--- tree-sitter-supercollider
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.supercollider = {
-	install_info = {
-		-- url = "~/code/tree-sitter-supercollider",
-		url = "https://github.com/madskjeldgaard/tree-sitter-supercollider",
-		files = {"src/parser.c"},
-		maintainer = "@madskjeldgaard"
-	},
-	filetype = "supercollider", -- if filetype does not agrees with parser name
-}
-```
-
-This allows you to run `:TSInstall supercollider` from within nvim. Repeat every time the grammar is changed.
-
-#### No highlighting?
-If the highlighting isn't happening, you probably need to symbolically link this repository's queries files to that of nvim-treesitter (on Linux this looks like):
-
-```bash
-ln -s $HOME/code/tree-sitter-supercollider/queries $HOME/.local/share/nvim/plugged/nvim-treesitter/queries/supercollider
-```
+Install [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) to use this grammar with NeoVim and follow their instructions for installing grammars.
 
 ## Resources
 
