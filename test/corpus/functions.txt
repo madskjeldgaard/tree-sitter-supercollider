@@ -8,6 +8,25 @@ ar(SinOsc, 110);
 (source_file (code_block (function_call (class_method_name) (parameter_call_list (argument_calls (unnamed_argument (class))) (argument_calls (unnamed_argument (literal (number (integer)))))))))
 
 =====================
+Argument list with no commas
+=====================
+
+(
+{|argument1 argument2|}
+)
+
+---
+(source_file 
+  (code_block 
+    (function_block 
+      (parameter_list 
+        (argument 
+          name: (identifier ))
+        (argument 
+          name: (identifier ))))))
+
+
+=====================
 unfold argument list with *
 =====================
 
