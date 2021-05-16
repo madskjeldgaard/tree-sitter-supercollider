@@ -116,7 +116,8 @@ module.exports = grammar({
 	duplicated_statement: $ => seq(
 		field("duplicated_object", $._object), 
 		field("operator","!"), 
-		field("duplication_times", $.number)
+			// TODO: This needs to be an object as well:
+		field("duplication_times", choice($.number))
 	),
 
         // keywords: $ => choice("if", "while"),
@@ -242,7 +243,7 @@ function_block: $ => choice(
         // Definition of parameters in function
         parameter_list: $ => choice(
             seq('arg', sepBy(',', $.argument), optional(seq("...", $.argument)), ';'),
-            seq('|', sepBy(',', $.argument), optional(seq("...", $.argument)), '|')
+            seq('|', sepBy(choice(' ', ','), $.argument), optional(seq("...", $.argument)), '|')
         ),
 
         // For definition lists
