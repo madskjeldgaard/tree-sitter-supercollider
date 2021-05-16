@@ -1,4 +1,36 @@
 ==================
+Empty symbol with single quotes
+==================
+var sym = '';
+
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (literal 
+        (symbol )))))
+
+==================
+Empty symbol with single slash
+==================
+var sym = \;
+
+---
+(source_file 
+  (code_block 
+    (variable_definition 
+      name: (variable 
+        (local_var 
+          name: (identifier )))
+      value: (literal 
+        (symbol )))))
+
+
+
+==================
 string concat
 ==================
 (
