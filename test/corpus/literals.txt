@@ -1,3 +1,14 @@
+======
+Class name as expression
+======
+(
+SinOsc;
+)
+---
+(source_file 
+  (code_block 
+    (class )))
+
 ==================
 Empty symbol with single quotes
 ==================
