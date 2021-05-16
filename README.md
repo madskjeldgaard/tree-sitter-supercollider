@@ -139,12 +139,16 @@ The source code is divided up like this:
 ### Resources
 Here are some helpful resources for developers who want to contribute:
 
+#### Tree-sitter resources:
+- [Creating parsers](https://tree-sitter.github.io/tree-sitter/creating-parsers) - The official tree-sitter documentation for creating parsers
 - [The javascript tree-sitter grammar is a good reference](https://github.com/tree-sitter/tree-sitter-javascript)
 - [A nice talk about what tree-sitter is and what it does](https://www.youtube.com/watch?v=Jes3bD6P0To)
+
+#### SuperCollider language resources:
+There is no official spec for he SuperCollider language (hehe), but these links are somewhat helpful:
 - [Literals in SuperCollider](http://doc.sccode.org/Reference/Literals.html)
 - [Symbolic notation in SuperCollider](http://doc.sccode.org/Overviews/SymbolicNotations.html)
 - [Syntax shortcuts in SuperCollider](http://doc.sccode.org/Reference/Syntax-Shortcuts.html)
-- [Creating parsers](https://tree-sitter.github.io/tree-sitter/creating-parsers)
 - [the SCIDE lexer](https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp) 
 
 ### Testing
