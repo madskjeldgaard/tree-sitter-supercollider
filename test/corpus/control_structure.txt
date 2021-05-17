@@ -13,14 +13,14 @@ if(nil.isNil, { "hello".postln });
           (receiver 
             (variable 
               (builtin_var )))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))
         true: (function_block 
           (function_call 
             (receiver 
               (literal 
                 (string )))
-            (instance_method_call 
+            (method_call 
               name: (method_name ))))))))
 ==================
 if with one clause
@@ -44,7 +44,7 @@ if(true, { "is true".postln; });
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name ))))))
   (control_structure 
     (if 
@@ -55,7 +55,7 @@ if(true, { "is true".postln; });
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -78,7 +78,7 @@ if(1 == 2, { "is true".postln; }, { 2; });
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name ))))
       false: (function_block 
         (literal 
@@ -101,14 +101,14 @@ true.if({ "hello".postln; }, { "no".postln; });
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name ))))
       false: (function_block 
         (function_call 
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name)))))))
 
 ==================
@@ -128,7 +128,7 @@ true.if({ "hello".postln; });
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -153,7 +153,7 @@ true.if({ "hello".postln; });
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 
@@ -179,7 +179,7 @@ while( {1 < 10;}, { "still counting".println;});
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -206,7 +206,7 @@ func.while{func}
           (receiver 
             (literal 
               (string )))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -228,7 +228,7 @@ for(1,10,{|i| i.postln});
           (receiver 
             (variable 
               (environment_var name: (identifier))))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -249,7 +249,7 @@ start.for(end, func)
           (receiver 
             (variable 
               (environment_var name: (identifier))))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -271,7 +271,7 @@ start.forBy(end, step, func)
           (receiver 
             (variable 
               (environment_var name: (identifier))))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -293,7 +293,7 @@ forBy(start, end, step, func)
           (receiver 
             (variable 
               (environment_var name: (identifier))))
-          (instance_method_call 
+          (method_call 
             name: (method_name )))))))
 
 ==================
@@ -470,7 +470,7 @@ x = switch (y.choose)
               (receiver 
                 (variable 
                   (environment_var name: (identifier))))
-              (instance_method_call 
+              (method_call 
                 name: (method_name ))))
           (function_block 
             (literal 
