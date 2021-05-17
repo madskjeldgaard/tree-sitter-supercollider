@@ -141,7 +141,7 @@ literal with method
       (literal 
         (number 
           (float ))))
-    (instance_method_call 
+    (method_call 
       (method_name ))))
 
 

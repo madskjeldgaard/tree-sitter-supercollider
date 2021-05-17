@@ -133,30 +133,19 @@ module.exports = grammar({
             field("value", $.function_block)
         )),
 
-        // TODO: Class vs instance/variable
         function_call: $ =>
             prec.right(choice(
-                // Class method
-                seq(
-                    $.class,
-                    repeat1(
-                        seq(
-                            $.class_method_call
-                        )
-                    )
-                ),
-		// Class method prefixed: ar(SinOsc, 110)
-			seq(
-			alias($.identifier, $.class_method_name), 
-			seq("(", optional($.parameter_call_list), ")"), 
-		),
-
-                // Instance method (chainable)
+				// method prefixed: ar(SinOsc, 110)
+				seq(
+					choice(alias($.identifier, $.method_name), alias($.class, $.method_name)), 
+					seq("(", optional($.parameter_call_list), ")"), 
+				),
+				// Instance method (chainable)
                  seq(
                     alias($._object, $.receiver),
                     repeat1(
                         choice(
-                            $.instance_method_call,
+                            $.method_call,
                             // This is already covered by the identifier rule, should it be more specific though?
                             $.instance_variable_setter_call,
                         )
@@ -165,7 +154,7 @@ module.exports = grammar({
                 )
             )),
 
-        instance_method_call: $ => prec.left(seq(
+        method_call: $ => prec.left(seq(
             ".",
             field("name", optional(alias($.identifier, $.method_name))),
             // Instance.method or Instance.method()
@@ -187,18 +176,18 @@ module.exports = grammar({
             )
         ),
 
-        class_method_call: $ => prec.left(choice(
-            // Class.method - class method
-            prec.left(seq(
-                ".",
-                field("name", alias($.identifier, $.class_method_name)),
-				optional(choice(
+        // class_method_call: $ => prec.left(choice(
+        //     // Class.method - class method
+        //     prec.left(seq(
+        //         ".",
+        //         field("name", alias($.identifier, $.class_method_name)),
+				// optional(choice(
 
-				seq("(", optional($.parameter_call_list), ")"), $._function_content)
-            ))),
-            // Class() - implicit .new
-            seq("(", optional($.parameter_call_list), ")")
-        )),
+				// seq("(", optional($.parameter_call_list), ")"), $._function_content)
+        //     ))),
+        //     // Class() - implicit .new
+        //     seq("(", optional($.parameter_call_list), ")")
+        // )),
 
         _expression_sequence: $ => seq(
             repeat(prec.right(1, seq($._expression_statement, ";"))),

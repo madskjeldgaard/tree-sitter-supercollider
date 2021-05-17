@@ -51,7 +51,7 @@ object.msg(a, _, _);
         (variable 
           (local_var 
             name: (identifier ))))
-      (instance_method_call 
+      (method_call 
         name: (method_name )
         (parameter_call_list 
           (argument_calls 
