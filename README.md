@@ -21,8 +21,8 @@ Note: This grammar is experimental. Most of sclang is now implemented
 - Very precise error messages (if a node fails, tree-sitter can tell pretty easily where it failed and why - for example if you are missing a semi colon in the middle of a function)
 - Editor agnostic - tree-sitter grammars can be implemented in any editor via [tree-sitter's language bindings](https://tree-sitter.github.io/tree-sitter/using-parsers)
 
-![/assets/playground.gif](Using tree-sitter-playground for neovim)
-
+![playground](/assets/playground.gif)
+Using [nvim-treesitter's playground to get a live view of the parser tree while writing code](https://github.com/nvim-treesitter/playground)
 
 ## TODO:
 
