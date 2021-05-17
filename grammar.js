@@ -389,7 +389,9 @@ function_block: $ => choice(
         ///////////////
 
 
-        // return_statement: $ => 
+        return_statement: $ => prec.left(seq("^", choice($._object))),
+
+
         // choice(
         // 	// $._end_of_function,
         // 	seq("^", $._object),
