@@ -424,6 +424,29 @@ Class as argument in mix of named/unnamed parameter list
               name: (identifier )
               name: (class ))))))))
 
+============================
+Implicit class method call to new in argument list
+============================
+(
+{arg ab; }.value(SinOsc());
+)
+---
+(source_file 
+  (code_block 
+    (function_call 
+      (receiver 
+        (function_block 
+          (parameter_list 
+            (argument 
+              name: (identifier )))))
+      (method_call 
+        name: (method_name )
+        (parameter_call_list 
+          (argument_calls 
+            (unnamed_argument 
+              (function_call 
+                (method_name )))))))))
+
 ==================
 Class method calls, implicit
 ==================

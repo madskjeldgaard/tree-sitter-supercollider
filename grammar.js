@@ -258,7 +258,7 @@ function_block: $ => choice(
             optional(
                 seq(
                     choice('=', ':'),
-                    choice($.function_call, $._object, $.class),
+                    choice($.function_call, $._object),
                 )
             )
         ))),
@@ -369,7 +369,6 @@ function_block: $ => choice(
             "=",
             field("value", choice($.class, $._object, $.function_call))
         )),
-        // naked_statement: $ => seq($._object),
 
         ///////////////
         //  Classes  //

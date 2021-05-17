@@ -88,7 +88,7 @@ Before pushing a pull request, make sure that it passes all tests.
 
 Most of the language has been implemented in the grammar, except for some of the more esoteric parts of the language:
 
-- Empty symbols as names eg `SynthDef(\, {})`
+
 - Syntax shortcuts / esoteric stuff: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- selector (method name) as a binary operator
 	- trailing-block arguments
@@ -98,11 +98,7 @@ Most of the language has been implemented in the grammar, except for some of the
 	- be able to parse `(:1..) select: _.isPrime nextN: 10;` properly
 	- multiple assignment
 	- special partial operator situation: (a: _);
-- Classes
-	- Class return statements - should these be demarcated somehow?
-- Make function calls _objects
-- Single expressions with no semicolon in a file (this even legal sc?)
-- implicit Class.new ( Class() ) in parameter lists
+- Single expressions with no semicolon in a file 
 
 ## Try it out
 
