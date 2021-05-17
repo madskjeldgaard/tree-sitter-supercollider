@@ -360,6 +360,71 @@ SinOsc.ar(freq: 441, mul:0.25);
                   (float ))))))))))
 
 ==================
+classes as arguments
+==================
+(
+{|a, b, c|}.value(SinOsc, LFTri, Saw)
+)
+---
+(source_file 
+  (code_block 
+    (function_call 
+      (receiver 
+        (function_block 
+          (parameter_list 
+            (argument 
+              name: (identifier ))
+            (argument 
+              name: (identifier ))
+            (argument 
+              name: (identifier )))))
+      (method_call 
+        name: (method_name )
+        (parameter_call_list 
+          (argument_calls 
+            (unnamed_argument 
+              (class )))
+          (argument_calls 
+            (unnamed_argument 
+              (class )))
+          (argument_calls 
+            (unnamed_argument 
+              (class ))))))))
+
+==========================
+Class as argument in mix of named/unnamed parameter list
+==========================
+(
+{|aaa, bbb, ccc|}.value(SinOsc, LFTri, ccc: Saw)
+)
+---
+(source_file 
+  (code_block 
+    (function_call 
+      (receiver 
+        (function_block 
+          (parameter_list 
+            (argument 
+              name: (identifier ))
+            (argument 
+              name: (identifier ))
+            (argument 
+              name: (identifier )))))
+      (method_call 
+        name: (method_name )
+        (parameter_call_list 
+          (argument_calls 
+            (unnamed_argument 
+              (class )))
+          (argument_calls 
+            (unnamed_argument 
+              (class )))
+          (argument_calls 
+            (named_argument 
+              name: (identifier )
+              name: (class ))))))))
+
+==================
 Class method calls, implicit
 ==================
 
