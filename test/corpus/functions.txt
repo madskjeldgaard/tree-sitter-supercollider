@@ -1,4 +1,30 @@
 =====================
+return statement: string literal
+=====================
+(
+^"hello";
+)
+---
+(source_file 
+  (code_block 
+    (return_statement 
+      (literal 
+        (string )))))
+
+=====================
+return statement: string literal no semi colon
+=====================
+(
+^"hello"
+)
+---
+(source_file 
+  (code_block 
+    (return_statement 
+      (literal 
+        (string )))))
+
+=====================
 class method prefixed class: ar(SinOsc, 110)
 =====================
 (
