@@ -90,17 +90,16 @@ module.exports = grammar({
             $.function_definition,
             $.function_call,
             $._object,
-
-		$.class,
             $.variable_definition,
             $.variable_definition_sequence,
 		$.duplicated_statement,
             // $.binary_expression,
-            // $.return_statement
+            $.return_statement
         ),
 
         // These are the values that may be assigned to a variable or argument
         _object: $ => choice(
+		prec(2, $.class),
             $.code_block,
             $.function_block,
             $.control_structure,
@@ -146,15 +145,14 @@ module.exports = grammar({
                         )
                     )
                 ),
-
-			// Class method prefixed: ar(SinOsc, 110)
+		// Class method prefixed: ar(SinOsc, 110)
 			seq(
-				alias($.identifier, $.class_method_name), 
-				seq("(", optional($.parameter_call_list), ")"), 
-			),
+			alias($.identifier, $.class_method_name), 
+			seq("(", optional($.parameter_call_list), ")"), 
+		),
 
                 // Instance method (chainable)
-                seq(
+                 seq(
                     alias($._object, $.receiver),
                     repeat1(
                         choice(
@@ -286,7 +284,7 @@ function_block: $ => choice(
             $.char,
             $.string,
             $.bool,
-			$.pi_statement
+		$.pi_statement
         ),
 
 		pi_statement: $ => seq(optional($.number), "pi"),
@@ -540,7 +538,6 @@ function_block: $ => choice(
                 [PRECEDENCE.or, '||'],
                 [PRECEDENCE.bitand, '&'],
                 [PRECEDENCE.bitor, '|'],
-                [PRECEDENCE.bitxor, '^'],
                 [PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
                 [PRECEDENCE.shift, choice('<<', '>>')],
                 [PRECEDENCE.additive, choice('+', '-', '++')],

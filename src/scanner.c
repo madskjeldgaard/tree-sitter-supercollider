@@ -2,7 +2,7 @@
 #include <wctype.h>
 // Block comment stuff here is largely nicked from tree-sitter-rust https://github.com/tree-sitter/tree-sitter-rust
 
-enum TokenType { BLOCK_COMMENT };
+enum TokenType { BLOCK_COMMENT, STRING };
 
 void *tree_sitter_supercollider_external_scanner_create() { return NULL; }
 void tree_sitter_supercollider_external_scanner_destroy(void *p) {}
@@ -32,6 +32,9 @@ bool tree_sitter_supercollider_external_scanner_scan(
       switch (lexer->lookahead) {
       case '\0':
         return false;
+	  /* case '"': */
+		/* lexer->result_symbol = STRING; */
+		/* break; */
       case '*':
         advance(lexer);
         after_star = true;
