@@ -168,4 +168,23 @@ Before pushing a pull request, make sure that it passes all tests.
 
 Install [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) to use this grammar with NeoVim and follow their instructions for installing grammars.
 
+### Install locally in nvim
+For development purposes it may be helpful to install your supercollider grammar locally:
+
+Add this to your nvim config (change path in `url` to that of the tree sitter supercollider repo on your system if it you've downloaded it somewhere):
+
+```lua
+-- tree-sitter-supercollider
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.supercollider = {
+	install_info = {
+		-- url = "~/code/tree-sitter-supercollider",
+		url = "https://github.com/madskjeldgaard/tree-sitter-supercollider",
+		files = {"src/parser.c"},
+		maintainer = "@madskjeldgaard"
+	},
+	filetype = "supercollider", -- if filetype does not agrees with parser name
+}
+```
+
 
