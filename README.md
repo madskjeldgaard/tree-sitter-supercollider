@@ -20,20 +20,24 @@ Note: This grammar is experimental. Most of sclang is now implemented
 
 ## Showcase:
 
+**Syntax highlighting**
 ![screenshot of grammar in action](/assets/screen1.png)
-Syntax highlighting
+
+**Syntax highlighting**
 
 ![screenshot of grammar in action2](/assets/benjolin.png)
-Syntax highlighting
 
-![playground](/assets/playground.gif)
-Using [nvim-treesitter's playground to get a live view of the parser tree while writing code](https://github.com/nvim-treesitter/playground)
+**Get table of contents for all definitions using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor) and navigate the document using those.**
 
 ![definitions](/assets/definitions.gif)
-Get table of contents for all definitions using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor) and navigate the document using those.
+
+**Rename all instances of a variable using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor)**
 
 ![smart rename](/assets/smartrename.gif)
-Rename all instances of a variable using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor). 
+
+**Using [nvim-treesitter's playground to get a live view of the parser tree while writing code](https://github.com/nvim-treesitter/playground)**
+
+![playground](/assets/playground.gif)
 
 ## TODO:
 
