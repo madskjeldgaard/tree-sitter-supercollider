@@ -34,7 +34,7 @@ Syntax highlighting a supercollider document in the terminal using the command `
 
 ![smart rename](/assets/smartrename.gif)
 
-**Using [https://github.com/nvim-treesitter/playground](nvim-treesitter's playground to get a live view of the parser tree while writing code):**
+**Using [nvim-treesitter's playground to get a live view of the parser tree while writing code](https://github.com/nvim-treesitter/playground):**
 
 ![playground](/assets/playground.gif)
 
