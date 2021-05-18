@@ -7,8 +7,8 @@ This project defines a grammar (the "rules" of the language) for SuperCollider i
 
 Among other things, this allows for a very high level of precision in syntax highlighting (see below) and analyzing/traversing source code with equal precision.
 
-## Status: Experimental
-Note: This grammar is experimental. Most of sclang is now implemented 
+## Status: Experimental but almost fully implemented
+Most of sclang is now implemented, except for a few of the more esoteric things (see issues/todolist) and generally works well. Yet, it is still early days and so expect bugs and changes to happen.
 
 ## Features
 
@@ -21,21 +21,19 @@ Note: This grammar is experimental. Most of sclang is now implemented
 ## Showcase:
 
 **Syntax highlighting**
-![screenshot of grammar in action](/assets/screen1.png)
 
-**Syntax highlighting**
+Syntax highlighting a supercollider document in the terminal using the command `tree-sitter highlight <somedocument>.scd`
 
 ![screenshot of grammar in action2](/assets/benjolin.png)
 
-**Get table of contents for all definitions using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor) and navigate the document using those.**
-
+**Get table of contents for all definitions using [nvim-treesitter-refactor](github.com/nvim-treesitter/nvim-treesitter-refactor) and navigate the document using those.**
 ![definitions](/assets/definitions.gif)
 
-**Rename all instances of a variable using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor)**
+**Rename all instances of a variable using [nvim-treesitter-refactor](github.com/nvim-treesitter/nvim-treesitter-refactor)**
 
 ![smart rename](/assets/smartrename.gif)
 
-**Using [nvim-treesitter's playground to get a live view of the parser tree while writing code](https://github.com/nvim-treesitter/playground)**
+**Using [https://github.com/nvim-treesitter/playground](nvim-treesitter's playground to get a live view of the parser tree while writing code)**
 
 ![playground](/assets/playground.gif)
 
