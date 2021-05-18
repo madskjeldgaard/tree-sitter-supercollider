@@ -29,6 +29,12 @@ Syntax highlighting
 ![playground](/assets/playground.gif)
 Using [nvim-treesitter's playground to get a live view of the parser tree while writing code](https://github.com/nvim-treesitter/playground)
 
+![definitions](/assets/definitions.gif)
+Get table of contents for all definitions using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor) and navigate the document using those.
+
+![smart rename](/assets/smartrename.gif)
+Rename all instances of a variable using [github.com/nvim-treesitter/nvim-treesitter-refactor](nvim-treesitter-refactor). 
+
 ## TODO:
 
 Most of the language has been implemented in the grammar, except for some of the more esoteric parts of the language:
