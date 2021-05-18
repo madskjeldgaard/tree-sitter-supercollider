@@ -106,7 +106,7 @@ module.exports = grammar({
             $.literal,
             $.variable,
             $.binary_expression,
-	$.unary_expression,
+			$.unary_expression,
             $.collection,
             $.indexed_collection,
             $.partial
@@ -250,16 +250,13 @@ function_block: $ => choice(
         ),
 
         // function call is added here to allow things like Array() in params
-        unnamed_argument: $ => choice($.function_call, $._object, $.class),
-        named_argument: $ => prec.left(1, field("name", seq(
-            field("name",
-                alias(seq(optional("\\"), $.identifier), $.identifier)
-			),
-            optional(
+        unnamed_argument: $ => choice($.function_call, $._object),
+        named_argument: $ => prec.left(10, 
+			field("name", seq(
+                choice($.symbol, $.identifier),
                 seq(
                     choice('=', ':'),
                     choice($.function_call, $._object),
-                )
             )
         ))),
 
@@ -273,7 +270,7 @@ function_block: $ => choice(
             $.char,
             $.string,
             $.bool,
-		$.pi_statement
+			$.pi_statement
         ),
 
 		pi_statement: $ => seq(optional($.number), "pi"),

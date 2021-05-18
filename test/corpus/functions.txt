@@ -1,4 +1,37 @@
 =====================
+String literal in unnamed argument calls
+=====================
+(
+SynthDef(\yo, {});
+SynthDef('yo', {});
+)
+---
+(source_file 
+  (code_block 
+    (function_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (symbol 
+                (identifier )))))
+        (argument_calls 
+          (unnamed_argument 
+            (function_block )))))
+    (function_call 
+      (method_name )
+      (parameter_call_list 
+        (argument_calls 
+          (unnamed_argument 
+            (literal 
+              (symbol 
+                (identifier )))))
+        (argument_calls 
+          (unnamed_argument 
+            (function_block )))))))
+
+=====================
 return statement: string literal
 =====================
 (
