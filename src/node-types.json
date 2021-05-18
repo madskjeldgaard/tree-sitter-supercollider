@@ -1302,6 +1302,10 @@
             "named": true
           },
           {
+            "type": "symbol",
+            "named": true
+          },
+          {
             "type": "unary_expression",
             "named": true
           },

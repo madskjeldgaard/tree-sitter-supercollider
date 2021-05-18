@@ -851,16 +851,12 @@
         {
           "type": "SYMBOL",
           "name": "_object"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "class"
         }
       ]
     },
     "named_argument": {
       "type": "PREC_LEFT",
-      "value": 1,
+      "value": 10,
       "content": {
         "type": "FIELD",
         "name": "name",
@@ -868,71 +864,46 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "FIELD",
-              "name": "name",
-              "content": {
-                "type": "ALIAS",
-                "content": {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "STRING",
-                          "value": "\\"
-                        },
-                        {
-                          "type": "BLANK"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "identifier"
-                    }
-                  ]
-                },
-                "named": true,
-                "value": "identifier"
-              }
-            },
-            {
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "SEQ",
+                  "type": "SYMBOL",
+                  "name": "symbol"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
                   "members": [
                     {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "STRING",
-                          "value": "="
-                        },
-                        {
-                          "type": "STRING",
-                          "value": ":"
-                        }
-                      ]
+                      "type": "STRING",
+                      "value": "="
                     },
                     {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "function_call"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "_object"
-                        }
-                      ]
+                      "type": "STRING",
+                      "value": ":"
                     }
                   ]
                 },
                 {
-                  "type": "BLANK"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "function_call"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_object"
+                    }
+                  ]
                 }
               ]
             }
