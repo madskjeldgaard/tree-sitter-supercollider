@@ -1,4 +1,39 @@
 ==================
+If-statements with double binary expressions
+==================
+(
+if(a.isKindOf(Stream) && a.class == Routine, {}, {});
+)
+---
+(source_file 
+  (code_block 
+    (control_structure 
+      (if 
+        expression: (binary_expression 
+          left: (function_call 
+            (receiver 
+              (binary_expression 
+                left: (function_call 
+                  (receiver 
+                    (variable 
+                      (environment_var 
+                        name: (identifier ))))
+                  (method_call 
+                    name: (method_name )
+                    (parameter_call_list 
+                      (argument_calls 
+                        (unnamed_argument 
+                          (class ))))))
+                right: (variable 
+                  (environment_var 
+                    name: (identifier )))))
+            (method_call 
+              name: (method_name )))
+          right: (class ))
+        true: (function_block )
+        false: (function_block )))))
+
+==================
 function call in if expression
 ==================
 (
