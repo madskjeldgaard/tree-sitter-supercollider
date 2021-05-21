@@ -376,29 +376,42 @@ function_block: $ => choice(
 	    // Definition of class
 	    class_def: $ => prec(PRECEDENCE.class_def, seq($.class, optional(seq(":", alias($.class, $.parent_class))), "{", 
 			    repeat(
-				    seq(
-					    sepBy(",",
-						    choice(
-
-							    // Variable declaration
+				    choice(
+					    // Variables
+					    seq(
+						    sepBy(",",
 							    choice(
-								    alias($.local_var, $.instance_var),
-								    $.instance_var,
-								    $.classvar
-							    ),
-							    // variable definiton
-							    seq(
+
+								    // Variable declaration
 								    choice(
 									    alias($.local_var, $.instance_var),
 									    $.instance_var,
 									    $.classvar
-								    ), 
-								    "=", 
-								    $._object, 
-							    ),
-						    )
-					    ), 
-					    ";"
+								    ),
+								    // variable definiton
+								    seq(
+									    choice(
+										    alias($.local_var, $.instance_var),
+										    $.instance_var,
+										    $.classvar
+									    ), 
+									    "=", 
+									    $._object, 
+								    ),
+							    )
+						    ), 
+						    ";"
+					    ),
+
+					    // Instance method
+					    seq(
+						    alias($.identifier, $.instance_method_name), $.function_block
+					    ),
+					    
+					    // Class method
+					    seq(
+						    "*", alias($.identifier, $.class_method_name), $.function_block
+					    ),
 				    )
 			    ),
 			    "}")),

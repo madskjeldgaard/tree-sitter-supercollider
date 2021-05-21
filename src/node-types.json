@@ -375,6 +375,81 @@
     "fields": {}
   },
   {
+    "type": "class_def",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "class",
+          "named": true
+        },
+        {
+          "type": "class_method_name",
+          "named": true
+        },
+        {
+          "type": "classvar",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
+          "type": "instance_method_name",
+          "named": true
+        },
+        {
+          "type": "instance_var",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "parent_class",
+          "named": true
+        },
+        {
+          "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "classvar",
     "named": true,
     "fields": {
@@ -1002,6 +1077,22 @@
     }
   },
   {
+    "type": "instance_var",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "instance_variable_setter_call",
     "named": true,
     "fields": {
@@ -1375,6 +1466,11 @@
     }
   },
   {
+    "type": "parent_class",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "partial",
     "named": true,
     "fields": {}
@@ -1518,6 +1614,10 @@
         },
         {
           "type": "class",
+          "named": true
+        },
+        {
+          "type": "class_def",
           "named": true
         },
         {
@@ -1841,6 +1941,10 @@
           "named": true
         },
         {
+          "type": "instance_var",
+          "named": true
+        },
+        {
           "type": "local_var",
           "named": true
         }
@@ -2155,6 +2259,10 @@
     "named": false
   },
   {
+    "type": "<>",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
@@ -2355,6 +2463,10 @@
     "named": true
   },
   {
+    "type": "class_method_name",
+    "named": true
+  },
+  {
     "type": "classvar",
     "named": false
   },
@@ -2401,6 +2513,10 @@
   {
     "type": "inf",
     "named": false
+  },
+  {
+    "type": "instance_method_name",
+    "named": true
   },
   {
     "type": "integer",

@@ -1,3 +1,43 @@
+====================
+instance variables with setters and getters
+====================
+
+var <>hello;
+var >yo;
+var <yo;
+
+---
+(source_file 
+  (variable 
+    (instance_var 
+      name: (identifier )))
+  (variable 
+    (instance_var 
+      name: (identifier )))
+  (variable 
+    (instance_var 
+      name: (identifier ))))
+
+====================
+class variables with setters and getters
+====================
+
+classvar <>hello;
+classvar >yo;
+classvar <yo;
+
+---
+(source_file 
+  (variable 
+    (classvar 
+      name: (identifier )))
+  (variable 
+    (classvar 
+      name: (identifier )))
+  (variable 
+    (classvar 
+      name: (identifier ))))
+
 ==================
 multiple variable assignment
 ==================
