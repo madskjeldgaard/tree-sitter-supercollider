@@ -36,6 +36,8 @@ const PRECEDENCE = {
     vardef: 3,
     vardef_sequence: 2,
     closure: -1,
+	class_def: 1,
+	class:20,
 }
 
 function sepBy1(sep, rule) {
@@ -80,8 +82,9 @@ module.exports = grammar({
         source_file: $ => repeat($._expression),
 
         _expression: $ => choice(
-            $.code_block,
-            seq($._expression_statement, ";"),
+		$.code_block,
+		$.class_def,
+		seq($._expression_statement, ";"),
         ),
 
         _expression_statement: $ => choice(
@@ -320,13 +323,13 @@ function_block: $ => choice(
         //  Variables  //
         /////////////////
 
-        variable: $ => choice(
-            $.environment_var,
-            $.local_var,
-            $.classvar,
-            $.builtin_var,
-		$.instance_var
-        ),
+	    variable: $ => choice(
+		    $.environment_var,
+		    $.local_var,
+		    $.classvar,
+		    $.builtin_var,
+		    $.instance_var
+	    ),
         builtin_var: $ => field("name", choice(
             "inf",
             "nil",
@@ -343,7 +346,7 @@ function_block: $ => choice(
             field("name", $.identifier), seq( 'var',  field("name", $.identifier)))
 	),
 
-	instance_var: $=> seq( 'var', optional(choice("<", ">", "<>")), field("name", $.identifier)),
+	instance_var: $=> seq( optional('var'), optional(choice("<", ">", "<>")), field("name", $.identifier)),
         classvar: $ => seq('classvar', optional(choice("<", ">", "<>")), field("name", $.identifier)),
         environment_var: $ => choice(
             field("name", alias(/[a-z]/, $.identifier)),
@@ -368,15 +371,37 @@ function_block: $ => choice(
         //  Classes  //
         ///////////////
 
-
         return_statement: $ => prec.left(seq("^", choice($._object))),
 
+	    // Definition of class
+	    class_def: $ => prec(PRECEDENCE.class_def, seq($.class, optional(seq(":", alias($.class, $.parent_class))), "{", 
+			    repeat(
+				    seq(
+					    sepBy(",",
+						    choice(
 
-        // choice(
-        // 	// $._end_of_function,
-        // 	seq("^", $._object),
-        // ),
-        // _end_of_function: $ => seq($._object, optional(";"), optional(/\n}/), "}"),
+							    // Variable declaration
+							    choice(
+								    alias($.local_var, $.instance_var),
+								    $.instance_var,
+								    $.classvar
+							    ),
+							    // variable definiton
+							    seq(
+								    choice(
+									    alias($.local_var, $.instance_var),
+									    $.instance_var,
+									    $.classvar
+								    ), 
+								    "=", 
+								    $._object, 
+							    ),
+						    )
+					    ), 
+					    ";"
+				    )
+			    ),
+			    "}")),
 
         ////////////////
         //  Comments  //
@@ -550,7 +575,7 @@ function_block: $ => choice(
 		))));
 	},
 
-        class: $ => field("name", /[A-Z]+[a-zA-Z\d_]*/),
+        class: $ => prec(PRECEDENCE.class, field("name", /[A-Z]+[a-zA-Z\d_]*/)),
         identifier: $ => /(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
 
         ////////////////////
