@@ -51,7 +51,6 @@ Most of the language has been implemented in the grammar, except for some of the
 	- list comprehensions
 	- Ref using the \` shorthand
 	- be able to parse `(:1..) select: _.isPrime nextN: 10;` properly
-	- multiple assignment
 	- special partial operator situation: (a: _);
 
 ## Try it out
