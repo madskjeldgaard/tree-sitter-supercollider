@@ -324,7 +324,8 @@ function_block: $ => choice(
             $.environment_var,
             $.local_var,
             $.classvar,
-            $.builtin_var
+            $.builtin_var,
+		$.instance_var
         ),
         builtin_var: $ => field("name", choice(
             "inf",
@@ -338,16 +339,12 @@ function_block: $ => choice(
             "topEnvironment"
         )),
 
-        // TODO: is this a good way to detect local variables in use?
         local_var: $ => prec(PRECEDENCE.localvar, choice(
-            field("name", $.identifier),
-            seq(
-                'var',
-                field("name", $.identifier)
-            )
-        )),
+            field("name", $.identifier), seq( 'var',  field("name", $.identifier)))
+	),
 
-        classvar: $ => seq('classvar', field("name", $.identifier)),
+	instance_var: $=> seq( 'var', optional(choice("<", ">", "<>")), field("name", $.identifier)),
+        classvar: $ => seq('classvar', optional(choice("<", ">", "<>")), field("name", $.identifier)),
         environment_var: $ => choice(
             field("name", alias(/[a-z]/, $.identifier)),
             field("name", alias(seq('~', $.identifier), $.identifier)),
