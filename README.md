@@ -43,15 +43,14 @@ Syntax highlighting a supercollider document in the terminal using the command `
 Most of the language has been implemented in the grammar, except for some of the more esoteric parts of the language:
 
 
-- Single expressions with no semicolon in a file 
 - Syntax shortcuts / esoteric stuff: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
 	- selector (method name) as a binary operator
 	- trailing-block arguments
 	- selectors for binary operators
 	- list comprehensions
-	- Ref using the \` shorthand
 	- be able to parse `(:1..) select: _.isPrime nextN: 10;` properly
 	- special partial operator situation: (a: _);
+- Single expressions with no semicolon in a file 
 
 ## Try it out
 
