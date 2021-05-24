@@ -1,4 +1,28 @@
 ======
+Ref'd array
+======
+
+(
+`[1,2,3]
+)
+
+---
+(source_file 
+  (code_block 
+    (collection 
+      (ref )
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer )))
+      (literal 
+        (number 
+          (integer ))))))
+
+
+======
 Class name as expression
 ======
 (
