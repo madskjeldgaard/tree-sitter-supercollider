@@ -1848,6 +1848,10 @@
         }
       }
     },
+    "ref": {
+      "type": "STRING",
+      "value": "`"
+    },
     "collection": {
       "type": "PREC_LEFT",
       "value": 0,
@@ -1878,9 +1882,22 @@
                               "value": "#"
                             },
                             {
-                              "type": "STRING",
-                              "value": "`"
-                            },
+                              "type": "SYMBOL",
+                              "name": "ref"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "CHOICE",
+                          "members": [
                             {
                               "type": "CHOICE",
                               "members": [
