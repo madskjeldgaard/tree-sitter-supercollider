@@ -69,6 +69,7 @@ module.exports = grammar({
         [$.local_var, $.if],
         [$.switch],
         [$.variable_definition_sequence],
+	    [$.binary_expression, $.nil_check],
         [$._expression, $._object],
     ],
 
@@ -103,6 +104,7 @@ module.exports = grammar({
         // These are the values that may be assigned to a variable or argument
         _object: $ => choice(
 		prec(2, $.class),
+		$.nil_check,
             $.code_block,
             $.function_block,
             $.control_structure,
@@ -590,6 +592,9 @@ function_block: $ => choice(
 
         class: $ => prec(PRECEDENCE.class, field("name", /[A-Z]+[a-zA-Z\d_]*/)),
         identifier: $ => /(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
+
+	    // Nil check
+	    nil_check: $ => prec.left(seq($._object, choice("?", "!?", "??"), $._object)),
 
         ////////////////////
         //  Conditionals  //

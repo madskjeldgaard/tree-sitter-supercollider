@@ -81,6 +81,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "nil_check"
+        },
+        {
+          "type": "SYMBOL",
           "name": "code_block"
         },
         {
@@ -3140,6 +3144,40 @@
       "type": "PATTERN",
       "value": "(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\\d_]*"
     },
+    "nil_check": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_object"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "?"
+              },
+              {
+                "type": "STRING",
+                "value": "!?"
+              },
+              {
+                "type": "STRING",
+                "value": "??"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_object"
+          }
+        ]
+      }
+    },
     "control_structure": {
       "type": "PREC",
       "value": 3,
@@ -3952,6 +3990,10 @@
     ],
     [
       "variable_definition_sequence"
+    ],
+    [
+      "binary_expression",
+      "nil_check"
     ],
     [
       "_expression",

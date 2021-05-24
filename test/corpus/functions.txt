@@ -1,3 +1,33 @@
+====================
+nil checks using ?? !? and ?
+====================
+(
+nil ?? "yo";
+2 !? { nil };
+a ? 2000;
+)
+---
+(source_file 
+  (code_block 
+    (nil_check 
+      (variable 
+        (builtin_var ))
+      (literal 
+        (string )))
+    (nil_check 
+      (literal 
+        (number 
+          (integer )))
+      (function_block 
+        (variable 
+          (builtin_var ))))
+    (nil_check 
+      (variable 
+        (environment_var 
+          name: (identifier )))
+      (literal 
+        (number 
+          (integer ))))))
 =====================
 String literal in unnamed argument calls
 =====================
