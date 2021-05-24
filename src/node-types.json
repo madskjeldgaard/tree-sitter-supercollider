@@ -131,6 +131,10 @@
             "named": true
           },
           {
+            "type": "nil_check",
+            "named": true
+          },
+          {
             "type": "partial",
             "named": true
           },
@@ -272,6 +276,10 @@
           },
           {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "nil_check",
             "named": true
           },
           {
@@ -431,6 +439,10 @@
           "named": true
         },
         {
+          "type": "nil_check",
+          "named": true
+        },
+        {
           "type": "parent_class",
           "named": true
         },
@@ -518,6 +530,10 @@
           "named": true
         },
         {
+          "type": "nil_check",
+          "named": true
+        },
+        {
           "type": "partial",
           "named": true
         },
@@ -594,6 +610,10 @@
         },
         {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "nil_check",
           "named": true
         },
         {
@@ -689,6 +709,10 @@
           },
           {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "nil_check",
             "named": true
           },
           {
@@ -853,6 +877,10 @@
           "named": true
         },
         {
+          "type": "nil_check",
+          "named": true
+        },
+        {
           "type": "parameter_list",
           "named": true
         },
@@ -982,6 +1010,10 @@
           },
           {
             "type": "literal",
+            "named": true
+          },
+          {
+            "type": "nil_check",
             "named": true
           },
           {
@@ -1159,6 +1191,10 @@
           "named": true
         },
         {
+          "type": "nil_check",
+          "named": true
+        },
+        {
           "type": "partial",
           "named": true
         },
@@ -1293,6 +1329,10 @@
           "named": true
         },
         {
+          "type": "nil_check",
+          "named": true
+        },
+        {
           "type": "parameter_call_list",
           "named": true
         },
@@ -1389,6 +1429,10 @@
             "named": true
           },
           {
+            "type": "nil_check",
+            "named": true
+          },
+          {
             "type": "partial",
             "named": true
           },
@@ -1406,6 +1450,65 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "nil_check",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "class",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "nil_check",
+          "named": true
+        },
+        {
+          "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1531,6 +1634,10 @@
           "named": true
         },
         {
+          "type": "nil_check",
+          "named": true
+        },
+        {
           "type": "partial",
           "named": true
         },
@@ -1583,6 +1690,10 @@
         },
         {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "nil_check",
           "named": true
         },
         {
@@ -1654,6 +1765,10 @@
         },
         {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "nil_check",
           "named": true
         },
         {
@@ -1754,6 +1869,10 @@
           "named": true
         },
         {
+          "type": "nil_check",
+          "named": true
+        },
+        {
           "type": "partial",
           "named": true
         },
@@ -1846,6 +1965,10 @@
             "named": true
           },
           {
+            "type": "nil_check",
+            "named": true
+          },
+          {
             "type": "partial",
             "named": true
           },
@@ -1903,6 +2026,10 @@
         },
         {
           "type": "literal",
+          "named": true
+        },
+        {
+          "type": "nil_check",
           "named": true
         },
         {
@@ -2006,6 +2133,10 @@
             "named": true
           },
           {
+            "type": "nil_check",
+            "named": true
+          },
+          {
             "type": "partial",
             "named": true
           },
@@ -2095,6 +2226,10 @@
             "named": true
           },
           {
+            "type": "nil_check",
+            "named": true
+          },
+          {
             "type": "partial",
             "named": true
           },
@@ -2144,6 +2279,10 @@
   },
   {
     "type": "!=",
+    "named": false
+  },
+  {
+    "type": "!?",
     "named": false
   },
   {
@@ -2280,6 +2419,14 @@
   },
   {
     "type": ">>",
+    "named": false
+  },
+  {
+    "type": "?",
+    "named": false
+  },
+  {
+    "type": "??",
     "named": false
   },
   {
