@@ -1,6 +1,6 @@
 /*
 
-keywords 
+keywords
 "arg"
 "classvar"
 "const"
@@ -11,7 +11,6 @@ keywords
 builtins
 
 */
-
 
 const PRECEDENCE = {
 	comment: 1000,
@@ -120,8 +119,8 @@ module.exports = grammar({
         partial: $ => "_",
 
 	duplicated_statement: $ => seq(
-		field("duplicated_object", $._object), 
-		field("operator","!"), 
+		field("duplicated_object", $._object),
+		field("operator","!"),
 			// TODO: This needs to be an object as well:
 		field("duplication_times", choice($.number))
 	),
@@ -142,8 +141,8 @@ module.exports = grammar({
             prec.right(choice(
 				// method prefixed: ar(SinOsc, 110)
 				seq(
-					choice(alias($.identifier, $.method_name), alias($.class, $.method_name)), 
-					seq("(", optional($.parameter_call_list), ")"), 
+					choice(alias($.identifier, $.method_name), alias($.class, $.method_name)),
+					seq("(", optional($.parameter_call_list), ")"),
 				),
 				// Instance method (chainable)
                  seq(
@@ -233,7 +232,6 @@ function_block: $ => choice(
             ),
         ),
 
-
         // Definition of parameters in function
         parameter_list: $ => choice(
             seq('arg', sepBy(',', $.argument), optional(seq("...", $.argument)), ';'),
@@ -256,7 +254,7 @@ function_block: $ => choice(
 
         // function call is added here to allow things like Array() in params
         unnamed_argument: $ => choice($.function_call, $._object),
-        named_argument: $ => prec.left(10, 
+        named_argument: $ => prec.left(10,
 			field("name", seq(
                 choice($.symbol, $.identifier),
                 seq(
@@ -373,10 +371,10 @@ function_block: $ => choice(
         //  Classes  //
         ///////////////
 
-        return_statement: $ => prec.left(seq("^", choice($._object))),
+        return_statement: $ => prec.left(seq("^", choice($._object, $.function_call))),
 
 	    // Definition of class
-	    class_def: $ => prec(PRECEDENCE.class_def, seq($.class, optional(seq(":", alias($.class, $.parent_class))), "{", 
+	    class_def: $ => prec(PRECEDENCE.class_def, seq($.class, optional(seq(":", alias($.class, $.parent_class))), "{",
 			    repeat(
 				    choice(
 					    // Variables
@@ -396,12 +394,12 @@ function_block: $ => choice(
 										    alias($.local_var, $.instance_var),
 										    $.instance_var,
 										    $.classvar
-									    ), 
-									    "=", 
-									    $._object, 
+									    ),
+									    "=",
+									    $._object,
 								    ),
 							    )
-						    ), 
+						    ),
 						    ";"
 					    ),
 
@@ -409,7 +407,7 @@ function_block: $ => choice(
 					    seq(
 						    alias($.identifier, $.instance_method_name), $.function_block
 					    ),
-					    
+
 					    // Class method
 					    seq(
 						    "*", alias($.identifier, $.class_method_name), $.function_block
@@ -522,7 +520,7 @@ function_block: $ => choice(
         ),
 
         _index: $ => choice(seq("[",
-            field("index", 
+            field("index",
 				choice($.literal,
                 // Subrange
                 choice(
@@ -532,7 +530,7 @@ function_block: $ => choice(
                 )
             )),
             "]"
-        ), 
+        ),
 			// clipAt
 			seq("|@|", field("index", $.integer)),
 			// wrapAt
@@ -579,8 +577,8 @@ function_block: $ => choice(
 			const table = [
 				[PRECEDENCE.unary, '-'],
 				[PRECEDENCE.unary, '*'],
-				// Example of this in usage to create a routine: 
-				// (:1..) 
+				// Example of this in usage to create a routine:
+				// (:1..)
 				[PRECEDENCE.unary, ':'],
 			];
 
