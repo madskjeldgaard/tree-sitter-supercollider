@@ -7,20 +7,19 @@ Ref'd array
 )
 
 ---
-(source_file 
-  (code_block 
-    (collection 
+(source_file
+  (code_block
+    (collection
       (ref )
-      (literal 
-        (number 
+      (literal
+        (number
           (integer )))
-      (literal 
-        (number 
+      (literal
+        (number
           (integer )))
-      (literal 
-        (number 
+      (literal
+        (number
           (integer ))))))
-
 
 ======
 Class name as expression
@@ -29,8 +28,8 @@ Class name as expression
 SinOsc;
 )
 ---
-(source_file 
-  (code_block 
+(source_file
+  (code_block
     (class )))
 
 ==================
@@ -41,13 +40,13 @@ var sym = '';
 )
 
 ---
-(source_file 
-  (code_block 
-    (variable_definition 
-      name: (variable 
-        (local_var 
+(source_file
+  (code_block
+    (variable_definition
+      name: (variable
+        (local_var
           name: (identifier )))
-      value: (literal 
+      value: (literal
         (symbol )))))
 
 ==================
@@ -58,16 +57,14 @@ var sym = \;
 )
 
 ---
-(source_file 
-  (code_block 
-    (variable_definition 
-      name: (variable 
-        (local_var 
+(source_file
+  (code_block
+    (variable_definition
+      name: (variable
+        (local_var
           name: (identifier )))
-      value: (literal 
+      value: (literal
         (symbol )))))
-
-
 
 ==================
 string concat
@@ -76,12 +73,12 @@ string concat
 "hej" ++ "med dig";
 )
 ---
-(source_file 
-  (code_block 
-    (binary_expression 
-      left: (literal 
+(source_file
+  (code_block
+    (binary_expression
+      left: (literal
         (string ))
-      right: (literal 
+      right: (literal
         (string )))))
 
 ==================
@@ -91,11 +88,11 @@ string concat
 2.0pi
 )
 ---
-(source_file 
-  (code_block 
-    (literal 
-      (pi_statement 
-        (number 
+(source_file
+  (code_block
+    (literal
+      (pi_statement
+        (number
           (float ))))))
 
 ==================
@@ -105,11 +102,11 @@ string concat
 2pi
 )
 ---
-(source_file 
-  (code_block 
-    (literal 
-      (pi_statement 
-        (number 
+(source_file
+  (code_block
+    (literal
+      (pi_statement
+        (number
           (integer ))))))
 
 ==================
@@ -118,9 +115,9 @@ single number
 1;
 
 ---
-(source_file 
-  (literal 
-    (number 
+(source_file
+  (literal
+    (number
       (integer))))
 
 ==================
@@ -131,8 +128,8 @@ unary single number
 ---
 (source_file
   (unary_expression
-    right: 
-	(literal 
+    right:
+	(literal
 		(number
         	(integer )))))
 
@@ -159,15 +156,14 @@ literal with method
 ==================
 10.5.round;
 ---
-(source_file 
-  (function_call 
-    (receiver 
-      (literal 
-        (number 
+(source_file
+  (function_call
+    (receiver
+      (literal
+        (number
           (float ))))
-    (method_call 
+    (method_call
       (method_name ))))
-
 
 ==================
 literal number
@@ -182,27 +178,27 @@ var expUpperCase = 1E8;
 var expNegativePre = -1E8;
 
 ---
-(source_file 
-  (variable_definition 
-    (variable 
-      (local_var 
+(source_file
+  (variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
-      (number 
+    (literal
+      (number
         (integer ))))
-(variable_definition 
-    (variable 
-      (local_var 
+(variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
-      (number 
+    (literal
+      (number
         (float ))))
-(variable_definition 
-    (variable 
-      (local_var 
+(variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
-      (number 
+    (literal
+      (number
         (hexinteger ))))
 (variable_definition
     (variable
@@ -247,12 +243,12 @@ literal string
 var string = "hej med Dig !#)¤!¤AZ";
 
 ---
-(source_file 
-  (variable_definition 
-    (variable 
-      (local_var 
+(source_file
+  (variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
+    (literal
       (string ))))
 
 ==================
@@ -261,12 +257,12 @@ literal symbol slashed
 var sym = \averyLongSymbol;
 
 ---
-(source_file 
-  (variable_definition 
-    (variable 
-      (local_var 
+(source_file
+  (variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
+    (literal
         (symbol (identifier)))))
 
 ==================
@@ -275,14 +271,13 @@ literal symbol single quoted
 var sym = 'averyLongSymbol';
 
 ---
-(source_file 
-  (variable_definition 
-    (variable 
-      (local_var 
+(source_file
+  (variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
+    (literal
         (symbol (identifier)))))
-
 
 ==================
 literal char
@@ -290,12 +285,12 @@ literal char
 var charvar = $w;
 
 ---
-(source_file 
-  (variable_definition 
-    (variable 
-      (local_var 
+(source_file
+  (variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
+    (literal
         (char ))))
 
 ==================
@@ -305,16 +300,16 @@ var boolean = true;
 var boolean2 = false;
 
 ---
-(source_file 
-  (variable_definition 
-    (variable 
-      (local_var 
+(source_file
+  (variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
+    (literal
         (bool )))
-  (variable_definition 
-    (variable 
-      (local_var 
+  (variable_definition
+    (variable
+      (local_var
         (identifier )))
-    (literal 
+    (literal
         (bool ))))

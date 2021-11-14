@@ -7,26 +7,26 @@ nil ?? "yo";
 a ? 2000;
 )
 ---
-(source_file 
-  (code_block 
-    (nil_check 
-      (variable 
+(source_file
+  (code_block
+    (nil_check
+      (variable
         (builtin_var ))
-      (literal 
+      (literal
         (string )))
-    (nil_check 
-      (literal 
-        (number 
+    (nil_check
+      (literal
+        (number
           (integer )))
-      (function_block 
-        (variable 
+      (function_block
+        (variable
           (builtin_var ))))
-    (nil_check 
-      (variable 
-        (environment_var 
+    (nil_check
+      (variable
+        (environment_var
           name: (identifier )))
-      (literal 
-        (number 
+      (literal
+        (number
           (integer ))))))
 =====================
 String literal in unnamed argument calls
@@ -36,29 +36,29 @@ SynthDef(\yo, {});
 SynthDef('yo', {});
 )
 ---
-(source_file 
-  (code_block 
-    (function_call 
+(source_file
+  (code_block
+    (function_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (symbol 
+      (parameter_call_list
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (symbol
                 (identifier )))))
-        (argument_calls 
-          (unnamed_argument 
+        (argument_calls
+          (unnamed_argument
             (function_block )))))
-    (function_call 
+    (function_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (symbol 
+      (parameter_call_list
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (symbol
                 (identifier )))))
-        (argument_calls 
-          (unnamed_argument 
+        (argument_calls
+          (unnamed_argument
             (function_block )))))))
 
 =====================
@@ -68,10 +68,10 @@ return statement: string literal
 ^"hello";
 )
 ---
-(source_file 
-  (code_block 
-    (return_statement 
-      (literal 
+(source_file
+  (code_block
+    (return_statement
+      (literal
         (string )))))
 
 =====================
@@ -81,11 +81,29 @@ return statement: string literal no semi colon
 ^"hello"
 )
 ---
-(source_file 
-  (code_block 
-    (return_statement 
-      (literal 
+(source_file
+  (code_block
+    (return_statement
+      (literal
         (string )))))
+
+=====================
+return statement with function call
+=====================
+EasyNRT {
+	*new{
+		^init()
+	}
+}
+---
+(source_file
+  (class_def
+    (class )
+    (class_method_name )
+    (function_block
+      (return_statement
+        (function_call
+          (method_name ))))))
 
 =====================
 class method prefixed class: ar(SinOsc, 110)
@@ -105,15 +123,14 @@ Argument list with no commas
 )
 
 ---
-(source_file 
-  (code_block 
-    (function_block 
-      (parameter_list 
-        (argument 
+(source_file
+  (code_block
+    (function_block
+      (parameter_list
+        (argument
           name: (identifier ))
-        (argument 
+        (argument
           name: (identifier ))))))
-
 
 =====================
 unfold argument list with *
@@ -124,54 +141,54 @@ unfold argument list with *
 	f.value(*[2,3,4])
 )
 ---
-(source_file 
-  (code_block 
-    (function_definition 
-      name: (variable 
-        (environment_var 
+(source_file
+  (code_block
+    (function_definition
+      name: (variable
+        (environment_var
           name: (identifier )))
-      value: (function_block 
-        (parameter_list 
-          (argument 
+      value: (function_block
+        (parameter_list
+          (argument
             name: (identifier ))
-          (argument 
+          (argument
             name: (identifier ))
-          (argument 
+          (argument
             name: (identifier )))
-        (function_call 
-          (receiver 
-            (collection 
-              (variable 
-                (local_var 
+        (function_call
+          (receiver
+            (collection
+              (variable
+                (local_var
                   name: (identifier )))
-              (variable 
-                (local_var 
+              (variable
+                (local_var
                   name: (identifier )))
-              (variable 
-                (local_var 
+              (variable
+                (local_var
                   name: (identifier )))))
-          (method_call 
+          (method_call
             name: (method_name )))))
-    (function_call 
-      (receiver 
-        (variable 
-          (environment_var 
+    (function_call
+      (receiver
+        (variable
+          (environment_var
             name: (identifier ))))
-      (method_call 
+      (method_call
         name: (method_name )
-        (parameter_call_list 
-          (argument_calls 
-            (unnamed_argument 
-              (unary_expression 
-                right: (collection 
-                  (literal 
-                    (number 
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
+              (unary_expression
+                right: (collection
+                  (literal
+                    (number
                       (integer )))
-                  (literal 
-                    (number 
+                  (literal
+                    (number
                       (integer )))
-                  (literal 
-                    (number 
+                  (literal
+                    (number
                       (integer ))))))))))))
 
 ==================
@@ -182,23 +199,23 @@ f = {arg ...args; };
 e = {|...args| };
 )
 ---
-(source_file 
-  (code_block 
-    (function_definition 
-      name: (variable 
-        (environment_var 
+(source_file
+  (code_block
+    (function_definition
+      name: (variable
+        (environment_var
           name: (identifier )))
-      value: (function_block 
-        (parameter_list 
-          (argument 
+      value: (function_block
+        (parameter_list
+          (argument
             name: (identifier )))))
-    (function_definition 
-      name: (variable 
-        (environment_var 
+    (function_definition
+      name: (variable
+        (environment_var
           name: (identifier )))
-      value: (function_block 
-        (parameter_list 
-          (argument 
+      value: (function_block
+        (parameter_list
+          (argument
             name: (identifier )))))))
 
 ==================
@@ -206,74 +223,74 @@ function call in binary operator
 ==================
 (
 var sig = sig * EnvGen.kr(
-	Env([0.0,1.0,1.0,0], [fadeIn, fadeOut], releaseNode: 2),  
-	gate: killgate,  
+	Env([0.0,1.0,1.0,0], [fadeIn, fadeOut], releaseNode: 2),
+	gate: killgate,
 	doneAction: 2
 );
 )
 ---
-(source_file 
-  (code_block 
-    (variable_definition 
-      name: (variable 
-        (local_var 
+(source_file
+  (code_block
+    (variable_definition
+      name: (variable
+        (local_var
           name: (identifier )))
-      value: (function_call 
-        (receiver 
-          (binary_expression 
-            left: (variable 
-              (local_var 
+      value: (function_call
+        (receiver
+          (binary_expression
+            left: (variable
+              (local_var
                 name: (identifier )))
             right: (class )))
-        (method_call 
+        (method_call
           name: (method_name )
-          (parameter_call_list 
-            (argument_calls 
-              (unnamed_argument 
-                (function_call 
+          (parameter_call_list
+            (argument_calls
+              (unnamed_argument
+                (function_call
                   (method_name )
-                  (parameter_call_list 
-                    (argument_calls 
-                      (unnamed_argument 
-                        (collection 
-                          (literal 
-                            (number 
+                  (parameter_call_list
+                    (argument_calls
+                      (unnamed_argument
+                        (collection
+                          (literal
+                            (number
                               (float )))
-                          (literal 
-                            (number 
+                          (literal
+                            (number
                               (float )))
-                          (literal 
-                            (number 
+                          (literal
+                            (number
                               (float )))
-                          (literal 
-                            (number 
+                          (literal
+                            (number
                               (integer ))))))
-                    (argument_calls 
-                      (unnamed_argument 
-                        (collection 
-                          (variable 
-                            (local_var 
+                    (argument_calls
+                      (unnamed_argument
+                        (collection
+                          (variable
+                            (local_var
                               name: (identifier )))
-                          (variable 
-                            (local_var 
+                          (variable
+                            (local_var
                               name: (identifier ))))))
-                    (argument_calls 
-                      (named_argument 
+                    (argument_calls
+                      (named_argument
                         name: (identifier )
-                        name: (literal 
-                          (number 
+                        name: (literal
+                          (number
                             (integer )))))))))
-            (argument_calls 
-              (named_argument 
+            (argument_calls
+              (named_argument
                 name: (identifier )
-                name: (variable 
-                  (local_var 
+                name: (variable
+                  (local_var
                     name: (identifier )))))
-            (argument_calls 
-              (named_argument 
+            (argument_calls
+              (named_argument
                 name: (identifier )
-                name: (literal 
-                  (number 
+                name: (literal
+                  (number
                     (integer )))))))))))
 
 ==================
@@ -283,22 +300,22 @@ instance variable setter method
 s.options.blockSize_(256);
 )
 ---
-(source_file 
-  (code_block 
-    (function_call 
-      (receiver 
-        (variable 
-          (environment_var 
+(source_file
+  (code_block
+    (function_call
+      (receiver
+        (variable
+          (environment_var
             name: (identifier ))))
-      (method_call 
+      (method_call
         name: (method_name ))
-      (method_call 
+      (method_call
         name: (method_name )
-        (parameter_call_list 
-          (argument_calls 
-            (unnamed_argument 
-              (literal 
-                (number 
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
+              (literal
+                (number
                   (integer ))))))))))
 
 ==================
@@ -310,15 +327,15 @@ s = Server.new;
 )
 
 ---
-(source_file 
-  (code_block 
-    (variable_definition 
-      name: (variable 
-        (environment_var 
+(source_file
+  (code_block
+    (variable_definition
+      name: (variable
+        (environment_var
           name: (identifier )))
-      value: (function_call 
+      value: (function_call
         (receiver (class) )
-        (method_call 
+        (method_call
           name: (method_name ))))))
 
 ==================
@@ -327,9 +344,9 @@ simple function definition no arguments
 f = {};
 
 ---
-(source_file 
-  (function_definition 
-    (variable 
+(source_file
+  (function_definition
+    (variable
       (environment_var (identifier)))
     (function_block )))
 
@@ -340,27 +357,27 @@ f = {|oneArg=10, anotherArg=2| oneArg+anotherArg; };
 
 ---
 
-(source_file 
-  (function_definition 
-    name: (variable 
+(source_file
+  (function_definition
+    name: (variable
       (environment_var name: (identifier)))
-    value: (function_block 
-      (parameter_list 
+    value: (function_block
+      (parameter_list
         (argument name:
           (identifier )
-          value: (literal 
-            (number 
+          value: (literal
+            (number
               (integer ))))
-        (argument 
+        (argument
           name: (identifier )
-          value: (literal 
-            (number 
+          value: (literal
+            (number
               (integer )))))
-      (binary_expression 
-        left: (variable 
+      (binary_expression
+        left: (variable
           (local_var name:
             (identifier )))
-        right: (variable 
+        right: (variable
           (local_var name:
             (identifier )))))))
 ==================
@@ -370,28 +387,28 @@ f = {arg oneArg=10, anotherArg=2; oneArg+anotherArg; };
 
 ---
 
-(source_file 
-  (function_definition 
-    name: (variable 
+(source_file
+  (function_definition
+    name: (variable
       (environment_var name: (identifier)))
-    value: (function_block 
-      (parameter_list 
-        (argument 
+    value: (function_block
+      (parameter_list
+        (argument
           name: (identifier )
-          value: (literal 
-            (number 
+          value: (literal
+            (number
               (integer ))))
-        (argument 
+        (argument
           name: (identifier )
-          value: (literal 
-            (number 
+          value: (literal
+            (number
               (integer )))))
-      (binary_expression 
-        left: (variable 
-          (local_var 
+      (binary_expression
+        left: (variable
+          (local_var
             name: (identifier )))
-        right: (variable 
-          (local_var 
+        right: (variable
+          (local_var
             name: (identifier )))))))
 
 ==================
@@ -401,25 +418,25 @@ Class method calls, explicit
 SinOsc.ar(freq: 441, mul:0.25);
 )
 ---
-(source_file 
-  (code_block 
-    (function_call 
-      (receiver 
+(source_file
+  (code_block
+    (function_call
+      (receiver
         (class ))
-      (method_call 
+      (method_call
         name: (method_name )
-        (parameter_call_list 
-          (argument_calls 
-            (named_argument 
+        (parameter_call_list
+          (argument_calls
+            (named_argument
               name: (identifier )
-              name: (literal 
-                (number 
+              name: (literal
+                (number
                   (integer )))))
-          (argument_calls 
-            (named_argument 
+          (argument_calls
+            (named_argument
               name: (identifier )
-              name: (literal 
-                (number 
+              name: (literal
+                (number
                   (float ))))))))))
 
 ==================
@@ -429,29 +446,29 @@ classes as arguments
 {|a, b, c|}.value(SinOsc, LFTri, Saw)
 )
 ---
-(source_file 
-  (code_block 
-    (function_call 
-      (receiver 
-        (function_block 
-          (parameter_list 
-            (argument 
+(source_file
+  (code_block
+    (function_call
+      (receiver
+        (function_block
+          (parameter_list
+            (argument
               name: (identifier ))
-            (argument 
+            (argument
               name: (identifier ))
-            (argument 
+            (argument
               name: (identifier )))))
-      (method_call 
+      (method_call
         name: (method_name )
-        (parameter_call_list 
-          (argument_calls 
-            (unnamed_argument 
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
               (class )))
-          (argument_calls 
-            (unnamed_argument 
+          (argument_calls
+            (unnamed_argument
               (class )))
-          (argument_calls 
-            (unnamed_argument 
+          (argument_calls
+            (unnamed_argument
               (class ))))))))
 
 ==========================
@@ -461,29 +478,29 @@ Class as argument in mix of named/unnamed parameter list
 {|aaa, bbb, ccc|}.value(SinOsc, LFTri, ccc: Saw)
 )
 ---
-(source_file 
-  (code_block 
-    (function_call 
-      (receiver 
-        (function_block 
-          (parameter_list 
-            (argument 
+(source_file
+  (code_block
+    (function_call
+      (receiver
+        (function_block
+          (parameter_list
+            (argument
               name: (identifier ))
-            (argument 
+            (argument
               name: (identifier ))
-            (argument 
+            (argument
               name: (identifier )))))
-      (method_call 
+      (method_call
         name: (method_name )
-        (parameter_call_list 
-          (argument_calls 
-            (unnamed_argument 
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
               (class )))
-          (argument_calls 
-            (unnamed_argument 
+          (argument_calls
+            (unnamed_argument
               (class )))
-          (argument_calls 
-            (named_argument 
+          (argument_calls
+            (named_argument
               name: (identifier )
               name: (class ))))))))
 
@@ -494,20 +511,20 @@ Implicit class method call to new in argument list
 {arg ab; }.value(SinOsc());
 )
 ---
-(source_file 
-  (code_block 
-    (function_call 
-      (receiver 
-        (function_block 
-          (parameter_list 
-            (argument 
+(source_file
+  (code_block
+    (function_call
+      (receiver
+        (function_block
+          (parameter_list
+            (argument
               name: (identifier )))))
-      (method_call 
+      (method_call
         name: (method_name )
-        (parameter_call_list 
-          (argument_calls 
-            (unnamed_argument 
-              (function_call 
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
+              (function_call
                 (method_name )))))))))
 
 ==================
@@ -518,28 +535,28 @@ Synth();
 Synth(1,3,2);
 
 ---
-(source_file 
-  (function_call 
-    (method_name 
+(source_file
+  (function_call
+    (method_name
       ))
-  (function_call 
-    (method_name 
+  (function_call
+    (method_name
       )
-    (parameter_call_list 
-      (argument_calls 
-        (unnamed_argument 
-          (literal 
-            (number 
+    (parameter_call_list
+      (argument_calls
+        (unnamed_argument
+          (literal
+            (number
               (integer )))))
-      (argument_calls 
-        (unnamed_argument 
-          (literal 
-            (number 
+      (argument_calls
+        (unnamed_argument
+          (literal
+            (number
               (integer )))))
-      (argument_calls 
-        (unnamed_argument 
-          (literal 
-            (number 
+      (argument_calls
+        (unnamed_argument
+          (literal
+            (number
               (integer ))))))))
 
 ==================
@@ -547,34 +564,34 @@ Instance method (linlin on a float)
 ==================
 0.5.linlin(0.0,1.0,1.0,10.0);
 ---
-(source_file 
-  (function_call 
-    (receiver 
-      (literal 
-        (number 
+(source_file
+  (function_call
+    (receiver
+      (literal
+        (number
           (float ))))
-    (method_call 
+    (method_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (number 
+      (parameter_call_list
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (number
                 (float )))))
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (number 
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (number
                 (float )))))
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (number 
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (number
                 (float )))))
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (number 
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (number
                 (float)))))))))
 
 ==================
@@ -583,30 +600,30 @@ instance method call with function as argument
 f = {|arg1|};
 f.value(arg1: { "hej".postln; });
 ---
-(source_file 
-  (function_definition 
-    (variable 
+(source_file
+  (function_definition
+    (variable
       (environment_var (identifier)))
-    (function_block 
-      (parameter_list 
-        (argument 
+    (function_block
+      (parameter_list
+        (argument
           (identifier )))))
-  (function_call 
-    (receiver 
-      (variable 
+  (function_call
+    (receiver
+      (variable
         (environment_var (identifier))))
-    (method_call 
+    (method_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (named_argument 
+      (parameter_call_list
+        (argument_calls
+          (named_argument
             (identifier )
-            (function_block 
-              (function_call 
-                (receiver 
-                  (literal 
+            (function_block
+              (function_call
+                (receiver
+                  (literal
                     (string )))
-                (method_call 
+                (method_call
                   (method_name ))))))))))
 
 ==================
@@ -615,33 +632,33 @@ instance method call with collection as argument
 f = {|arg1|};
 f.value(arg1: #[1,2,3]);
 ---
-(source_file 
-  (function_definition 
-    (variable 
+(source_file
+  (function_definition
+    (variable
       (environment_var (identifier)))
-    (function_block 
-      (parameter_list 
-        (argument 
+    (function_block
+      (parameter_list
+        (argument
           (identifier )))))
-  (function_call 
-    (receiver 
-      (variable 
+  (function_call
+    (receiver
+      (variable
         (environment_var (identifier))))
-    (method_call 
+    (method_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (named_argument 
+      (parameter_call_list
+        (argument_calls
+          (named_argument
             (identifier )
-            (collection 
-              (literal 
-                (number 
+            (collection
+              (literal
+                (number
                   (integer )))
-              (literal 
-                (number 
+              (literal
+                (number
                   (integer )))
-              (literal 
-                (number 
+              (literal
+                (number
                   (integer ))))))))))
 
 ==================
@@ -650,25 +667,25 @@ instance method call with string as argument
 f = {|arg1|};
 f.value(arg1: "hejhje hej");
 ---
-(source_file 
-  (function_definition 
-    (variable 
+(source_file
+  (function_definition
+    (variable
       (environment_var (identifier)))
-    (function_block 
-      (parameter_list 
-        (argument 
+    (function_block
+      (parameter_list
+        (argument
           (identifier )))))
-  (function_call 
-    (receiver 
-      (variable 
+  (function_call
+    (receiver
+      (variable
         (environment_var (identifier))))
-    (method_call 
+    (method_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (named_argument 
+      (parameter_call_list
+        (argument_calls
+          (named_argument
             (identifier )
-            (literal 
+            (literal
               (string ))))))))
 
 ==================
@@ -677,25 +694,25 @@ instance method call with symbol as argument
 f = {|arg1|};
 f.value(arg1: \hej);
 ---
-(source_file 
-  (function_definition 
-    (variable 
+(source_file
+  (function_definition
+    (variable
       (environment_var (identifier)))
-    (function_block 
-      (parameter_list 
-        (argument 
+    (function_block
+      (parameter_list
+        (argument
           (identifier )))))
-  (function_call 
-    (receiver 
-      (variable 
+  (function_call
+    (receiver
+      (variable
         (environment_var (identifier))))
-    (method_call 
+    (method_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (named_argument 
+      (parameter_call_list
+        (argument_calls
+          (named_argument
             (identifier )
-            (literal 
+            (literal
               (symbol (identifier) ))))))))
 
 ==================
@@ -703,25 +720,25 @@ chained instance methods on literal
 ==================
 "Hej % and %".format(20, 33).postln;
 ---
-(source_file 
-  (function_call 
-    (receiver 
-      (literal 
+(source_file
+  (function_call
+    (receiver
+      (literal
         (string )))
-    (method_call 
+    (method_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (number 
+      (parameter_call_list
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (number
                 (integer )))))
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (number 
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (number
                 (integer )))))))
-    (method_call 
+    (method_call
       (method_name ))))
 
 ==================
@@ -730,24 +747,24 @@ chained instance methods on env var
 a = 10;
 a.pow(2).nextPowerOfThree;
 ---
-(source_file 
-  (variable_definition 
-    (variable 
+(source_file
+  (variable_definition
+    (variable
       (environment_var (identifier)))
-    (literal 
-      (number 
+    (literal
+      (number
         (integer ))))
-  (function_call 
-    (receiver 
-      (variable 
+  (function_call
+    (receiver
+      (variable
         (environment_var (identifier))))
-    (method_call 
+    (method_call
       (method_name )
-      (parameter_call_list 
-        (argument_calls 
-          (unnamed_argument 
-            (literal 
-              (number 
+      (parameter_call_list
+        (argument_calls
+          (unnamed_argument
+            (literal
+              (number
                 (integer )))))))
-    (method_call 
+    (method_call
       (method_name ))))

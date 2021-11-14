@@ -1556,6 +1556,10 @@
               {
                 "type": "SYMBOL",
                 "name": "_object"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "function_call"
               }
             ]
           }

@@ -1689,6 +1689,10 @@
           "named": true
         },
         {
+          "type": "function_call",
+          "named": true
+        },
+        {
           "type": "indexed_collection",
           "named": true
         },
