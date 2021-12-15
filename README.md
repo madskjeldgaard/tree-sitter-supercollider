@@ -45,7 +45,7 @@ Note: This grammar is experimental. Most of sclang is now implemented
 - Editor agnostic - tree-sitter grammars can be implemented in any editor via [tree-sitter's language bindings](https://tree-sitter.github.io/tree-sitter/using-parsers)
 
 ## Contributing
-There's always work to be done and contributions are not only welcome, but _needed_. You can help by finding and identifying issues or resolving [existing ones](https://github.com/madskjeldgaard/tree-sitter-supercollider/issues) and submitting pull requests. 
+There's always work to be done and contributions are not only welcome, but _needed_. You can help by finding and identifying issues or resolving [existing ones](https://github.com/madskjeldgaard/tree-sitter-supercollider/issues) and submitting pull requests. Alternatively, see the list of TODO below.
 
 ### Overview
 The source code is divided up like this:
