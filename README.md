@@ -33,6 +33,8 @@ Help WANTED. This project is too big to be handled by one person, and so any and
 
 If you want to help out, you can either identify and open up issues, resolve existing ones, solve things in the TODO list below or write tests. 
 
+Pull requests are especially appreciated.
+
 ### Overview
 The source code is divided up like this:
 
