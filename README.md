@@ -29,7 +29,7 @@ This project defines a grammar (the "rules" of the language) for SuperCollider i
 Among other things, this allows for a very high level of precision in syntax highlighting (see below) and analyzing/traversing source code with equal precision.
 
 ## Contributing
-Help WANTED. 
+Help WANTED. This project is too big to be handled by one person, and so any and all help would be appreciated.
 
 If you want to help out, you can either identify and open up issues, resolve existing ones, solve things in the TODO list below or write tests. 
 
