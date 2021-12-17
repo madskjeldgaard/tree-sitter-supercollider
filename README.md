@@ -89,11 +89,11 @@ Syntax highlighting a supercollider document in the terminal using the command `
 
 ![screenshot of grammar in action2](/assets/benjolin.png)
 
-**Get table of contents for all definitions using [nvim-treesitter-refactor](github.com/nvim-treesitter/nvim-treesitter-refactor) and navigate the document using those:**
+**Get table of contents for all definitions using [nvim-treesitter-refactor](https://github.com/nvim-treesitter/nvim-treesitter-refactor) and navigate the document using those:**
 
 ![definitions](/assets/definitions.gif)
 
-**Rename all instances of a variable using [nvim-treesitter-refactor](github.com/nvim-treesitter/nvim-treesitter-refactor):**
+**Rename all instances of a variable using [nvim-treesitter-refactor](https://github.com/nvim-treesitter/nvim-treesitter-refactor):**
 
 ![smart rename](/assets/smartrename.gif)
 
