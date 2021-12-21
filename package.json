@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-supercollider",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Tree sitter parser for the SuperCollider programming language",
   "main": "bindings/node",
   "scripts": {
