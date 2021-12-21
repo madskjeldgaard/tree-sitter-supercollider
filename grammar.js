@@ -103,6 +103,7 @@ module.exports = grammar({
         // These are the values that may be assigned to a variable or argument
         _object: $ => choice(
 		prec(2, $.class),
+		prec(20, $.function_call),
 		$.nil_check,
             $.code_block,
             $.function_block,
