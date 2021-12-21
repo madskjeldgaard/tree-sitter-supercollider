@@ -12,7 +12,6 @@
   - [Status: Experimental but almost fully implemented](#status-experimental-but-almost-fully-implemented)
   - [Features](#features)
   - [Showcase:](#showcase)
-  - [TODO:](#todo)
   - [Try it out](#try-it-out)
   - [Trying with nvim-treesitter](#trying-with-nvim-treesitter)
     - [Install locally in nvim](#install-locally-in-nvim)
@@ -31,7 +30,7 @@ Among other things, this allows for a very high level of precision in syntax hig
 ## Contributing
 Help WANTED. This project is too big to be handled by one person, and so any and all help would be appreciated.
 
-If you want to help out, you can either identify and open up issues, resolve existing ones, solve things in the TODO list below or write tests. 
+If you want to help out, you can either identify and open up issues (example: Find some language feature that has not been defined in the grammar yet or some code that makes tree-sitter fail), resolve existing ones or write tests. 
 
 Pull requests are especially appreciated.
 
@@ -100,18 +99,6 @@ Syntax highlighting a supercollider document in the terminal using the command `
 **Using [nvim-treesitter's playground to get a live view of the parser tree while writing code](https://github.com/nvim-treesitter/playground):**
 
 ![playground](/assets/playground.gif)
-
-## TODO:
-
-Most of the language has been implemented in the grammar, except for some of the more esoteric parts of the language:
-
-- Syntax shortcuts / esoteric stuff: http://doc.sccode.org/Reference/Syntax-Shortcuts.html
-	- selector (method name) as a binary operator
-	- selectors for binary operators
-	- list comprehensions
-	- be able to parse `(:1..) select: _.isPrime nextN: 10;` properly
-	- special partial operator situation: (a: _);
-- Single expressions with no semicolon in a file 
 
 ## Try it out
 
