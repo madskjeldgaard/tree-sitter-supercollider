@@ -548,6 +548,38 @@ Implicit class method call to new in argument list
             (unnamed_argument
               (function_call
                 (method_name )))))))))
+==================
+Chaining methods on explicit new
+==================
+(
+Pfunc.new().trace
+)
+---
+(source_file
+  (code_block
+    (function_call
+      (receiver
+        (class ))
+      (method_call
+        name: (method_name ))
+      (method_call
+        name: (method_name )))))
+
+==================
+Chaining methods on implicit new
+==================
+(
+Pfunc().trace
+)
+---
+(source_file
+  (code_block
+    (function_call
+      (receiver
+        (function_call
+          (method_name )))
+      (method_call
+        name: (method_name )))))
 
 ==================
 Class method calls, implicit
