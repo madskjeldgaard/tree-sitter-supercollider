@@ -1255,10 +1255,6 @@
           "named": true
         },
         {
-          "type": "pi_statement",
-          "named": true
-        },
-        {
           "type": "string",
           "named": true
         },
@@ -1541,7 +1537,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "exponential",
@@ -1557,6 +1553,10 @@
         },
         {
           "type": "integer",
+          "named": true
+        },
+        {
+          "type": "number",
           "named": true
         }
       ]
@@ -1601,21 +1601,6 @@
     "type": "partial",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "pi_statement",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "number",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "receiver",

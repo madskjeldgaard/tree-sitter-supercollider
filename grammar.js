@@ -274,15 +274,17 @@ function_block: $ => choice(
             $.char,
             $.string,
             $.bool,
-			$.pi_statement
+			// $.pi_statement
         ),
 
-		pi_statement: $ => seq(optional($.number), "pi"),
+		// pi_statement: $ => seq(optional($.number), "pi"),
         number: $ => choice(
             $.integer,
             $.float,
             $.hexinteger,
-            $.exponential
+            $.exponential,
+			"pi",
+			(seq(optional($.number), "pi"))
         ),
 
         integer: $ => /\d+/,

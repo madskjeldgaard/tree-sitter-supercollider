@@ -82,6 +82,23 @@ string concat
         (string )))))
 
 ==================
+(1..3pi)
+==================
+(
+(1..3pi)
+)
+---
+(source_file
+  (code_block
+    (collection
+      (arithmetic_series
+        (number
+          (integer ))
+        (number
+          (number
+            (integer )))))))
+
+==================
 2.0pi
 ==================
 (
@@ -91,7 +108,7 @@ string concat
 (source_file
   (code_block
     (literal
-      (pi_statement
+      (number
         (number
           (float ))))))
 
@@ -105,7 +122,7 @@ string concat
 (source_file
   (code_block
     (literal
-      (pi_statement
+      (number
         (number
           (integer ))))))
 
