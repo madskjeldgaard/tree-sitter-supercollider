@@ -604,6 +604,19 @@ function_block: $ => choice(
         )),
 
         if: $ => choice(
+			// if (expr) trueFunc falseFunc
+			prec.right(
+                seq(
+                    field("name", "if"),
+                    "(",
+                    field("expression", prec.left(
+                        choice($.function_call, $._object)
+                    )),
+                    ")",
+                    field("true", $.function_block),
+                    optional(field("false", $.function_block)),
+                )
+            ),
             // if (expr, trueFunc, falseFunc);
             prec.right(
                 seq(
