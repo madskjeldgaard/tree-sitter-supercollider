@@ -461,12 +461,12 @@ function_block: $ => choice(
             )
         )),
 
-        _collection_sequence: $ => sepBy1(",", choice(
-            $.associative_item,
-            $._object
-        )),
+		_collection_sequence: $ => seq(sepBy1(",", choice(
+		$.associative_item,
+		$._object
+		)), optional(",")),
 
-        _paired_associative_sequence: $ => sepBy1(",", $.associative_item),
+        _paired_associative_sequence: $ => seq(sepBy1(",", $.associative_item), optional(",")),
 
         associative_item: $ => seq(
             choice(
