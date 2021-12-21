@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-supercollider"
 description = "supercollider grammar for the tree-sitter parsing library"
-version = "0.0.1"
+version = "0.2.5"
 keywords = ["incremental", "parsing", "supercollider"]
 categories = ["parsing", "text-editors"]
 repository = "https://github.com/tree-sitter/tree-sitter-supercollider"
