@@ -133,6 +133,28 @@ Argument list with no commas
           name: (identifier ))))))
 
 =====================
+function call in associtive item
+=====================
+(
+	[freq: 2, froq: FroqGen()]
+)
+---
+(source_file
+  (code_block
+    (collection
+      (associative_item
+        (identifier )
+        (item
+          (literal
+            (number
+              (integer )))))
+      (associative_item
+        (identifier )
+        (item
+          (function_call
+            (method_name )))))))
+
+=====================
 unfold argument list with *
 =====================
 

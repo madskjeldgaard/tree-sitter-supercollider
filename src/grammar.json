@@ -80,6 +80,14 @@
           }
         },
         {
+          "type": "PREC",
+          "value": 20,
+          "content": {
+            "type": "SYMBOL",
+            "name": "function_call"
+          }
+        },
+        {
           "type": "SYMBOL",
           "name": "nil_check"
         },
