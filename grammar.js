@@ -124,7 +124,7 @@ module.exports = grammar({
 		field("duplicated_object", $._object),
 		field("operator","!"),
 			// TODO: This needs to be an object as well:
-		field("duplication_times", choice($.number))
+		field("duplication_times", $._object)
 	),
 
         // keywords: $ => choice("if", "while"),

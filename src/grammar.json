@@ -160,13 +160,8 @@
           "type": "FIELD",
           "name": "duplication_times",
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "number"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "_object"
           }
         }
       ]
