@@ -75,7 +75,7 @@ SynthDef('yo', {});
 (source_file
   (code_block
     (function_call
-      (method_name )
+      (class )
       (parameter_call_list
         (argument_calls
           (unnamed_argument
@@ -86,7 +86,7 @@ SynthDef('yo', {});
           (unnamed_argument
             (function_block )))))
     (function_call
-      (method_name )
+      (class )
       (parameter_call_list
         (argument_calls
           (unnamed_argument
@@ -188,7 +188,7 @@ function call in associtive item
         (identifier )
         (item
           (function_call
-            (method_name )))))))
+            (class )))))))
 
 =====================
 unfold argument list with *
@@ -306,7 +306,7 @@ var sig = sig * EnvGen.kr(
             (argument_calls
               (unnamed_argument
                 (function_call
-                  (method_name )
+                  (class )
                   (parameter_call_list
                     (argument_calls
                       (unnamed_argument
@@ -583,7 +583,7 @@ Implicit class method call to new in argument list
           (argument_calls
             (unnamed_argument
               (function_call
-                (method_name )))))))))
+                (class )))))))))
 ==================
 Chaining methods on explicit new
 ==================
@@ -613,7 +613,7 @@ Pfunc().trace
     (function_call
       (receiver
         (function_call
-          (method_name )))
+          (class )))
       (method_call
         name: (method_name )))))
 
@@ -627,10 +627,10 @@ Synth(1,3,2);
 ---
 (source_file
   (function_call
-    (method_name
+    (class
       ))
   (function_call
-    (method_name
+    (class
       )
     (parameter_call_list
       (argument_calls

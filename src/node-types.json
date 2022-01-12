@@ -984,6 +984,10 @@
       "required": true,
       "types": [
         {
+          "type": "class",
+          "named": true
+        },
+        {
           "type": "instance_variable_setter_call",
           "named": true
         },
@@ -1434,11 +1438,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "method_name",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "named_argument",
@@ -2736,6 +2735,10 @@
   },
   {
     "type": "integer",
+    "named": true
+  },
+  {
+    "type": "method_name",
     "named": true
   },
   {

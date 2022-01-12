@@ -16,6 +16,7 @@ const PRECEDENCE = {
 	comment: 1000,
 	stringConcat:16,
     STRING: 2,
+	partial: 15,
     call: 14,
     field: 13,
     unary: 15,
@@ -118,7 +119,7 @@ module.exports = grammar({
 			$.partial
 		),
 
-        partial: $ => "_",
+        partial: $ => prec.right(PRECEDENCE.partial, "_"),
 
 	duplicated_statement: $ => seq(
 		field("duplicated_object", $._object),
@@ -141,12 +142,22 @@ module.exports = grammar({
 
         function_call: $ =>
             prec.right(choice(
+			choice(
+
 				// method prefixed: ar(SinOsc, 110)
 				seq(
-					choice(alias($.identifier, $.method_name), alias($.class, $.method_name)),
+					choice(alias($.identifier, $.method_name), $.class),
 					seq("(", optional($.parameter_call_list), ")"),
 				),
-				// Instance method (chainable)
+
+				// implicit new on classes type SinOsc();
+				seq(
+					$.class,
+					seq("(", optional($.parameter_call_list), ")"),
+				),
+
+			),
+			// Instance method (chainable)
                  seq(
                     alias($._object, $.receiver),
                     repeat1(
@@ -474,7 +485,7 @@ function_block: $ => choice(
                 prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
                 seq($.identifier, ":")
             ),
-            alias($._object, $.item)
+            alias($._object,  $.item)
         ),
 
 		// These are unused at the moment
