@@ -30,6 +30,7 @@ const PRECEDENCE = {
     or: 2,
     range: 1,
     assign: 0,
+	selectorBinary: 20,
     controlstruct: 3,
     localvar: 4,
     vardef: 3,
@@ -101,21 +102,21 @@ module.exports = grammar({
         ),
 
         // These are the values that may be assigned to a variable or argument
-        _object: $ => choice(
-		prec(2, $.class),
-		prec(20, $.function_call),
-		$.nil_check,
-            $.code_block,
-            $.function_block,
-            $.control_structure,
-            $.literal,
-            $.variable,
-            $.binary_expression,
+		_object: $ => choice(
+			prec(2, $.class),
+			prec(20, $.function_call),
+			$.nil_check,
+			$.code_block,
+			$.function_block,
+			$.control_structure,
+			$.literal,
+			$.variable,
+			$.binary_expression,
 			$.unary_expression,
-            $.collection,
-            $.indexed_collection,
-            $.partial
-        ),
+			$.collection,
+			$.indexed_collection,
+			$.partial
+		),
 
         partial: $ => "_",
 
@@ -558,23 +559,30 @@ function_block: $ => choice(
         //  Expressions  //
         ///////////////////
         binary_expression: $ => {
-            const table = [
-                [PRECEDENCE.and, '&&'],
-                [PRECEDENCE.or, '||'],
-                [PRECEDENCE.bitand, '&'],
-                [PRECEDENCE.bitor, '|'],
-                [PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
-                [PRECEDENCE.shift, choice('<<', '>>')],
-                [PRECEDENCE.additive, choice('+', '-', '++')],
-                [PRECEDENCE.multiplicative, choice('*', '/', '%', prec.left("**"))],
-                [PRECEDENCE.assign, '='],
-			[PRECEDENCE.stringConcat, "+/+"]
-            ];
+			const table = [
+
+				// "Selector as binary operator"
+				// [PRECEDENCE.selectorBinary, seq($.identifier, ":")],
+
+				// "Regular" binary operators
+				[PRECEDENCE.and, '&&'],
+				[PRECEDENCE.or, '||'],
+				[PRECEDENCE.bitand, '&'],
+				[PRECEDENCE.bitor, '|'],
+				[PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
+				[PRECEDENCE.shift, choice('<<', '>>')],
+				[PRECEDENCE.additive, choice('+', '-', '++')],
+				[PRECEDENCE.multiplicative, choice('*', '/', '%', prec.left("**"))],
+				[PRECEDENCE.assign, '='],
+
+				// String concatenation
+				[PRECEDENCE.stringConcat, "+/+"]
+			];
 
             return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
-                field('left', choice($.function_call, $._object)),
+                field('left', $._object),
                 field('operator', operator),
-                field('right', choice($.function_call, $._object)),
+                field('right', $._object),
             ))));
         },
 
@@ -597,6 +605,7 @@ function_block: $ => choice(
         identifier: $ => /(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
 
 	    // Nil check
+		// @FIXME: Should be a binary operator
 	    nil_check: $ => prec.left(seq($._object, choice("?", "!?", "??"), $._object)),
 
         ////////////////////

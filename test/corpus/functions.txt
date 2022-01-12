@@ -1,4 +1,40 @@
 ====================
+selector as infix binary operators
+====================
+(
+(1..3) collect: { |x| x + 1 } bubble: 0
+)
+---
+(source_file
+  (code_block
+    (binary_expression
+      left: (binary_expression
+        left: (collection
+          (arithmetic_series
+            (number
+              (integer ))
+            (number
+              (integer ))))
+        operator: (method_name )
+        operator: (method_name )
+        right: (function_block
+          (parameter_list
+            (argument
+              name: (identifier )))
+          (binary_expression
+            left: (variable
+              (environment_var
+                name: (identifier )))
+            right: (literal
+              (number
+                (integer ))))))
+      operator: (method_name )
+      operator: (method_name )
+      right: (literal
+        (number
+          (integer ))))))
+
+====================
 nil checks using ?? !? and ?
 ====================
 (
