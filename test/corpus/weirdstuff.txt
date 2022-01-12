@@ -7,16 +7,15 @@ Basic duplication
 )
 
 ---
-(source_file 
-  (code_block 
-    (duplicated_statement 
-      duplicated_object: (literal 
-        (number 
+(source_file
+  (code_block
+    (duplicated_statement
+      duplicated_object: (literal
+        (number
           (integer )))
-      duplication_times: (number 
-        (hexinteger )))))
-
-
+      duplication_times: (literal
+        (number
+          (hexinteger ))))))
 
 ====================
 partial: [a, b, _]
@@ -25,14 +24,14 @@ partial: [a, b, _]
 [a, b, _];
 )
 ---
-(source_file 
-  (code_block 
-    (collection 
-      (variable 
-        (environment_var 
+(source_file
+  (code_block
+    (collection
+      (variable
+        (environment_var
           name: (identifier )))
-      (variable 
-        (environment_var 
+      (variable
+        (environment_var
           name: (identifier )))
       (partial ))))
 
@@ -44,26 +43,26 @@ object.msg(a, _, _);
 )
 ---
 
-(source_file 
-  (code_block 
-    (function_call 
-      (receiver 
-        (variable 
-          (local_var 
+(source_file
+  (code_block
+    (function_call
+      (receiver
+        (variable
+          (local_var
             name: (identifier ))))
-      (method_call 
+      (method_call
         name: (method_name )
-        (parameter_call_list 
-          (argument_calls 
-            (unnamed_argument 
-              (variable 
-                (environment_var 
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
+              (variable
+                (environment_var
                   name: (identifier )))))
-          (argument_calls 
-            (unnamed_argument 
+          (argument_calls
+            (unnamed_argument
               (partial )))
-          (argument_calls 
-            (unnamed_argument 
+          (argument_calls
+            (unnamed_argument
               (partial ))))))))
 
 ====================
@@ -74,10 +73,10 @@ a + _;
 )
 ---
 
-(source_file 
-  (code_block 
-    (binary_expression 
-      left: (variable 
-        (environment_var 
+(source_file
+  (code_block
+    (binary_expression
+      left: (variable
+        (environment_var
           name: (identifier )))
       right: (partial))))
