@@ -30,7 +30,7 @@ const PRECEDENCE = {
     or: 2,
     range: 1,
     assign: 0,
-	selectorBinary: 20,
+	selectorBinary: 1,
     controlstruct: 3,
     localvar: 4,
     vardef: 3,
@@ -462,12 +462,12 @@ function_block: $ => choice(
             )
         )),
 
-        _collection_sequence: $ => sepBy1(",", choice(
+        _collection_sequence: $ => seq(sepBy1(",", choice(
             $.associative_item,
             $._object
-        )),
+        )), optional(",")),
 
-        _paired_associative_sequence: $ => sepBy1(",", $.associative_item),
+        _paired_associative_sequence: $ => seq(sepBy1(",", $.associative_item), optional(",")),
 
         associative_item: $ => seq(
             choice(
@@ -562,7 +562,8 @@ function_block: $ => choice(
 			const table = [
 
 				// "Selector as binary operator"
-				// [PRECEDENCE.selectorBinary, seq($.identifier, ":")],
+				// @TODO
+				// [PRECEDENCE.selectorBinary, prec.right(seq($.identifier, ":"))],
 
 				// "Regular" binary operators
 				[PRECEDENCE.and, '&&'],
