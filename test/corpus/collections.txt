@@ -215,6 +215,46 @@ arithmetic series (1..10)
           (integer ))))))
 
 ==================
+Variable as index in collection
+==================
+(
+var yo = 2;
+var array = [1,2,4];
+array[yo]
+)
+---
+(source_file
+  (code_block
+    (variable_definition
+      name: (variable
+        (local_var
+          name: (identifier )))
+      value: (literal
+        (number
+          (integer ))))
+    (variable_definition
+      name: (variable
+        (local_var
+          name: (identifier )))
+      value: (collection
+        (literal
+          (number
+            (integer )))
+        (literal
+          (number
+            (integer )))
+        (literal
+          (number
+            (integer )))))
+    (indexed_collection
+      (variable
+        (local_var
+          name: (identifier )))
+      index: (variable
+        (local_var
+          name: (identifier ))))))
+
+==================
 index_collection multidimensional array
 ==================
 (

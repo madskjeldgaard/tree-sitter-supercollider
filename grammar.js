@@ -284,7 +284,7 @@ function_block: $ => choice(
             $.hexinteger,
             $.exponential,
 			"pi",
-			(seq(optional($.number), "pi"))
+			seq(optional($.number), "pi")
         ),
 
         integer: $ => /\d+/,
@@ -461,12 +461,12 @@ function_block: $ => choice(
             )
         )),
 
-		_collection_sequence: $ => seq(sepBy1(",", choice(
-		$.associative_item,
-		$._object
-		)), optional(",")),
+        _collection_sequence: $ => sepBy1(",", choice(
+            $.associative_item,
+            $._object
+        )),
 
-        _paired_associative_sequence: $ => seq(sepBy1(",", $.associative_item), optional(",")),
+        _paired_associative_sequence: $ => sepBy1(",", $.associative_item),
 
         associative_item: $ => seq(
             choice(
@@ -524,7 +524,9 @@ function_block: $ => choice(
 
         _index: $ => choice(seq("[",
             field("index",
-				choice($.literal,
+				choice(
+					$.literal,
+					$.variable,
                 // Subrange
                 choice(
                     seq($.integer, ".."),
