@@ -64,6 +64,73 @@
     }
   },
   {
+    "type": "association",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "association",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "class",
+          "named": true
+        },
+        {
+          "type": "code_block",
+          "named": true
+        },
+        {
+          "type": "collection",
+          "named": true
+        },
+        {
+          "type": "control_structure",
+          "named": true
+        },
+        {
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "indexed_collection",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "nil_check",
+          "named": true
+        },
+        {
+          "type": "partial",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "associative_item",
     "named": true,
     "fields": {},
@@ -72,15 +139,15 @@
       "required": true,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
           "type": "item",
-          "named": true
-        },
-        {
-          "type": "symbol",
           "named": true
         }
       ]
@@ -94,6 +161,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "association",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -243,6 +314,10 @@
         "required": true,
         "types": [
           {
+            "type": "association",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -391,6 +466,10 @@
       "required": true,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -490,6 +569,10 @@
       "required": false,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -574,6 +657,10 @@
       "types": [
         {
           "type": "arithmetic_series",
+          "named": true
+        },
+        {
+          "type": "association",
           "named": true
         },
         {
@@ -692,6 +779,10 @@
         "required": true,
         "types": [
           {
+            "type": "association",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -749,6 +840,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "association",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -892,6 +987,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "association",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -1044,6 +1143,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "association",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -1231,6 +1334,10 @@
       "required": true,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -1357,6 +1464,10 @@
       "required": false,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -1456,6 +1567,10 @@
             "named": false
           },
           {
+            "type": "association",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -1527,6 +1642,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "association",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -1662,6 +1781,10 @@
       "required": true,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -1725,6 +1848,10 @@
       "required": true,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -1787,6 +1914,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "association",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -1901,6 +2032,10 @@
       "required": true,
       "types": [
         {
+          "type": "association",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -2001,6 +2136,10 @@
         "required": true,
         "types": [
           {
+            "type": "association",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -2064,6 +2203,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "association",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -2169,6 +2312,10 @@
         "required": true,
         "types": [
           {
+            "type": "association",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -2261,6 +2408,10 @@
         "multiple": false,
         "required": false,
         "types": [
+          {
+            "type": "association",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true

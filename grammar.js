@@ -14,6 +14,8 @@ builtins
 
 const PRECEDENCE = {
 	comment: 1000,
+	association: 11,
+	associative_item: 10,
 	stringConcat:16,
     STRING: 2,
 	partial: 15,
@@ -106,6 +108,7 @@ module.exports = grammar({
 		_object: $ => choice(
 			prec(2, $.class),
 			prec(20, $.function_call),
+			$.association,
 			$.nil_check,
 			$.code_block,
 			$.function_block,
@@ -480,13 +483,25 @@ function_block: $ => choice(
 
         _paired_associative_sequence: $ => seq(sepBy1(",", $.associative_item), optional(",")),
 
-        associative_item: $ => seq(
-            choice(
-                prec.left(1, seq($.symbol, choice(prec(PRECEDENCE.assign, "->"), ","))),
-                seq($.identifier, ":")
-            ),
-            alias($._object,  $.item)
-        ),
+		// See this link for more info
+		// https://doc.sccode.org/Reference/Key-Value-Pairs.html
+		association: $ => prec(
+			PRECEDENCE.association,
+			seq(
+				prec.left($._object),
+				prec(PRECEDENCE.assign, "->"),
+				prec.right($._object)
+			)
+		),
+
+		associative_item: $ => prec(PRECEDENCE.associative_item,
+			seq(
+				choice(
+					seq($.identifier, ":",  alias($._object,  $.item)),
+					$.association
+				)
+			)
+		),
 
 		// These are unused at the moment
         _collection_types: $ => choice($._unordered_collection_types, $._ordered_collection_types),
