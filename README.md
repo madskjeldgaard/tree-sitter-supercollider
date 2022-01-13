@@ -18,7 +18,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ![live parsing of code](/assets/playground2.gif)
-_ SuperCollider code (on the right) being parsed live by tree-sitter (on the left) using the nvim-playground plugin_
+_SuperCollider code (on the right) being parsed live by tree-sitter (on the left) using the nvim-playground plugin. Notice how quickly and incrementally it parses the code and includes the precise location of language features of the code_
 
 # tree-sitter-supercollider
 [SuperCollider](https://supercollider.github.io/) grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter).
