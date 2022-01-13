@@ -375,7 +375,7 @@ module.exports = grammar({
 		return_statement: $ => prec.left(seq("^", choice($._object, $.function_call))),
 
 		// Definition of class
-		class_def: $ => prec(PRECEDENCE.class_def, seq($.class, optional(seq(":", alias($.class, $.parent_class))), "{",
+		class_def: $ => prec(PRECEDENCE.class_def, seq(optional("+"), $.class, optional(seq(":", alias($.class, $.parent_class))), "{",
 			repeat(
 				choice(
 					// Variables
