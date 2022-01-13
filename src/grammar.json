@@ -89,6 +89,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "association"
+        },
+        {
+          "type": "SYMBOL",
           "name": "nil_check"
         },
         {
@@ -2106,67 +2110,78 @@
         }
       ]
     },
+    "association": {
+      "type": "PREC",
+      "value": 11,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "PREC_LEFT",
+            "value": 0,
+            "content": {
+              "type": "SYMBOL",
+              "name": "_object"
+            }
+          },
+          {
+            "type": "PREC",
+            "value": 0,
+            "content": {
+              "type": "STRING",
+              "value": "->"
+            }
+          },
+          {
+            "type": "PREC_RIGHT",
+            "value": 0,
+            "content": {
+              "type": "SYMBOL",
+              "name": "_object"
+            }
+          }
+        ]
+      }
+    },
     "associative_item": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "PREC_LEFT",
-              "value": 1,
-              "content": {
+      "type": "PREC",
+      "value": 10,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
                 "type": "SEQ",
                 "members": [
                   {
                     "type": "SYMBOL",
-                    "name": "symbol"
+                    "name": "identifier"
                   },
                   {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "PREC",
-                        "value": 0,
-                        "content": {
-                          "type": "STRING",
-                          "value": "->"
-                        }
-                      },
-                      {
-                        "type": "STRING",
-                        "value": ","
-                      }
-                    ]
+                    "type": "STRING",
+                    "value": ":"
+                  },
+                  {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_object"
+                    },
+                    "named": true,
+                    "value": "item"
                   }
                 ]
+              },
+              {
+                "type": "SYMBOL",
+                "name": "association"
               }
-            },
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "identifier"
-                },
-                {
-                  "type": "STRING",
-                  "value": ":"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_object"
-          },
-          "named": true,
-          "value": "item"
-        }
-      ]
+            ]
+          }
+        ]
+      }
     },
     "_collection_types": {
       "type": "CHOICE",

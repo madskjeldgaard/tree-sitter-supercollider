@@ -455,33 +455,37 @@ integer array
 ==================
 Associative array
 ==================
+(
 [\a -> 1, \b -> \symmysymmyya, \c -> 3.81];
-
+)
 ---
 (source_file
-      (collection
-        (associative_item
-          (symbol
-            (identifier ))
-          (item
-            (literal
-              (number
-                (integer )))))
-        (associative_item
-          (symbol
-            (identifier ))
-          (item
-            (literal
-              (symbol
-                (identifier )))))
-        (associative_item
-          (symbol
-            (identifier ))
-          (item
-            (literal
-              (number
-                (float ))))))
-    )
+  (code_block
+    (collection
+      (associative_item
+        (association
+          (literal
+            (symbol
+              (identifier )))
+          (literal
+            (number
+              (integer )))))
+      (associative_item
+        (association
+          (literal
+            (symbol
+              (identifier )))
+          (literal
+            (symbol
+              (identifier )))))
+      (associative_item
+        (association
+          (literal
+            (symbol
+              (identifier )))
+          (literal
+            (number
+              (float ))))))))
 
 ==================
 Assign array to variable
