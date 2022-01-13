@@ -307,7 +307,7 @@ module.exports = grammar({
 		exponential: $ => /-?\d+(\.\d+)?[eE]-?\d+/,
 		symbol: $ => choice(
 			prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/, $.escape_sequence)))),
-			prec.left(seq("'", optional(choice($.identifier, /[0-9]+/, $.escape_sequence)), "'")),
+			prec.left(seq("'", optional(token.immediate(/[^"'\\]+/)), "'")),
 		),
 		char: $ => /\$./,
 

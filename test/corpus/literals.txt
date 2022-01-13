@@ -279,6 +279,15 @@ var string = "hej med Dig !#)¤!¤AZ";
       (string ))))
 
 ==================
+literal symbol with non alphabetic characters
+==================
+'AUTHENTIC_SOUND_EFFECTS.vol1';
+---
+(source_file
+  (literal
+    (symbol )))
+
+==================
 literal symbol slashed
 ==================
 var sym = \averyLongSymbol;
@@ -304,7 +313,7 @@ var sym = 'averyLongSymbol';
       (local_var
         (identifier )))
     (literal
-        (symbol (identifier)))))
+        (symbol ))))
 
 ==================
 literal char
