@@ -1,0 +1,12 @@
+=====
+Class extensions
+=====
++SinOsc{
+	someMethod{}
+}
+---
+(source_file
+  (class_def
+    (class )
+    (instance_method_name )
+    (function_block )))
