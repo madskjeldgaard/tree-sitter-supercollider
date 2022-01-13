@@ -33,7 +33,7 @@ const PRECEDENCE = {
 	or: 2,
 	range: 1,
 	assign: 0,
-	selectorBinary: 1,
+	selectorBinary: 100,
 	controlstruct: 3,
 	localvar: 4,
 	vardef: 3,
@@ -66,6 +66,8 @@ module.exports = grammar({
 	// The name of a token that will match keywords for the purpose of the keyword extraction optimization.
 	word: $ => $.identifier,
 	conflicts: $ => [
+		// [$.selector_binary, $.binary_expression],
+		// [$.selector_binary, $.unary_expression],
 		[$.unnamed_argument, $.named_argument],
 		[$.variable_definition, $.function_definition],
 		[$.collection, $.code_block],
@@ -127,11 +129,8 @@ module.exports = grammar({
 		duplicated_statement: $ => seq(
 			field("duplicated_object", $._object),
 			field("operator","!"),
-			// TODO: This needs to be an object as well:
 			field("duplication_times", $._object)
 		),
-
-		// keywords: $ => choice("if", "while"),
 
 		/////////////////
 		//  Functions  //
@@ -215,7 +214,6 @@ module.exports = grammar({
 			seq($._expression_statement, optional(";"))
 		),
 
-		// TODO: Make tolerant to non semicoloned expression
 		code_block: $ => seq(
 			'(',
 			optional($._expression_sequence),
@@ -583,6 +581,12 @@ module.exports = grammar({
 		///////////////////
 		//  Expressions  //
 		///////////////////
+		// "Selector as binary operator"
+		// selector_binary: $ => prec(PRECEDENCE.selectorBinary, prec.left(seq(
+		// 	field('left', $._object),
+		// 	field('operator', prec.right(seq($.identifier, ":"))),
+		// 	field('right', $._object)
+		// ))),
 		binary_expression: $ => {
 			const table = [
 
