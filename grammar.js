@@ -83,7 +83,7 @@ module.exports = grammar({
 
 	rules: {
 
-		source_file: $ => repeat($._expression),
+		source_file: $ => choice(repeat($._expression), $._expression_statement), // This choice operator is a clumsy way to allow files with naked expressions witout semicolons
 
 		_expression: $ => choice(
 			$.code_block,
@@ -212,8 +212,7 @@ module.exports = grammar({
 		_expression_sequence: $ => seq(
 			repeat(prec.right(1, seq($._expression_statement, ";"))),
 			// Last statement in sequence
-			$._expression_statement,
-			optional(";")
+			seq($._expression_statement, optional(";"))
 		),
 
 		// TODO: Make tolerant to non semicoloned expression
