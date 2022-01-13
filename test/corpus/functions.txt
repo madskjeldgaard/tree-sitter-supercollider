@@ -92,7 +92,7 @@ SynthDef('yo', {});
           (unnamed_argument
             (literal
               (symbol
-                (identifier )))))
+                ))))
         (argument_calls
           (unnamed_argument
             (function_block )))))))
