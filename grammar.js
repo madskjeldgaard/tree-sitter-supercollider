@@ -1,17 +1,3 @@
-/*
-
-keywords
-"arg"
-"classvar"
-"const"
-"super"
-"this"
-"var"
-
-builtins
-
-*/
-
 const PRECEDENCE = {
 	comment: 1000,
 	association: 11,
