@@ -1,20 +1,21 @@
 [
-  (_object)
-  (binary_expression)
-  (code_block)
   (function_block)
-  (function_call)
+  (binary_expression)
   (collection)
   (indexed_collection)
   (parameter_call_list)
-  (method_call)
+  (function_call)
   (class_def)
+  (class_var)
+  (instance_var)
+  (variable_definition)
+  (variable_definition_sequence (variable_definition))
   (control_structure)
   (return_statement)
 ] @indent
 
 [
-  (parameter_call_list (argument))
+  (parameter_call_list (argument_calls))
   "("
   ")"
   "{"
