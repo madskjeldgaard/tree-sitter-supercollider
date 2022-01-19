@@ -6,7 +6,7 @@
   (parameter_call_list)
   (function_call)
   (class_def)
-  (class_var)
+  (classvar)
   (instance_var)
   (variable_definition)
   (variable_definition_sequence (variable_definition))
@@ -25,6 +25,6 @@
 ] @branch
 
 [
-  (comment)
+  (block_comment)
   (line_comment)
 ] @ignore
