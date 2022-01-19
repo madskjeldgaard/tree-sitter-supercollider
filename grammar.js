@@ -578,7 +578,7 @@ module.exports = grammar({
 
 				// "Selector as binary operator"
 				// @TODO
-				// [PRECEDENCE.selectorBinary, prec.right(seq($.identifier, ":"))],
+				[PRECEDENCE.selectorBinary, alias(/(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*:/, $.method_name)],
 
 				// "Regular" binary operators
 				[PRECEDENCE.and, '&&'],
