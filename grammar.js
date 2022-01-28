@@ -328,6 +328,7 @@ module.exports = grammar({
 			$.environment_var,
 			$.local_var,
 			$.classvar,
+			// $.const, // Only works in classes?
 			$.builtin_var,
 			$.instance_var
 		),
@@ -349,6 +350,8 @@ module.exports = grammar({
 
 		instance_var: $=> seq( optional('var'), optional(choice("<", ">", "<>")), field("name", $.identifier)),
 		classvar: $ => seq('classvar', optional(choice("<", ">", "<>")), field("name", $.identifier)),
+		const: $ => seq('const', optional(choice("<", ">", "<>")), field("name", $.identifier)),
+
 		environment_var: $ => choice(
 			field("name", alias(/[a-z]/, $.identifier)),
 			field("name", alias(seq('~', $.identifier), $.identifier)),
@@ -394,7 +397,8 @@ module.exports = grammar({
 									choice(
 										alias($.local_var, $.instance_var),
 										$.instance_var,
-										$.classvar
+										$.classvar,
+										$.const
 									),
 									"=",
 									$._object,
