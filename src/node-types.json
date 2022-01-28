@@ -300,6 +300,10 @@
             "named": false
           },
           {
+            "type": "method_name",
+            "named": true
+          },
+          {
             "type": "|",
             "named": false
           },

@@ -16,7 +16,6 @@ selector as infix binary operators
             (number
               (integer ))))
         operator: (method_name )
-        operator: (method_name )
         right: (function_block
           (parameter_list
             (argument
@@ -28,7 +27,6 @@ selector as infix binary operators
             right: (literal
               (number
                 (integer ))))))
-      operator: (method_name )
       operator: (method_name )
       right: (literal
         (number
