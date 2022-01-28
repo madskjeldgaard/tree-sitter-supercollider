@@ -498,6 +498,10 @@
           "named": true
         },
         {
+          "type": "const",
+          "named": true
+        },
+        {
           "type": "control_structure",
           "named": true
         },
@@ -738,6 +742,22 @@
     "type": "collection_type",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "const",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "control_structure",
@@ -2838,6 +2858,10 @@
   },
   {
     "type": "classvar",
+    "named": false
+  },
+  {
+    "type": "const",
     "named": false
   },
   {

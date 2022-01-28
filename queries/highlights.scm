@@ -68,7 +68,7 @@
 [
 "arg"
 "classvar"
-; "const"
+"const"
 ; "super"
 ; "this"
 "var"

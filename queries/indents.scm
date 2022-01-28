@@ -7,6 +7,7 @@
   (function_call)
   (class_def)
   (classvar)
+  (const)
   (instance_var)
   (variable_definition)
   (variable_definition_sequence (variable_definition))
