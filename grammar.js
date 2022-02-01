@@ -240,7 +240,7 @@ module.exports = grammar({
 		// For definition lists
 		argument: $ => seq(
 			field("name", $.identifier),
-			field("value", optional(seq("=", $.literal)))
+			field("value", optional(choice(seq("=", $.literal), seq("(", $.literal, ")"))))
 		),
 
 		// When supplying arguments to a function call
