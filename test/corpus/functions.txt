@@ -1,3 +1,21 @@
+====
+C-style initialization of arguments using parenthesis
+====
+NiceNice{
+  *new{|aNumber(10)|}
+}
+---
+(source_file
+  (class_def
+    (class )
+    (class_method_name )
+    (function_block
+      (parameter_list
+        (argument
+          name: (identifier )
+          value: (literal
+            (number
+              (integer ))))))))
 ====================
 selector as infix binary operators
 ====================
