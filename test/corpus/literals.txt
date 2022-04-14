@@ -1,14 +1,4 @@
 ======
-Just a literal no code braces or semicolon
-======
-2
----
-(source_file
-  (literal
-  	(number
-	 (integer ))))
-
-======
 Ref'd array
 ======
 
