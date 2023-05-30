@@ -30,6 +30,10 @@
             "named": false
           },
           {
+            "type": "collection",
+            "named": true
+          },
+          {
             "type": "literal",
             "named": true
           }
