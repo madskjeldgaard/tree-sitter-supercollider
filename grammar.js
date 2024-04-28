@@ -47,20 +47,14 @@ module.exports = grammar({
 		$.block_comment,
 	],
 
-	inline: $ => [$.keywords],
+	//inline: $ => [$.keywords],
 
 	// The name of a token that will match keywords for the purpose of the keyword extraction optimization.
 	word: $ => $.identifier,
 	conflicts: $ => [
 		// [$.selector_binary, $.binary_expression],
 		// [$.selector_binary, $.unary_expression],
-		[$.unnamed_argument, $.named_argument],
-		[$.variable_definition, $.function_definition],
-		[$.collection, $.code_block],
-		[$.local_var, $.if],
 		[$.switch],
-		[$.variable_definition_sequence],
-		[$.binary_expression, $.nil_check],
 		[$._expression, $._object],
 	],
 
@@ -317,7 +311,7 @@ module.exports = grammar({
 				/[0-7]{1,3}/,
 				/x[0-9a-fA-F]{2}/,
 				/u[0-9a-fA-F]{4}/,
-				/u{[0-9a-fA-F]+}/
+				/u\{[0-9a-fA-F]+\}/
 			)
 		)),
 

@@ -1240,7 +1240,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "u{[0-9a-fA-F]+}"
+                "value": "u\\{[0-9a-fA-F]+\\}"
               }
             ]
           }
@@ -4096,30 +4096,7 @@
   ],
   "conflicts": [
     [
-      "unnamed_argument",
-      "named_argument"
-    ],
-    [
-      "variable_definition",
-      "function_definition"
-    ],
-    [
-      "collection",
-      "code_block"
-    ],
-    [
-      "local_var",
-      "if"
-    ],
-    [
       "switch"
-    ],
-    [
-      "variable_definition_sequence"
-    ],
-    [
-      "binary_expression",
-      "nil_check"
     ],
     [
       "_expression",
@@ -4133,9 +4110,6 @@
       "name": "block_comment"
     }
   ],
-  "inline": [
-    "ReferenceError"
-  ],
+  "inline": [],
   "supertypes": []
 }
-
