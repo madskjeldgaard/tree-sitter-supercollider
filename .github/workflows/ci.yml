@@ -18,10 +18,9 @@ jobs:
         git clone https://github.com/tree-sitter/tree-sitter.git
         cd tree-sitter
         make
-        echo "$PWD/cli" >> $GITHUB_PATH
-        # sudo make install
+        sudo make install
 
     - name: Generate and Test
       run: |
-        tree-sitter generate
-        tree-sitter test
+        /usr/local/tree-sitter generate
+        /usr/local/tree-sitter test
