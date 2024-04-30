@@ -19,10 +19,10 @@ jobs:
 
     - name: Download and Install Tree-sitter
       run: |
-        wget https://github.com/tree-sitter/tree-sitter/releases/download/${{ env.TREE_SITTER_VERSION }}/tree-sitter-linux-x86.gz
-        gunzip tree-sitter-linux-x86.gz
-        chmod +x tree-sitter-linux-x86
-        sudo mv tree-sitter-linux-x86 /usr/local/bin/tree-sitter
+        wget https://github.com/tree-sitter/tree-sitter/releases/download/${{ env.TREE_SITTER_VERSION }}/tree-sitter-linux-x64.gz
+        gunzip tree-sitter-linux-x64.gz
+        chmod +x tree-sitter-linux-x64
+        sudo mv tree-sitter-linux-x64 /usr/local/bin/tree-sitter
 
     - name: Generate and Test
       run: |
