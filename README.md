@@ -1,3 +1,5 @@
+[![Tree-sitter Test](https://github.com/madskjeldgaard/tree-sitter-supercollider/actions/workflows/ci.yml/badge.svg)](https://github.com/madskjeldgaard/tree-sitter-supercollider/actions/workflows/ci.yml)
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
@@ -25,7 +27,7 @@ _SuperCollider code (on the right) being parsed live by tree-sitter (on the left
 
 SuperCollider is a programming language for sound. Tree-sitter is a really smart code parser.
 
-This project defines a grammar (the "rules" of the language) for SuperCollider in a way that allows tree-sitter to do fast and very precise analysis of the code, while it is being typed. 
+This project defines a grammar (the "rules" of the language) for SuperCollider in a way that allows tree-sitter to do fast and very precise analysis of the code, while it is being typed.
 
 Among other things, this allows for a very high level of precision in syntax highlighting (see below) and analyzing/traversing source code with equal precision.
 
@@ -96,7 +98,7 @@ parser_config.supercollider = {
 ## Contributing
 Help WANTED. This project is too big to be handled by one person, and so any and all help would be appreciated.
 
-If you want to help out, you can either identify and open up issues (example: Find some language feature that has not been defined in the grammar yet or some code that makes tree-sitter fail), resolve existing ones or write tests. 
+If you want to help out, you can either identify and open up issues (example: Find some language feature that has not been defined in the grammar yet or some code that makes tree-sitter fail), resolve existing ones or write tests.
 
 Pull requests are especially appreciated.
 
@@ -121,11 +123,11 @@ There is no official spec for he SuperCollider language (hehe), but these links 
 - [Literals in SuperCollider](http://doc.sccode.org/Reference/Literals.html)
 - [Symbolic notation in SuperCollider](http://doc.sccode.org/Overviews/SymbolicNotations.html)
 - [Syntax shortcuts in SuperCollider](http://doc.sccode.org/Reference/Syntax-Shortcuts.html)
-- [the SCIDE lexer](https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp) 
+- [the SCIDE lexer](https://github.com/supercollider/supercollider/blob/608bb981162c2c26f0a32c09d82557b29774a32e/editors/sc-ide/core/sc_lexer.cpp)
 
 ### Testing
 
-Ideally, all rules in the grammar should be accompanied by at least one unit test. 
+Ideally, all rules in the grammar should be accompanied by at least one unit test.
 
 These are found in `test/corpus` and named `<subject>.txt`. See [this part of the tree-sitter docs on how to create tests](https://tree-sitter.github.io/tree-sitter/creating-parsers#command-test).
 
