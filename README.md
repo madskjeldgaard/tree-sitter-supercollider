@@ -88,12 +88,13 @@ parser_config.supercollider = {
 	install_info = {
 		-- url = "~/code/tree-sitter-supercollider",
 		url = "https://github.com/madskjeldgaard/tree-sitter-supercollider",
-		files = {"src/parser.c"},
+		files = {"src/parser.c", "src/scanner.c"},
 		maintainer = "@madskjeldgaard"
 	},
 	filetype = "supercollider", -- if filetype does not agrees with parser name
 }
 ```
+Also see nvim-treesitter [README](https://github.com/nvim-treesitter/nvim-treesitter#adding-parsers).
 
 ## Contributing
 Help WANTED. This project is too big to be handled by one person, and so any and all help would be appreciated.
