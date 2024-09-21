@@ -20,7 +20,8 @@
       "file-types": [
         "scd",
         "sc"
-      ]
+      ],
+      "highlights": "queries/highlights.scm"
     }
   ]
 }
