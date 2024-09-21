@@ -281,7 +281,7 @@ module.exports = grammar({
 		),
 
 		integer: $ => /\d+/,
-		hexinteger: $ => /0x(\\d|[a-f]|[A-F])+/,
+		hexinteger: $ => /0x([a-fA-F\d])+/,
 		float: $ => /\d+\.\d+/,
 		exponential: $ => /-?\d+(\.\d+)?[eE]-?\d+/,
 		symbol: $ => choice(
