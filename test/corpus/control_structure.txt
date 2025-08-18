@@ -278,6 +278,28 @@ func.while{func}
             name: (method_name )))))))
 
 ==================
+while {test} {body}
+==================
+
+while { false } { "never".postln };
+
+---
+
+(source_file
+  (control_structure
+    (while
+      test_func: (function_block
+        (literal
+          (bool)))
+      body_func: (function_block
+        (function_call
+          (receiver
+            (literal
+              (string)))
+          (method_call
+            name: (method_name)))))))
+
+==================
 for(start, end, func)
 ==================
 
