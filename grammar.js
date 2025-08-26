@@ -8,6 +8,7 @@ const PRECEDENCE = {
 	call: 14,
 	field: 13,
 	unary: 15,
+    duplication: 12,
 	multiplicative: 10,
 	additive: 9,
 	shift: 8,
@@ -107,7 +108,7 @@ module.exports = grammar({
 
 		partial: $ => prec.right(PRECEDENCE.partial, "_"),
 
-		duplicated_statement: $ => prec.left(1, seq(
+		duplicated_statement: $ => prec.left(PRECEDENCE.duplication, seq(
             field("duplicated_object", $._object),
             field("operator","!"),
             field("duplication_times", $._object)
