@@ -41,7 +41,7 @@ Chained duplications
           (integer))))))
 
 ====================
-Assign duplication statement to local variable
+Assign duplication to local variable
 ====================
 
 (
@@ -69,7 +69,7 @@ train = "choo" ! 2;
 
 
 ====================
-duplicated argument
+duplication as function call argument
 ====================
 
 { PinkNoise.ar(0.1!2) };
@@ -93,6 +93,30 @@ duplicated argument
                 duplication_times: (literal
                   (number
                     (integer)))))))))))
+
+====================
+Math on duplications
+====================
+
+(
+1 ! 2 + 3;
+)
+
+---
+
+(source_file
+  (code_block
+    (binary_expression
+      left: (duplicated_statement
+        duplicated_object: (literal
+          (number
+            (integer)))
+        duplication_times: (literal
+          (number
+            (integer))))
+      right: (literal
+        (number
+          (integer))))))
 
 ====================
 partial: [a, b, _]
