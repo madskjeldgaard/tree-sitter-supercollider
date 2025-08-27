@@ -18,6 +18,107 @@ Basic duplication
           (hexinteger ))))))
 
 ====================
+Chained duplications
+====================
+
+(
+1!2!3
+)
+
+---
+(source_file
+  (code_block
+    (duplicated_statement
+      duplicated_object: (duplicated_statement
+        duplicated_object: (literal
+          (number
+            (integer)))
+        duplication_times: (literal
+          (number
+            (integer))))
+      duplication_times: (literal
+        (number
+          (integer))))))
+
+====================
+Assign duplication to local variable
+====================
+
+(
+var train;
+train = "choo" ! 2;
+)
+
+---
+
+(source_file
+  (code_block
+    (variable
+      (local_var
+        name: (identifier)))
+    (variable_definition
+      name: (variable
+        (local_var
+          name: (identifier)))
+      value: (duplicated_statement
+        duplicated_object: (literal
+          (string))
+        duplication_times: (literal
+          (number
+            (integer)))))))
+
+
+====================
+duplication as function call argument
+====================
+
+{ PinkNoise.ar(0.1!2) };
+
+---
+
+(source_file
+  (function_block
+    (function_call
+      (receiver
+        (class))
+      (method_call
+        name: (method_name)
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
+              (duplicated_statement
+                duplicated_object: (literal
+                  (number
+                    (float)))
+                duplication_times: (literal
+                  (number
+                    (integer)))))))))))
+
+====================
+Math on duplications
+====================
+
+(
+1 ! 2 + 3;
+)
+
+---
+
+(source_file
+  (code_block
+    (binary_expression
+      left: (duplicated_statement
+        duplicated_object: (literal
+          (number
+            (integer)))
+        duplication_times: (literal
+          (number
+            (integer))))
+      right: (literal
+        (number
+          (integer))))))
+
+====================
 partial: [a, b, _]
 ====================
 (
