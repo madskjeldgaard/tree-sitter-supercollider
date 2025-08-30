@@ -185,6 +185,28 @@ Argument list with no commas
           name: (identifier ))))))
 
 =====================
+Spaces in argument list with no commas
+=====================
+
+(
+{|argument1 = \arg1 argument2|}
+)
+
+---
+
+(source_file
+  (code_block
+    (function_block
+      (parameter_list
+        (argument
+          name: (identifier)
+          value: (literal
+            (symbol
+              (identifier))))
+        (argument
+          name: (identifier))))))
+
+=====================
 function call in associtive item
 =====================
 (

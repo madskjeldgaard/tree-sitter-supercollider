@@ -46,6 +46,7 @@ module.exports = grammar({
 
 	externals: $ => [
 		$.block_comment,
+        $._space_separator
 	],
 
 	//inline: $ => [$.keywords],
@@ -230,14 +231,29 @@ module.exports = grammar({
 
 		// Definition of parameters in function
 		parameter_list: $ => choice(
-			seq('arg', sepBy(',', $.argument), optional(seq("...", $.argument)), ';'),
-			seq('|', sepBy(choice(' ', ','), $.argument), optional(seq("...", $.argument)), '|')
+			seq(
+                'arg',
+                sepBy(',', $.argument),
+                optional(seq("...", $.argument)),
+                ';'
+            ),
+			seq(
+                '|',
+                sepBy(choice($._space_separator, ','), $.argument),
+                optional(seq("...", $.argument)),
+                '|'
+            )
 		),
 
 		// For definition lists
 		argument: $ => seq(
 			field("name", $.identifier),
-			field("value", optional(choice(seq("=", choice($.literal, $.collection)), seq("(", $.literal, ")"))))
+            field("value", optional(
+                choice(
+                    seq("=", choice($.literal, $.collection)),
+                    seq("(", $.literal, ")")
+                )
+            ))
 		),
 
 		// When supplying arguments to a function call
