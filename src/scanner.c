@@ -1,4 +1,4 @@
-#include <tree_sitter/parser.h>
+#include "tree_sitter/parser.h"
 #include <wctype.h>
 // Block comment stuff here is largely nicked from tree-sitter-rust https://github.com/tree-sitter/tree-sitter-rust
 
