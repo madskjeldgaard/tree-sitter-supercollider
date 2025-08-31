@@ -708,6 +708,12 @@ module.exports = grammar({
 				field("name", ".while"),
 				field("body_func", $.function_block),
 			),
+            // while testFunc bodyFunc;
+            seq(
+				field("name", "while"),
+				field("test_func", $.function_block),
+				field("body_func", $.function_block),
+            ),
 		),
 
 		for: $ => choice(
