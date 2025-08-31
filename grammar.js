@@ -309,14 +309,15 @@ module.exports = grammar({
 		char: $ => /\$./,
 
 		// Taken from https://github.com/tree-sitter/tree-sitter-javascript/blob/83f6a2d900a2dc245e4717ccd05c2a362443cd87/grammar.js#L808
-		string: $ =>
-		seq(
-			'"',
-			repeat(choice(
-				token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
-				$.escape_sequence
-			)),
-			'"'
+		string: $ => repeat1(
+            seq(
+                '"',
+                repeat(choice(
+                    token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
+                    $.escape_sequence
+                )),
+                '"'
+            )
 		),
 
 		bool: $ => choice("true", "false"),
