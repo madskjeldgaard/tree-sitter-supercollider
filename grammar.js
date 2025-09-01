@@ -250,8 +250,9 @@ module.exports = grammar({
 			field("name", $.identifier),
             field("value", optional(
                 choice(
-                    seq("=", choice($.literal, $.collection)),
-                    seq("(", $.literal, ")")
+                    seq("=", choice($.literal, $.collection, $.code_block)),
+                    $.code_block,
+                    // seq("(", $.literal, ")")
                 )
             ))
 		),
