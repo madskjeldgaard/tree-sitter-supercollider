@@ -234,13 +234,18 @@ module.exports = grammar({
 			seq(
                 'arg',
                 sepBy(',', $.argument),
-                optional(seq("...", $.argument)),
+                // optional(seq("...", $.argument)),
+                optional(alias($.variable_argument, $.argument)),
                 ';'
             ),
 			seq(
                 '|',
-                sepBy(choice($._space_separator, ','), $.argument),
-                optional(seq("...", $.argument)),
+                sepBy(choice($._space_separator, ','),
+                    choice(
+                        $.argument,
+                        alias($.variable_argument, $.argument),
+                    ),
+                ),
                 '|'
             )
 		),
@@ -256,6 +261,9 @@ module.exports = grammar({
                 )
             ))
 		),
+
+        // see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
+        variable_argument: $ => seq("...", field("name", $.identifier)),
 
 		// When supplying arguments to a function call
 		parameter_call_list: $ => sepBy1(',', $.argument_calls),
