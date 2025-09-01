@@ -19,12 +19,13 @@ static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 static bool is_num_char(int32_t c) { return c == '_' || iswdigit(c); }
 
 bool tree_sitter_supercollider_external_scanner_scan(
-    void *payload, TSLexer *lexer, const bool *valid_symbols) {
+  void *payload, TSLexer *lexer, const bool *valid_symbols) {
 
+  // space as separator in '{ |arg1 arg2| }' style argument declaration
   if (valid_symbols[SPACE_SEPARATOR] && iswspace(lexer->lookahead)) {
     while (iswspace(lexer->lookahead))
       lexer->advance(lexer, true);
-    if (lexer->lookahead != '=') {
+    if (lexer->lookahead != '=' && lexer->lookahead != '|') {
       lexer->result_symbol = SPACE_SEPARATOR;
       return true;
     }
