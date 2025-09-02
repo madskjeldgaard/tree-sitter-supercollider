@@ -194,7 +194,7 @@ Spaces in argument list with no commas
 =====================
 
 (
-{|argument1 = \arg1 argument2|}
+{ | argument1 = \arg1 argument2 | }
 )
 
 ---
@@ -208,6 +208,27 @@ Spaces in argument list with no commas
           value: (literal
             (symbol
               (identifier))))
+        (argument
+          name: (identifier))))))
+
+=====================
+Argument list with variable argument
+=====================
+
+(
+{ | arg0, arg1 ...rest | };
+)
+
+---
+
+(source_file
+  (code_block
+    (function_block
+      (parameter_list
+        (argument
+          name: (identifier))
+        (argument
+          name: (identifier))
         (argument
           name: (identifier))))))
 
