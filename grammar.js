@@ -46,6 +46,7 @@ module.exports = grammar({
 
 	externals: $ => [
 		$.block_comment,
+        $._space_separator
 	],
 
 	//inline: $ => [$.keywords],
@@ -230,15 +231,39 @@ module.exports = grammar({
 
 		// Definition of parameters in function
 		parameter_list: $ => choice(
-			seq('arg', sepBy(',', $.argument), optional(seq("...", $.argument)), ';'),
-			seq('|', sepBy(choice(' ', ','), $.argument), optional(seq("...", $.argument)), '|')
+			seq(
+                'arg',
+                sepBy(',', $.argument),
+                // optional(seq("...", $.argument)),
+                optional(alias($.variable_argument, $.argument)),
+                ';'
+            ),
+			seq(
+                '|',
+                sepBy(choice($._space_separator, ','),
+                    choice(
+                        $.argument,
+                        alias($.variable_argument, $.argument),
+                    ),
+                ),
+                '|'
+            )
 		),
 
 		// For definition lists
 		argument: $ => seq(
 			field("name", $.identifier),
-			field("value", optional(choice(seq("=", choice($.literal, $.collection)), seq("(", $.literal, ")"))))
+            field("value", optional(
+                choice(
+                    seq("=", choice($.literal, $.collection, $.code_block)),
+                    $.code_block,
+                    // seq("(", $.literal, ")")
+                )
+            ))
 		),
+
+        // see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
+        variable_argument: $ => seq("...", field("name", $.identifier)),
 
 		// When supplying arguments to a function call
 		parameter_call_list: $ => sepBy1(',', $.argument_calls),
@@ -293,14 +318,15 @@ module.exports = grammar({
 		char: $ => /\$./,
 
 		// Taken from https://github.com/tree-sitter/tree-sitter-javascript/blob/83f6a2d900a2dc245e4717ccd05c2a362443cd87/grammar.js#L808
-		string: $ =>
-		seq(
-			'"',
-			repeat(choice(
-				token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
-				$.escape_sequence
-			)),
-			'"'
+		string: $ => repeat1(
+            seq(
+                '"',
+                repeat(choice(
+                    token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
+                    $.escape_sequence
+                )),
+                '"'
+            )
 		),
 
 		bool: $ => choice("true", "false"),
