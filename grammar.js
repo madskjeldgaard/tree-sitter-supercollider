@@ -19,6 +19,7 @@ const PRECEDENCE = {
 	and: 3,
 	or: 2,
 	range: 1,
+    indexing: 1,
 	assign: 0,
 	selectorBinary: 100,
 	controlstruct: 3,
@@ -553,40 +554,40 @@ module.exports = grammar({
 			"SymbolArray",
 		),
 
+        _indexable_object: $ => choice(
+            $.collection,
+            $.variable,
+            $.string,
+            $.function_call,
+            prec.left(1, $.code_block),
+            $.control_structure
+        ),
+
 		indexed_collection: $ => seq(
-			$.variable,
+            $._indexable_object,
 			repeat($._index),
 			$._index
 		),
 
-		_index: $ => choice(seq("[",
-			field("index",
-				choice(
-					$.literal,
-					$.variable,
-					// Subrange
-					choice(
-						seq($.integer, ".."),
-						seq("..", $.integer),
-						seq($.integer, "..", $.integer),
-					)
-				)),
-			"]"
-		),
-			// clipAt
-			seq("|@|", field("index", $.integer)),
-			// wrapAt
-			seq("@@", field("index", $.integer)),
-			// foldAt
-			seq("@|@", field("index", $.integer)),
-		),
+        index_subrange: $ => choice(
+            seq($._numeric_expression, ".."),
+            seq("..", $._numeric_expression),
+            seq($._numeric_expression, "..", $._numeric_expression),
+            seq($._numeric_expression, ",", $._numeric_expression, "..", $._numeric_expression),
+        ),
+
+		_index: $ => seq(
+            "[",
+            field("index", choice($._numeric_expression, $.index_subrange)),
+            "]"
+        ),
 
 		arithmetic_series: $ => seq(
 			"(",
 			choice(
-				seq($.number, ",", $.number, "..", $.number),
-				seq("..", $.number),
-				seq($.number, "..", $.number),
+				seq($._numeric_expression, ",", $._numeric_expression, "..", $._numeric_expression),
+				seq("..", $._numeric_expression),
+				seq($._numeric_expression, "..", $._numeric_expression),
 			),
 			")"
 		),
@@ -619,7 +620,10 @@ module.exports = grammar({
 				[PRECEDENCE.assign, '='],
 
 				// String concatenation
-				[PRECEDENCE.stringConcat, "+/+"]
+				[PRECEDENCE.stringConcat, "+/+"],
+
+                // Indexing (see https://doc.sccode.org/Overviews/SymbolicNotations.html#SequenceableCollection%20operators)
+                [PRECEDENCE.indexing, choice("@", "@@", "|@|", "@|@")]
 			];
 
 			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
@@ -650,6 +654,19 @@ module.exports = grammar({
 		// Nil check
 		// @FIXME: Should be a binary operator
 		nil_check: $ => prec.left(seq($._object, choice("?", "!?", "??"), $._object)),
+
+        // Expressions that can hold or return a single value
+        _numeric_expression: $ => choice(
+            $.number,
+            $.variable,
+            $.binary_expression,
+            $.unary_expression,
+            $.function_call,
+            $.indexed_collection,
+            $.code_block,
+            $.nil_check,
+            $.control_structure,
+        ),
 
 		////////////////////
 		//  Conditionals  //
