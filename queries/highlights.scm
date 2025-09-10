@@ -1,101 +1,115 @@
 ; highlights.scm
 ; See this for full list: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md
 
-; comments
-(line_comment) @comment
-(block_comment) @comment
+; Comments
+(line_comment) @comment @spell
+(block_comment) @comment @spell
 
 ; Argument definition
-(argument name: (identifier) @parameter)
+(argument 
+  name: (identifier) @variable.parameter)
+
+; Variable argument
+[ "..." ] @variable.parameter
 
 ; Variables
-(local_var name: (identifier) @variable)
-(environment_var name:(identifier) @variable.builtin)
+(local_var 
+  name: (identifier) @variable)
+
+(environment_var 
+  name:(identifier) @variable.builtin)
+
 (builtin_var) @constant.builtin
 
-; (variable) @variable
-
 ; Functions
-(function_definition
-  name: (variable) @function)
-
-; For function calls
 (named_argument
-  name: (identifier) @property)
+  name: (identifier) @variable.parameter)
 
 ; Methods
 (method_call
-        name: (method_name) @method)
+  name: (method_name) @function.method.call)
+
+(method_name) @function.method.call
+
+; Collections
+(associative_item
+  (identifier) @property)
 
 ; Classes
 (class) @type
+(parent_class) @type
+
+(instance_method_name) @function.method
+(class_method_name) @function.method
 
 ; Literals
+(bool) @boolean
 (number) @number
-;(pi_statement) @constant.builtin
-(float) @float
-
+(float) @number.float
 (string) @string
-(symbol) @string.special
+(escape_sequence) @string.escape
+(symbol) @string.special.symbol
+
+; Conditionals
+[
+  "if"
+  "while"
+  "case"
+  "switch"
+  "?"
+  "!?"
+  "??"
+] @keyword.conditional
+
+; Iterations
+[ "for" "forBy" ] @keyword.repeat
+
+; Duplication operator
+[ "!" ] @keyword.repeat
+
+; Arithmetic series operator
+[ ".." ] @operator
 
 ; Operators
 [
-"&&"
-"||"
-"&"
-"|"
-"^"
-"=="
-"!="
-"<"
-"<="
-">"
-">="
-"<<"
-">>"
-"+"
-"-"
-"*"
-"/"
-"%"
-"="
-"|@|"
-"@@"
-"@|@"
+  "&&"
+  "||"
+  "&"
+  "|"
+  "^"
+  "=="
+  "!="
+  "<"
+  "<="
+  ">"
+  ">="
+  "<<"
+  ">>"
+  "+"
+  "-"
+  "*"
+  "/"
+  "%"
+  "="
+  "|@|"
+  "@@"
+  "@|@"
+  "++"
+  "+/+"
 ] @operator
 
 ; Keywords
 [
-"arg"
-"classvar"
-"const"
-; "super"
-; "this"
-"var"
+  "arg"
+  "classvar"
+  "const"
+  ; "super"
+  ; "this"
+  "var"
 ] @keyword
 
 ; Brackets
-[
-  "("
-  ")"
-  "["
-  "]"
-  "{"
-  "}"
-  "|"
-] @punctuation.bracket
+[ "(" ")" "[" "]" "{" "}" "|" ] @punctuation.bracket
 
 ; Delimeters
-[
-  ";"
-  "."
-  ","
-] @punctuation.delimiter
-
-; control structure
-(control_structure) @conditional
-
-(escape_sequence) @string.special
-
-; SinOsc.ar()!2
-(duplicated_statement) @repeat
+[ ";" "." "," ] @punctuation.delimiter
