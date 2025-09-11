@@ -623,7 +623,7 @@ module.exports = grammar({
 				[PRECEDENCE.stringConcat, "+/+"],
 
                 // Indexing (see https://doc.sccode.org/Overviews/SymbolicNotations.html#SequenceableCollection%20operators)
-                [PRECEDENCE.indexing, choice("@", "@@", "|@|", "@|@")]
+                [PRECEDENCE.indexing, choice("@", "@@", "|@|", "@|@")],
 			];
 
 			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
