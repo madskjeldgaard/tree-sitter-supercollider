@@ -21,91 +21,107 @@ Comma at end of collection
 ==================
 collection@|@1
 ==================
+
 (
 var arr = [1,2,3];
 arr@|@1
 )
+
 ---
+
 (source_file
   (code_block
     (variable_definition
       name: (variable
         (local_var
-          name: (identifier )))
+          name: (identifier)))
       value: (collection
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))))
-    (indexed_collection
-      (variable
+            (integer)))))
+    (binary_expression
+      left: (variable
         (local_var
-          name: (identifier )))
-      index: (integer ))))
+          name: (identifier)))
+      right: (literal 
+        (number
+          (integer))))))
 
 ==================
 collection@@1
 ==================
+
 (
 var arr = [1,2,3];
 arr@@1
 )
+
 ---
+
 (source_file
   (code_block
     (variable_definition
       name: (variable
         (local_var
-          name: (identifier )))
+          name: (identifier)))
       value: (collection
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))))
-    (indexed_collection
-      (variable
+            (integer)))))
+    (binary_expression
+      left: (variable
         (local_var
-          name: (identifier )))
-      index: (integer ))))
+          name: (identifier)))
+      right: (literal 
+        (number
+          (integer))))))
+
 ==================
 collection|@|1
 ==================
+
 (
 var arr = [1,2,3];
 arr|@|1
 )
+
 ---
+
 (source_file
   (code_block
     (variable_definition
       name: (variable
         (local_var
-          name: (identifier )))
+          name: (identifier)))
       value: (collection
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))))
-    (indexed_collection
-      (variable
+            (integer)))))
+    (binary_expression
+      left: (variable
         (local_var
-          name: (identifier )))
-      index: (integer ))))
+          name: (identifier)))
+      right: (literal 
+        (number
+          (integer))))))
 
 ==================
 10.do{|index| index.postln}
@@ -172,7 +188,9 @@ arithmetic series (1.0, 1.0..2.0)
 (
 (1.0, 1.1 .. 2.0)
 )
+
 ---
+
 (source_file
   (code_block
     (collection
@@ -187,10 +205,13 @@ arithmetic series (1.0, 1.0..2.0)
 ==================
 arithmetic series (..1)
 ==================
+
 (
 (..1)
 )
+
 ---
+
 (source_file
   (code_block
     (collection
@@ -201,10 +222,13 @@ arithmetic series (..1)
 ==================
 arithmetic series (1..10)
 ==================
+
 (
 (1..10)
 )
+
 ---
+
 (source_file
   (code_block
     (collection
@@ -215,14 +239,55 @@ arithmetic series (1..10)
           (integer ))))))
 
 ==================
+arithmetic series with variable
+==================
+
+(
+var index = rrand(0, 8);
+(index..16);
+)
+
+---
+
+(source_file
+  (code_block
+    (variable_definition
+      name: (variable
+        (local_var
+          name: (identifier)))
+      value: (function_call
+        (method_name)
+        (parameter_call_list
+          (argument_calls
+            (unnamed_argument
+              (literal
+                (number
+                  (integer)))))
+          (argument_calls
+            (unnamed_argument
+              (literal
+                (number
+                  (integer))))))))
+    (collection
+      (arithmetic_series
+        (variable
+          (local_var
+            name: (identifier)))
+        (number
+          (integer))))))
+
+==================
 Variable as index in collection
 ==================
+
 (
 var yo = 2;
 var array = [1,2,4];
 array[yo]
 )
+
 ---
+
 (source_file
   (code_block
     (variable_definition
@@ -257,6 +322,7 @@ array[yo]
 ==================
 index_collection multidimensional array
 ==================
+
 (
 var array = [
 	[1,2,3],
@@ -265,90 +331,98 @@ var array = [
 
 array[1][0].postln;
 )
+
 ---
+
 (source_file
   (code_block
     (variable_definition
       name: (variable
         (local_var
-          name: (identifier )))
+          name: (identifier)))
       value: (collection
         (collection
           (literal
             (number
-              (integer )))
+              (integer)))
           (literal
             (number
-              (integer )))
+              (integer)))
           (literal
             (number
-              (integer ))))
+              (integer))))
         (collection
           (literal
             (number
-              (integer )))
+              (integer)))
           (literal
             (number
-              (integer )))
+              (integer)))
           (literal
             (number
-              (integer ))))))
+              (integer))))))
     (function_call
       (receiver
         (indexed_collection
           (variable
             (local_var
-              name: (identifier )))
-          index: (literal
-            (number
-              (integer )))
-          index: (literal
-            (number
-              (integer )))))
+              name: (identifier)))
+          index: (number
+            (integer))
+          index: (number
+            (integer))))
       (method_call
-        name: (method_name )))))
+        name: (method_name)))))
 
 ==================
 index_collection array[1..3]
 ==================
+
 (
 var array = [1,2,3,4];
 array[1..3];
 )
+
 ---
+
 (source_file
   (code_block
     (variable_definition
       name: (variable
         (local_var
-          name: (identifier )))
+          name: (identifier)))
       value: (collection
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))
+            (integer)))
         (literal
           (number
-            (integer )))))
+            (integer)))))
     (indexed_collection
       (variable
         (local_var
-          name: (identifier )))
-      index: (integer )
-      index: (integer ))))
+          name: (identifier)))
+      index: (index_subrange
+        (number
+          (integer))
+        (number
+          (integer))))))
 
 ==================
 index_collection array[1..]
 ==================
+
 (
 var array = [1,2,3,4];
 array[..1];
 )
+
 ---
 
 (source_file
@@ -374,7 +448,9 @@ array[..1];
       (variable
         (local_var
           name: (identifier )))
-      index: (integer ))))
+      index: (index_subrange
+        (number 
+          (integer))))))
 
 ==================
 index_collection array[..1]
@@ -408,7 +484,76 @@ array[..1];
       (variable
         (local_var
           name: (identifier )))
-      index: (integer ))))
+      index: (index_subrange
+        (number 
+          (integer))))))
+
+==================
+indexing on arithmetic series (1..10)[0..3]
+==================
+
+(1..10)[0..3];
+
+---
+
+(source_file
+  (indexed_collection
+    (collection
+      (arithmetic_series
+        (number
+          (integer))
+        (number
+          (integer))))
+    index: (index_subrange
+      (number
+        (integer))
+      (number
+        (integer)))))
+
+==================
+indexing on string
+==================
+
+"123"[0];
+
+---
+
+(source_file
+  (indexed_collection
+    (string)
+    index: (number
+      (integer))))
+
+==================
+index_collection symbolic notation
+==================
+
+(
+var arr = (0..10);
+arr @ 5;
+)
+
+---
+
+(source_file
+  (code_block
+    (variable_definition
+      name: (variable
+        (local_var
+          name: (identifier)))
+      value: (collection
+        (arithmetic_series
+          (number
+            (integer))
+          (number
+            (integer)))))
+    (binary_expression
+      left: (variable
+        (local_var
+          name: (identifier)))
+      right: (literal
+        (number
+          (integer))))))
 
 ==================
 class method call on collection type
