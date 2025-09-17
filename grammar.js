@@ -8,7 +8,7 @@ const PRECEDENCE = {
 	call: 14,
 	field: 13,
 	unary: 15,
-    duplication: 12,
+	duplication: 12,
 	multiplicative: 10,
 	additive: 9,
 	shift: 8,
@@ -19,7 +19,7 @@ const PRECEDENCE = {
 	and: 3,
 	or: 2,
 	range: 1,
-    indexing: 1,
+	indexing: 1,
 	assign: 0,
 	selectorBinary: 100,
 	controlstruct: 3,
@@ -47,7 +47,7 @@ module.exports = grammar({
 
 	externals: $ => [
 		$.block_comment,
-        $._space_separator
+		$._space_separator
 	],
 
 	//inline: $ => [$.keywords],
@@ -62,8 +62,8 @@ module.exports = grammar({
 	],
 
 	// supertypes: $ => [
-	//     $._object,
-	//     $._expression_statement,
+	//	   $._object,
+	//	   $._expression_statement,
 	// ],
 
 	rules: {
@@ -111,13 +111,13 @@ module.exports = grammar({
 		partial: $ => prec.right(PRECEDENCE.partial, "_"),
 
 		duplicated_statement: $ => prec.left(PRECEDENCE.duplication, seq(
-            field("duplicated_object", $._object),
-            field("operator","!"),
-            field("duplication_times", $._object)
-        )),
+			field("duplicated_object", $._object),
+			field("operator","!"),
+			field("duplication_times", $._object)
+		)),
 
 		/////////////////
-		//  Functions  //
+		//	Functions  //
 		/////////////////
 
 		function_definition: $ => prec.left(1, seq(
@@ -180,16 +180,16 @@ module.exports = grammar({
 		),
 
 		// class_method_call: $ => prec.left(choice(
-		//     // Class.method - class method
-		//     prec.left(seq(
-		//         ".",
-		//         field("name", alias($.identifier, $.class_method_name)),
+		//	   // Class.method - class method
+		//	   prec.left(seq(
+		//		   ".",
+		//		   field("name", alias($.identifier, $.class_method_name)),
 		// optional(choice(
 
 		// seq("(", optional($.parameter_call_list), ")"), $._function_content)
-		//     ))),
-		//     // Class() - implicit .new
-		//     seq("(", optional($.parameter_call_list), ")")
+		//	   ))),
+		//	   // Class() - implicit .new
+		//	   seq("(", optional($.parameter_call_list), ")")
 		// )),
 
 		_expression_sequence: $ => seq(
@@ -233,38 +233,38 @@ module.exports = grammar({
 		// Definition of parameters in function
 		parameter_list: $ => choice(
 			seq(
-                'arg',
-                sepBy(',', $.argument),
-                // optional(seq("...", $.argument)),
-                optional(alias($.variable_argument, $.argument)),
-                ';'
-            ),
+				'arg',
+				sepBy(',', $.argument),
+				// optional(seq("...", $.argument)),
+				optional(alias($.variable_argument, $.argument)),
+				';'
+			),
 			seq(
-                '|',
-                sepBy(choice($._space_separator, ','),
-                    choice(
-                        $.argument,
-                        alias($.variable_argument, $.argument),
-                    ),
-                ),
-                '|'
-            )
+				'|',
+				sepBy(choice($._space_separator, ','),
+					choice(
+						$.argument,
+						alias($.variable_argument, $.argument),
+					),
+				),
+				'|'
+			)
 		),
 
 		// For definition lists
 		argument: $ => seq(
 			field("name", $.identifier),
-            field("value", optional(
-                choice(
-                    seq("=", choice($.literal, $.collection, $.code_block)),
-                    $.code_block,
-                    // seq("(", $.literal, ")")
-                )
-            ))
+			field("value", optional(
+				choice(
+					seq("=", choice($.literal, $.collection, $.code_block)),
+					$.code_block,
+					// seq("(", $.literal, ")")
+				)
+			))
 		),
 
-        // see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
-        variable_argument: $ => seq("...", field("name", $.identifier)),
+		// see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
+		variable_argument: $ => seq("...", field("name", $.identifier)),
 
 		// When supplying arguments to a function call
 		parameter_call_list: $ => sepBy1(',', $.argument_calls),
@@ -286,7 +286,7 @@ module.exports = grammar({
 			))),
 
 		///////////////////////
-		//  Define literal  //
+		//	Define literal	//
 		///////////////////////
 
 		literal: $ => choice(
@@ -320,14 +320,14 @@ module.exports = grammar({
 
 		// Taken from https://github.com/tree-sitter/tree-sitter-javascript/blob/83f6a2d900a2dc245e4717ccd05c2a362443cd87/grammar.js#L808
 		string: $ => repeat1(
-            seq(
-                '"',
-                repeat(choice(
-                    token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
-                    $.escape_sequence
-                )),
-                '"'
-            )
+			seq(
+				'"',
+				repeat(choice(
+					token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
+					$.escape_sequence
+				)),
+				'"'
+			)
 		),
 
 		bool: $ => choice("true", "false"),
@@ -345,7 +345,7 @@ module.exports = grammar({
 		)),
 
 		/////////////////
-		//  Variables  //
+		//	Variables  //
 		/////////////////
 
 		variable: $ => choice(
@@ -396,7 +396,7 @@ module.exports = grammar({
 		)),
 
 		///////////////
-		//  Classes  //
+		//	Classes  //
 		///////////////
 
 		return_statement: $ => prec.left(seq("^", choice($._object, $.function_call))),
@@ -446,7 +446,7 @@ module.exports = grammar({
 			"}")),
 
 		////////////////
-		//  Comments  //
+		//	Comments  //
 		////////////////
 
 		comment: $ => choice(
@@ -457,7 +457,7 @@ module.exports = grammar({
 		line_comment: $ => prec(PRECEDENCE.comment, token(seq('//', /.*/))),
 
 		///////////////////
-		//  Collections  //
+		//	Collections  //
 		///////////////////
 
 		ref: $ => "`",
@@ -508,7 +508,7 @@ module.exports = grammar({
 		associative_item: $ => prec(PRECEDENCE.associative_item,
 			seq(
 				choice(
-					seq($.identifier, ":",  alias($._object,  $.item)),
+					seq($.identifier, ":",	alias($._object,  $.item)),
 					$.association
 				)
 			)
@@ -554,33 +554,33 @@ module.exports = grammar({
 			"SymbolArray",
 		),
 
-        _indexable_object: $ => choice(
-            $.collection,
-            $.variable,
-            $.string,
-            $.function_call,
-            prec.left(1, $.code_block),
-            $.control_structure
-        ),
+		_indexable_object: $ => choice(
+			$.collection,
+			$.variable,
+			$.string,
+			$.function_call,
+			prec.left(1, $.code_block),
+			$.control_structure
+		),
 
 		indexed_collection: $ => seq(
-            $._indexable_object,
+			$._indexable_object,
 			repeat($._index),
 			$._index
 		),
 
-        index_subrange: $ => choice(
-            seq($._numeric_expression, ".."),
-            seq("..", $._numeric_expression),
-            seq($._numeric_expression, "..", $._numeric_expression),
-            seq($._numeric_expression, ",", $._numeric_expression, "..", $._numeric_expression),
-        ),
+		index_subrange: $ => choice(
+			seq($._numeric_expression, ".."),
+			seq("..", $._numeric_expression),
+			seq($._numeric_expression, "..", $._numeric_expression),
+			seq($._numeric_expression, ",", $._numeric_expression, "..", $._numeric_expression),
+		),
 
 		_index: $ => seq(
-            "[",
-            field("index", choice($._numeric_expression, $.index_subrange)),
-            "]"
-        ),
+			"[",
+			field("index", choice($._numeric_expression, $.index_subrange)),
+			"]"
+		),
 
 		arithmetic_series: $ => seq(
 			"(",
@@ -593,13 +593,13 @@ module.exports = grammar({
 		),
 
 		///////////////////
-		//  Expressions  //
+		//	Expressions  //
 		///////////////////
 		// "Selector as binary operator"
 		// selector_binary: $ => prec(PRECEDENCE.selectorBinary, prec.left(seq(
-		// 	field('left', $._object),
-		// 	field('operator', prec.right(seq($.identifier, ":"))),
-		// 	field('right', $._object)
+		//	field('left', $._object),
+		//	field('operator', prec.right(seq($.identifier, ":"))),
+		//	field('right', $._object)
 		// ))),
 		binary_expression: $ => {
 			const table = [
@@ -622,8 +622,8 @@ module.exports = grammar({
 				// String concatenation
 				[PRECEDENCE.stringConcat, "+/+"],
 
-                // Indexing (see https://doc.sccode.org/Overviews/SymbolicNotations.html#SequenceableCollection%20operators)
-                [PRECEDENCE.indexing, choice("@", "@@", "|@|", "@|@")],
+				// Indexing (see https://doc.sccode.org/Overviews/SymbolicNotations.html#SequenceableCollection%20operators)
+				[PRECEDENCE.indexing, choice("@", "@@", "|@|", "@|@")],
 			];
 
 			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
@@ -655,21 +655,21 @@ module.exports = grammar({
 		// @FIXME: Should be a binary operator
 		nil_check: $ => prec.left(seq($._object, choice("?", "!?", "??"), $._object)),
 
-        // Expressions that can hold or return a single value
-        _numeric_expression: $ => choice(
-            $.number,
-            $.variable,
-            $.binary_expression,
-            $.unary_expression,
-            $.function_call,
-            $.indexed_collection,
-            $.code_block,
-            $.nil_check,
-            $.control_structure,
-        ),
+		// Expressions that can hold or return a single value
+		_numeric_expression: $ => choice(
+			$.number,
+			$.variable,
+			$.binary_expression,
+			$.unary_expression,
+			$.function_call,
+			$.indexed_collection,
+			$.code_block,
+			$.nil_check,
+			$.control_structure,
+		),
 
 		////////////////////
-		//  Conditionals  //
+		//	Conditionals  //
 		////////////////////
 
 		control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
@@ -751,12 +751,12 @@ module.exports = grammar({
 				field("name", ".while"),
 				field("body_func", $.function_block),
 			),
-            // while testFunc bodyFunc;
-            seq(
+			// while testFunc bodyFunc;
+			seq(
 				field("name", "while"),
 				field("test_func", $.function_block),
 				field("body_func", $.function_block),
-            ),
+			),
 		),
 
 		for: $ => choice(
