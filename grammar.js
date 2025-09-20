@@ -1,9 +1,9 @@
 const PRECEDENCE = {
 	comment: 1000,
 
-  	call: 140,   // chains bind tighter than any binary op
-  	BIN:  20,    // flat, left-associative binary tier
-  	unary: 130,  // unary binds tighter than BIN (but below call)
+	call: 140,   // chains bind tighter than any binary op
+	BIN: 20,    // flat, left-associative binary tier
+	unary: 130,  // unary binds tighter than BIN (but below call)
 
 	association: 11,
 	associative_item: 10,
@@ -103,7 +103,7 @@ module.exports = grammar({
 
 		duplicated_statement: $ => prec.left(PRECEDENCE.duplication, seq(
 			field("duplicated_object", $._object),
-			field("operator","!"),
+			field("operator", "!"),
 			field("duplication_times", $._object)
 		)),
 
@@ -147,7 +147,7 @@ module.exports = grammar({
 				)
 			)
 		)),
-		
+
 		/**
 		 * _primary
 		 * ----------
@@ -348,9 +348,9 @@ module.exports = grammar({
 		parameter_call_list: $ => sepBy1(',', choice($.named_argument, $._object)),
 
 		named_argument: $ => seq(
-		  field('name',  choice($.symbol, $.identifier)),
-		  ':',
-		  field('value', $._object)
+			field('name', choice($.symbol, $.identifier)),
+			':',
+			field('value', $._object)
 		),
 
 		///////////////////////
@@ -445,10 +445,10 @@ module.exports = grammar({
 		)),
 
 		local_var: $ => prec(PRECEDENCE.localvar, choice(
-			field("name", $.identifier), seq( 'var',  field("name", $.identifier)))
+			field("name", $.identifier), seq('var', field("name", $.identifier)))
 		),
 
-		instance_var: $=> seq( optional('var'), optional(choice("<", ">", "<>")), field("name", $.identifier)),
+		instance_var: $ => seq(optional('var'), optional(choice("<", ">", "<>")), field("name", $.identifier)),
 		classvar: $ => seq('classvar', optional(choice("<", ">", "<>")), field("name", $.identifier)),
 		const: $ => seq('const', optional(choice("<", ">", "<>")), field("name", $.identifier)),
 
@@ -584,7 +584,7 @@ module.exports = grammar({
 		associative_item: $ => prec(PRECEDENCE.associative_item,
 			seq(
 				choice(
-					seq($.identifier, ":",	alias($._object,  $.item)),
+					seq($.identifier, ":", alias($._object, $.item)),
 					$.association
 				)
 			)
@@ -766,7 +766,7 @@ module.exports = grammar({
 			prec.right(seq(
 				field("name", "if"),
 				"(",
-				field("expression", $._postfix),	
+				field("expression", $._postfix),
 				field("true", seq(",", $.function_block)),
 				optional(field("false", seq(",", $.function_block))),
 				")"
