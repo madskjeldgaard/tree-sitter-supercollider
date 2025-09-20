@@ -342,24 +342,30 @@ module.exports = grammar({
 		// see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
 		variable_argument: $ => seq("...", field("name", $.identifier)),
 
-		// When supplying arguments to a function call
-		parameter_call_list: $ => sepBy1(',', $.argument_calls),
 
-		argument_calls: $ => choice(
-			$.named_argument,
-			$.unnamed_argument,
+		/**
+		 * parameter_call_list / named_argument
+		 * ------------------------------------
+		 * Argument handling for function and method calls.
+		 *
+		 * `parameter_call_list` is a comma-separated list of either unnamed
+		 * arguments (`_object`) or named arguments.
+		 *
+		 * `named_argument` consists of an identifier or symbol followed by `:`
+		 * and a value. The value is always stored under the `value` field,
+		 * ensuring constructs like `curve: -1` parse correctly.
+		 *
+		 * Examples:
+		 *   SinOsc.ar(440, mul: 0.5)
+		 *   Env.perc(0.01, curve: -1)
+		 */
+		parameter_call_list: $ => sepBy1(',', choice($.named_argument, $._object)),
+		
+		named_argument: $ => seq(
+		  field('name',  choice($.symbol, $.identifier)),
+		  ':',
+		  field('value', $._object)
 		),
-
-		// function call is added here to allow things like Array() in params
-		unnamed_argument: $ => choice($.function_call, $._object),
-		named_argument: $ => prec.left(10,
-			field("name", seq(
-				choice($.symbol, $.identifier),
-				seq(
-					choice('=', ':'),
-					choice($.function_call, $._object),
-				)
-			))),
 
 		///////////////////////
 		//	Define literal	//
