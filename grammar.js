@@ -671,13 +671,6 @@ module.exports = grammar({
 		///////////////////
 		//	Expressions  //
 		///////////////////
-		// "Selector as binary operator"
-		// selector_binary: $ => prec(PRECEDENCE.selectorBinary, prec.left(seq(
-		//	field('left', $._object),
-		//	field('operator', prec.right(seq($.identifier, ":"))),
-		//	field('right', $._object)
-		// ))),
-
 
 		/**
 		 * binary_expression
