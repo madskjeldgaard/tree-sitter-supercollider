@@ -376,18 +376,25 @@ module.exports = grammar({
 			$.char,
 			$.string,
 			$.bool,
-			// $.pi_statement
 		),
 
-		// pi_statement: $ => seq(optional($.number), "pi"),
+		/**
+		 * number
+		 * ------
+		 * Numeric literals supported by SuperCollider.
+		 *
+		 *
+		 * Note: Special handling of `pi` was removed; it should be treated
+		 * as a constant or symbol rather than a literal number.
+		 */
 		number: $ => choice(
 			$.integer,
 			$.float,
 			$.hexinteger,
-			$.exponential,
-			"pi",
-			seq(optional($.number), "pi")
+			$.exponential
 		),
+
+		// pi_statement: $ => seq(optional($.number), "pi"),
 
 		integer: $ => /\d+/,
 		hexinteger: $ => /0x([a-fA-F\d])+/,
