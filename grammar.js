@@ -270,14 +270,31 @@ module.exports = grammar({
 		/**
 		 * group
 		 * -----
-		 * A parenthesized expression used for grouping: `( ... )`.
-		 * (Not a code block; see `code_block` for `{ ... }`.)
+		 * A parenthesized expression for grouping or immediate evaluation.
+		 * Can contain regular expressions or code blocks.
+		 * 
+		 * Examples:
+		 *   (2 + 3)           // Simple grouping
+		 *   ({ "hello" })     // Immediate code block evaluation
 		 */
-		group: $ => seq('(', $._expression, ')'),
+		group: $ => seq(
+			'(',
+			choice(
+				$._expression_sequence,  // Regular grouped expression
+				$.code_block            // Immediate code block: ({ ... })
+			),
+			')'
+		),
 
+		/**
+		 * function_block
+		 * --------------
+		 * Either a plain code block or one prefixed with a method name.
+		 * The method name version is for special syntactic sugar.
+		 */
 		function_block: $ => choice(
-			$._function_content,
-			prec.left(seq(alias($.identifier, $.method_name), $._function_content)),
+			$.code_block,
+			prec.left(seq(alias($.identifier, $.method_name), $.code_block))
 		),
 
 		/**
@@ -285,12 +302,12 @@ module.exports = grammar({
 		 * -----------------
 		 * The body of a function/code block: `{ parameter_list? expression_sequence? }`.
 		 */
-		_function_content: $ => seq(
-			'{',
-			optional($.parameter_list),
-			optional($._expression_sequence),
-			'}'
-		),
+		// _function_content: $ => seq(
+		// 	'{',
+		// 	optional($.parameter_list),
+		// 	optional($._expression_sequence),
+		// 	'}'
+		// ),
 
 		// Definition of parameters in function
 		parameter_list: $ => choice(
@@ -690,13 +707,23 @@ module.exports = grammar({
 		 *   \freq.kr(440) * (Env.perc(0.01, curve: -1).ar * 48).midiratio
 		 */
 		binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
-			field('left', $._postfix),
+			field('left',  $._postfix),
 			field('operator', choice(
-				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
-				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**'
+				'||','&&','|','^','&','==','!=','<','<=','>','>=',
+				'<<','>>','+','-','++','+/+','*','/','%','**',
+				/[A-Za-z_]\w*:/
 			)),
 			field('right', $._postfix)
 		)),
+
+		// binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
+		// 	field('left', $._postfix),
+		// 	field('operator', choice(
+		// 		'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
+		// 		'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**'
+		// 	)),
+		// 	field('right', $._postfix)
+		// )),
 
 		/**
 		 * unary_expression
