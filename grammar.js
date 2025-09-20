@@ -677,51 +677,46 @@ module.exports = grammar({
 		//	field('operator', prec.right(seq($.identifier, ":"))),
 		//	field('right', $._object)
 		// ))),
-		binary_expression: $ => {
-			const table = [
 
 
-				// "Regular" binary operators
-				[PRECEDENCE.and, '&&'],
-				[PRECEDENCE.or, '||'],
-				[PRECEDENCE.bitand, '&'],
-				[PRECEDENCE.bitor, '|'],
-				[PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
-				[PRECEDENCE.shift, choice('<<', '>>')],
-				[PRECEDENCE.additive, choice('+', '-', '++')],
-				[PRECEDENCE.multiplicative, choice('*', '/', '%', prec.left("**"))],
-				[PRECEDENCE.assign, '='],
+		/**
+		 * binary_expression
+		 * -----------------
+		 * Represents any binary operator expression.
+		 *
+		 * Structure:
+		 *   <left> <operator> <right>
+		 *
+		 * Notes:
+		 *   • Single flat, left-associative tier (`PRECEDENCE.BIN`).
+		 *   • Operands are `_postfix` so method-call chains bind tighter than binops.
+		 *   • Covers all symbolic binary operators, including `**`.
+		 *   • Matches SuperCollider’s L→R evaluation of binary operators.
+		 *
+		 * Example:
+		 *   \freq.kr(440) * (Env.perc(0.01, curve: -1).ar * 48).midiratio
+		 */
+		binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
+			field('left',  $._postfix),
+			field('operator', choice(
+				'||','&&','|','^','&','==','!=','<','<=','>','>=',
+				'<<','>>','+','-','++','+/+','*','/','%','**'
+			)),
+			field('right', $._postfix)
+		)),
 
-				// String concatenation
-				[PRECEDENCE.stringConcat, "+/+"],
+		/**
+		 * unary_expression
+		 * ----------------
+		 * Unary operators applied to a term. Unary binds tighter than BIN,
+		 * but looser than CALL (so chains still attach to the operand).
+		 */
+		unary_expression: $ => prec.left(PRECEDENCE.unary, seq(
+			field("operator", choice('+','-')),
+			field("right", $._postfix)
+		)),
 
-				// Indexing (see https://doc.sccode.org/Overviews/SymbolicNotations.html#SequenceableCollection%20operators)
-				[PRECEDENCE.indexing, choice("@", "@@", "|@|", "@|@")],
-			];
-
-			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
-				field('left', $._object),
-				field('operator', operator),
-				field('right', $._object),
-			))));
-		},
-
-		unary_expression: $ => {
-			const table = [
-				[PRECEDENCE.unary, '-'],
-				[PRECEDENCE.unary, '*'],
-				// Example of this in usage to create a routine:
-				// (:1..)
-				[PRECEDENCE.unary, ':'],
-			];
-
-			return choice(...table.map(([precedence, operator]) => prec.left(precedence, seq(
-				field("operator", operator),
-				field("right", choice($._object))
-			))));
-		},
-
-		class: $ => prec(PRECEDENCE.class, field("name", /[A-Z]+[a-zA-Z\d_]*/)),
+		class: $ => prec(PRECEDENCE.class, field("name", /[A-Z][a-zA-Z\d_]*/)),
 		identifier: $ => /(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
 
 		// Nil check
