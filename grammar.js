@@ -21,7 +21,6 @@ const PRECEDENCE = {
 	range: 1,
 	indexing: 1,
 	assign: 0,
-	selectorBinary: 100,
 	controlstruct: 3,
 	localvar: 4,
 	vardef: 3,
@@ -618,9 +617,6 @@ module.exports = grammar({
 		binary_expression: $ => {
 			const table = [
 
-				// "Selector as binary operator"
-				// @TODO
-				[PRECEDENCE.selectorBinary, alias(/(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*:/, $.method_name)],
 
 				// "Regular" binary operators
 				[PRECEDENCE.and, '&&'],
