@@ -97,7 +97,6 @@ module.exports = grammar({
 		// These are the values that may be assigned to a variable or argument
 		_object: $ => choice(
 			prec(2, $.class),
-			prec(20, $.function_call),
 			$.association,
 			$.nil_check,
 			$.code_block,
@@ -360,7 +359,7 @@ module.exports = grammar({
 		 *   Env.perc(0.01, curve: -1)
 		 */
 		parameter_call_list: $ => sepBy1(',', choice($.named_argument, $._object)),
-		
+
 		named_argument: $ => seq(
 		  field('name',  choice($.symbol, $.identifier)),
 		  ':',
