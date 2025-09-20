@@ -19,20 +19,7 @@ const PRECEDENCE = {
 	vardef_sequence: 2,
 	closure: -1,
 	class_def: 1,
-	class: 20,
-	
-
-	multiplicative: 10,
-	additive: 9,
-	shift: 8,
-	bitand: 7,
-	bitxor: 6,
-	bitor: 5,
-	comparative: 4,
-	and: 3,
-	or: 2,
-	range: 1,
-	indexing: 1,
+	class: 20
 }
 
 function sepBy1(sep, rule) {
@@ -236,7 +223,7 @@ module.exports = grammar({
 		instance_variable_setter_call: $ => prec.left(2,
 			seq(
 				".",
-				field("name", optional(alias($.identifier, $.method_name))),
+				field("name", alias($.identifier, $.method_name)),
 				"_",
 				// Instance.method or Instance.method()
 				optional(seq("(", optional($.parameter_call_list), ")")),
@@ -381,11 +368,12 @@ module.exports = grammar({
 		/**
 		 * number
 		 * ------
-		 * Numeric literals supported by SuperCollider.
-		 *
-		 *
-		 * Note: Special handling of `pi` was removed; it should be treated
-		 * as a constant or symbol rather than a literal number.
+		 * Numeric literal forms:
+		 *   • integer       — e.g. 42
+		 *   • float         — e.g. 3.14
+		 *   • hexinteger    — e.g. 0xFF
+		 *   • exponential   — e.g. 1.0e-3
+		 * Note: `pi` handling was removed from the grammar.
 		 */
 		number: $ => choice(
 			$.integer,
@@ -646,7 +634,7 @@ module.exports = grammar({
 			$.collection,
 			$.variable,
 			$.string,
-			$.function_call,
+			$._postfix,
 			prec.left(1, $.code_block),
 			$.control_structure
 		),
@@ -702,10 +690,10 @@ module.exports = grammar({
 		 *   \freq.kr(440) * (Env.perc(0.01, curve: -1).ar * 48).midiratio
 		 */
 		binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
-			field('left',  $._postfix),
+			field('left', $._postfix),
 			field('operator', choice(
-				'||','&&','|','^','&','==','!=','<','<=','>','>=',
-				'<<','>>','+','-','++','+/+','*','/','%','**'
+				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
+				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**'
 			)),
 			field('right', $._postfix)
 		)),
@@ -717,7 +705,7 @@ module.exports = grammar({
 		 * but looser than CALL (so chains still attach to the operand).
 		 */
 		unary_expression: $ => prec.left(PRECEDENCE.unary, seq(
-			field("operator", choice('+','-')),
+			field("operator", choice('+', '-')),
 			field("right", $._postfix)
 		)),
 
@@ -745,71 +733,72 @@ module.exports = grammar({
 		//	Conditionals  //
 		////////////////////
 
+		/**
+		 * control_structure
+		 * -----------------
+		 * Entry point for SC’s control forms. Each form accepts an expression
+		 * (use `_postfix` so chains bind tighter than binops) and one or more
+		 * function blocks (code blocks) as bodies/branches.
+		 */
 		control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
 			$.if, $.while, $.for, $.forby, $.case, $.switch
 		)),
 
+		/**
+		 * if
+		 * --
+		 * Forms:
+		 *   if (expr) {true} {false?}
+		 *   if (expr, {true}, {false?})
+		 *   expr.if {true} ({false?})
+		 */
 		if: $ => choice(
 			// if (expr) trueFunc falseFunc
-			prec.right(
-				seq(
-					field("name", "if"),
-					"(",
-					field("expression", prec.left(
-						choice($.function_call, $._object)
-					)),
-					")",
-					field("true", $.function_block),
-					optional(field("false", $.function_block)),
-				)
-			),
-			// if (expr, trueFunc, falseFunc);
-			prec.right(
-				seq(
-					field("name", "if"),
-					"(",
-					field("expression", prec.left(
-						choice($.function_call, $._object)
-					)),
-					field("true", seq(",", $.function_block)),
-					optional(field("false", seq(",", $.function_block))),
-					")"
-				)
-			),
-
-			// TODO: Should/could this be covered by the instance method rules?
-			// expr.if (trueFunc, falseFunc);
+			prec.right(seq(
+				field("name", "if"),
+				"(",
+				field("expression", $._postfix),
+				")",
+				field("true", $.function_block),
+				optional(field("false", $.function_block))
+			)),
+			// if (expr, trueFunc, falseFunc)
+			prec.right(seq(
+				field("name", "if"),
+				"(",
+				field("expression", $._postfix),	
+				field("true", seq(",", $.function_block)),
+				optional(field("false", seq(",", $.function_block))),
+				")"
+			)),
+			// expr.if {true} ({false?})
 			seq(
-				prec.left(1,
-					seq(
-						field("expression", choice($.function_call, $._object)),
-						field("name", seq(".", "if"))
-					)
-				),
+				prec.left(1, seq(
+					field("expression", $._postfix),
+					field("name", seq(".", "if"))
+				)),
 				choice(
-					// expr.if{truefunc}
 					field("true", $.function_block),
-					choice(
-						// expr.if({truefunc}) or expr.if{truefunc};
-						choice(
-							seq(field("true", $.function_block)),
-							seq("(", field("true", $.function_block), ")"),
-						),
-						// expr.if({truefunc}, {falsefunc})
-						seq(
-							"(",
-							field("true", $.function_block),
-							optional(field("false",
-								seq(",", $.function_block))),
-							")"
-						)
+					seq(
+						"(",
+						field("true", $.function_block),
+						optional(field("false", seq(",", $.function_block))),
+						")"
 					)
 				)
 			)
 		),
 
+		/**
+		 * while
+		 * -----
+		 * Forms:
+		 *   while ( {test}, {body} )
+		 *   testFunc.while {body}
+		 *   while {test} {body}
+		 */
 		while: $ => choice(
-			// while ( testFunc, bodyFunc );
+			// while ( testFunc, bodyFunc )
 			prec.left(1, seq(
 				field("name", "while"),
 				"(",
@@ -818,65 +807,73 @@ module.exports = grammar({
 				field("body_func", $.function_block),
 				")"
 			)),
-			// testFunc.while( bodyFunc );
+			// testExpr.while { body }
 			seq(
-				field("expression", choice($.function_call, $._object)),
+				field("expression", $._postfix),
 				field("name", ".while"),
-				field("body_func", $.function_block),
+				field("body_func", $.function_block)
 			),
-			// while testFunc bodyFunc;
+			// while { test } { body }
 			seq(
 				field("name", "while"),
 				field("test_func", $.function_block),
-				field("body_func", $.function_block),
-			),
+				field("body_func", $.function_block)
+			)
 		),
 
+		/**
+		 * for / forBy
+		 * -----------
+		 * SC’s numeric iteration helpers.
+		 */
 		for: $ => choice(
-			// for ( startValue, endValue, function )
-			seq("for", "(", $.integer, ",", $.integer, ",", $.function_block, ")"),
-			// startValue.for ( endValue, function )
+			// for ( start, end, {body} )
+			seq("for", "(", $._postfix, ",", $._postfix, ",", $.function_block, ")"),
+			// start.for ( end, {body} )
 			seq($.integer, ".for", "(", $.integer, ",", $.function_block, ")")
 		),
+
 		forby: $ => choice(
-			// forBy ( startValue, endValue, stepValue, function );
+			// forBy ( start, end, step, {body} )
 			seq(
 				field("name", "forBy"),
 				"(",
-				$.integer,
-				",",
-				$.integer,
-				",",
-				$.integer,
-				",",
-				$.function_block,
+				$.integer, ",", $.integer, ",", $.integer, ",", $.function_block,
 				")"
 			),
-			// startValue.forBy ( endValue, stepValue, function );
+			// start.forBy ( end, step, {body} )
 			seq(
 				$.integer,
 				field("name", ".forBy"),
 				"(",
-				$.integer,
-				",",
-				$.integer,
-				",",
-				$.function_block,
+				$.integer, ",", $.integer, ",", $.function_block,
 				")"
 			)
 		),
 
+		/**
+		 * case
+		 * ----
+		 * One or more function blocks terminated with `;`.
+		 */
 		case: $ => seq(
 			field("name", "case"),
 			repeat($.function_block),
 			";"
 		),
 
+		/**
+		 * switch
+		 * ------
+		 * Forms:
+		 *   switch ( expr, key, {body}, ... [, {default}] )
+		 *   switch { expr } key {body} ... [{default}]
+		 */
 		switch: $ => choice(
 			seq(
 				field("name", "switch"),
 				"(",
-				choice($.function_call, $._object),
+				field("expr", $._postfix),
 				",",
 				sepBy(
 					",",
@@ -889,20 +886,13 @@ module.exports = grammar({
 			),
 			prec.right(seq(
 				field("name", "switch"),
-				$.code_block,
-				// "(", $._object, ")",
-				repeat(
-					seq(
-						choice($.function_call, $._object),
-						$.function_block
-					)
-				),
-				seq(
-					choice($.function_call, $._object),
-					$.function_block
-				),
+				$.code_block, // switch { expr }
+				repeat(seq($._postfix, $.function_block)),
+				seq($._postfix, $.function_block)
 			))
-		),
+		)
+
+
 
 	}
 });
