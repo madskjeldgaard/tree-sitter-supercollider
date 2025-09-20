@@ -1,14 +1,27 @@
 const PRECEDENCE = {
 	comment: 1000,
+
+  	call: 140,   // chains bind tighter than any binary op
+  	BIN:  20,    // flat, left-associative binary tier
+  	unary: 130,  // unary binds tighter than BIN (but below call)
+
 	association: 11,
 	associative_item: 10,
-	stringConcat:16,
+	stringConcat: 16,
 	STRING: 2,
 	partial: 15,
-	call: 14,
 	field: 13,
-	unary: 15,
 	duplication: 12,
+	assign: 0,
+	controlstruct: 3,
+	localvar: 4,
+	vardef: 3,
+	vardef_sequence: 2,
+	closure: -1,
+	class_def: 1,
+	class: 20,
+	
+
 	multiplicative: 10,
 	additive: 9,
 	shift: 8,
@@ -20,14 +33,6 @@ const PRECEDENCE = {
 	or: 2,
 	range: 1,
 	indexing: 1,
-	assign: 0,
-	controlstruct: 3,
-	localvar: 4,
-	vardef: 3,
-	vardef_sequence: 2,
-	closure: -1,
-	class_def: 1,
-	class:20,
 }
 
 function sepBy1(sep, rule) {
@@ -126,8 +131,7 @@ module.exports = grammar({
 			field("value", $.function_block)
 		)),
 
-		function_call: $ =>
-		prec.right(choice(
+		function_call: $ => prec.right(choice(
 			choice(
 
 				// method prefixed: ar(SinOsc, 110)
@@ -156,16 +160,77 @@ module.exports = grammar({
 				)
 			)
 		)),
+		
+		/**
+		 * _primary
+		 * ----------
+		 * Defines a *primary expression* — the basic building blocks that can
+		 * stand alone or serve as receivers for method calls.
+		 *
+		 * Includes:
+		 *   - number: numeric literal
+		 *   - string: string literal
+		 *   - symbol: symbols like \freq
+		 *   - variable: variable references
+		 *   - class: class identifiers
+		 *   - collection: collection literals (arrays, dicts, etc.)
+		 *   - code_block: `{ ... }` blocks
+		 *   - group: parenthesized expressions `( ... )`
+		 */
+		_primary: $ => choice(
+			$.number,
+			$.string,
+			$.symbol,
+			$.variable,
+			$.class,
+			$.collection,
+			$.code_block,
+			$.group
+		),
 
-		method_call: $ => prec.left(seq(
+		/**
+		 * method_call
+		 * ------------
+		 * A method call introduced by a dot `.` and followed by an identifier.
+		 *
+		 * Structure:
+		 *   .name(args?)
+		 *
+		 * Notes:
+		 *   - The `name` is captured as `method_name` for highlighting/queries.
+		 *   - Arguments are optional:
+		 *       • `()` with optional parameter list
+		 *       • or an inline function block used as an argument
+		 */
+		method_call: $ => seq(
 			".",
-			field("name", optional(alias($.identifier, $.method_name))),
-			// Instance.method or Instance.method()
+			field("name", alias($.identifier, $.method_name)),
 			optional(choice(
 				seq("(", optional($.parameter_call_list), ")"),
 				$._function_content
 			))
-		)),
+		),
+
+		/**
+		 * _postfix
+		 * ---------
+		 * A postfix expression: either a method-call chain or a bare primary.
+		 *
+		 * Cases:
+		 *   - `<primary>.<method>(...)...` — one primary followed by ≥1 method calls
+		 *   - `<primary>` — a bare primary
+		 *
+		* Notes:
+		*   • `prec.left` makes chains left-associative (calls nest L→R).
+		*   • `PRECEDENCE.call` keeps chains tighter than any binary operator.
+		 */
+		_postfix: $ => choice(
+			prec.left(PRECEDENCE.call, seq(
+				$._primary,
+				repeat1($.method_call)
+			)),
+			$._primary
+		),
 
 		// This is unused
 		instance_variable_setter_call: $ => prec.left(2,
@@ -199,7 +264,15 @@ module.exports = grammar({
 			optional(";")
 		),
 
-		// { ... } (code block)
+		/**
+		 * code_block
+		 * ----------
+		 * A function/code block delimited by `{ ... }`, optionally with parameters.
+		 *
+		 * Examples:
+		 *   { arg x; x * 2 }
+		 *   { |x, y| x + y }
+		 */
 		code_block: $ => seq(
 			'{',
 			optional($.parameter_list),
@@ -207,7 +280,12 @@ module.exports = grammar({
 			'}'
 		),
 
-		// ( ... ) (parenthesized expression / grouping)
+		/**
+		 * group
+		 * -----
+		 * A parenthesized expression used for grouping: `( ... )`.
+		 * (Not a code block; see `code_block` for `{ ... }`.)
+		 */
 		group: $ => seq('(', $._expression, ')'),
 
 		function_block: $ => choice(
@@ -215,33 +293,17 @@ module.exports = grammar({
 			prec.left(seq(alias($.identifier, $.method_name), $._function_content)),
 		),
 
-		// _function_content: $ => choice(
-		// 	seq(
-		// 		'{',
-		// 		optional($.parameter_list),
-		// 		// optional(seq($._expression_statement, ";")),
-		// 		optional(
-		// 			$._expression_sequence
-		// 		),
-		// 		'}'
-		// 	),
-		// 	seq(
-		// 		seq("(", "{"),
-		// 		optional($.parameter_list),
-		// 		optional(
-		// 			$._expression_sequence
-		// 		),
-		// 		seq(")", "}"),
-		// 	),
-		// ),
-
+		/**
+		 * _function_content
+		 * -----------------
+		 * The body of a function/code block: `{ parameter_list? expression_sequence? }`.
+		 */
 		_function_content: $ => seq(
 			'{',
 			optional($.parameter_list),
 			optional($._expression_sequence),
 			'}'
 		),
-		
 
 		// Definition of parameters in function
 		parameter_list: $ => choice(
