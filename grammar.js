@@ -147,9 +147,10 @@ module.exports = grammar({
 				),
 
 			),
+
 			// Instance method (chainable)
 			seq(
-				alias($._object, $.receiver),
+				field('receiver', $._primary),
 				repeat1(
 					choice(
 						$.method_call,
