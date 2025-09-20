@@ -187,14 +187,14 @@ module.exports = grammar({
 		 *   - The `name` is captured as `method_name` for highlighting/queries.
 		 *   - Arguments are optional:
 		 *       • `()` with optional parameter list
-		 *       • or an inline function block used as an argument
+		 *       • or an inline code block used as an argument
 		 */
 		method_call: $ => seq(
 			".",
 			field("name", alias($.identifier, $.method_name)),
 			optional(choice(
 				seq("(", optional($.parameter_call_list), ")"),
-				$._function_content
+				$.code_block
 			))
 		),
 
@@ -707,10 +707,10 @@ module.exports = grammar({
 		 *   \freq.kr(440) * (Env.perc(0.01, curve: -1).ar * 48).midiratio
 		 */
 		binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
-			field('left',  $._postfix),
+			field('left', $._postfix),
 			field('operator', choice(
-				'||','&&','|','^','&','==','!=','<','<=','>','>=',
-				'<<','>>','+','-','++','+/+','*','/','%','**',
+				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
+				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**',
 				/[A-Za-z_]\w*:/
 			)),
 			field('right', $._postfix)
