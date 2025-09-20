@@ -72,6 +72,7 @@ module.exports = grammar({
 
 		_expression: $ => choice(
 			$.code_block,
+			$.group,
 			$.class_def,
 			seq($._expression_statement, ";"),
 		),
@@ -199,36 +200,49 @@ module.exports = grammar({
 			optional(";")
 		),
 
+		// { ... } (code block)
 		code_block: $ => seq(
-			'(',
+			'{',
+			optional($.parameter_list),
 			optional($._expression_sequence),
-			')'
+			'}'
 		),
+
+		// ( ... ) (parenthesized expression / grouping)
+		group: $ => seq('(', $._expression, ')'),
 
 		function_block: $ => choice(
 			$._function_content,
 			prec.left(seq(alias($.identifier, $.method_name), $._function_content)),
 		),
 
-		_function_content: $ => choice(
-			seq(
-				'{',
-				optional($.parameter_list),
-				// optional(seq($._expression_statement, ";")),
-				optional(
-					$._expression_sequence
-				),
-				'}'
-			),
-			seq(
-				seq("(", "{"),
-				optional($.parameter_list),
-				optional(
-					$._expression_sequence
-				),
-				seq(")", "}"),
-			),
+		// _function_content: $ => choice(
+		// 	seq(
+		// 		'{',
+		// 		optional($.parameter_list),
+		// 		// optional(seq($._expression_statement, ";")),
+		// 		optional(
+		// 			$._expression_sequence
+		// 		),
+		// 		'}'
+		// 	),
+		// 	seq(
+		// 		seq("(", "{"),
+		// 		optional($.parameter_list),
+		// 		optional(
+		// 			$._expression_sequence
+		// 		),
+		// 		seq(")", "}"),
+		// 	),
+		// ),
+
+		_function_content: $ => seq(
+			'{',
+			optional($.parameter_list),
+			optional($._expression_sequence),
+			'}'
 		),
+		
 
 		// Definition of parameters in function
 		parameter_list: $ => choice(
