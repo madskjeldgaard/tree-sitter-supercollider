@@ -80,7 +80,9 @@ module.exports = grammar({
 		_object: $ => choice(
 			prec(2, $.class),
 			$.association,
-			//$.nil_check,
+			$.nil_conditional,
+			$.nil_guard,
+			$.nil_default,
 			$.code_block,
 			$.function_block,
 			$.control_structure,
@@ -266,7 +268,7 @@ module.exports = grammar({
 		/**
 		 * group
 		 * -----
- 		 * A parenthesized expression for grouping. It can contain any expression,
+			 * A parenthesized expression for grouping. It can contain any expression,
 		 * including a code block node; evaluation semantics are unchanged.
 		 * 
 		 * Examples:
@@ -701,7 +703,7 @@ module.exports = grammar({
 			field('operator', choice(
 				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
 				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**',
-				'?', '!?', '??',       // Nil check operators see [[nil_check]]
+				// '?', '!?', '??',       // Nil check operators
 				'..',                  // range operator
 				/[A-Za-z_]\w*:/        // See [[keyword_message]] 
 			)),
@@ -749,20 +751,41 @@ module.exports = grammar({
 		/**
 		 *  Nil check operators: ?, !?, ??
 		 * ------------------------
+		 * These operators have special short-circuiting evaluation rules in SC.
 		 * 
-		 * Moved to binary_expression 
-		 * 
-		 * These operators check for nil values and provide defaults.
-		 * Since they behave as standard binary operators with the same precedence
-		 * and associativity, there's no compelling reason to separate them. 
-		 * The simpler, unified approach is better unless SuperCollider has special 
-		 * parsing rules for these operators that I haven't discovered yet.
+		 */
 
-		// nil_check: $ => prec.left(PRECEDENCE.BIN, seq(  // Use same precedence as BIN
-		// 	field('left', $._postfix),    
-		// 	field('operator', choice('?', '!?', '??')),
-		// 	field('right', $._postfix)
-		// )),
+		// Nil-check operators with their special forms
+		nil_conditional: $ => prec.left(PRECEDENCE.BIN, choice(
+			// expr ? valueIfNotNil
+			seq(
+				field('condition', $._postfix),
+				'?',
+				field('if_not_nil', $._postfix)
+			),
+			// expr ? { blockIfNotNil } { blockIfNil }  (ternary-like)
+			seq(
+				field('condition', $._postfix),
+				'?',
+				field('if_not_nil', $.code_block),
+				field('if_nil', optional($.code_block))
+			)
+		)),
+
+		nil_guard: $ => prec.left(PRECEDENCE.BIN, seq(
+			// expr !? funcOrValue  (evaluates right only if left is not nil)
+			field('value', $._postfix),
+			'!?',
+			field('action', choice($._postfix, $.code_block))
+		)),
+
+		nil_default: $ => prec.left(PRECEDENCE.BIN, seq(
+			// expr ?? defaultValue  (returns right if left is nil)
+			field('value', $._postfix),
+			'??',
+			field('default', choice($._postfix, $.code_block))
+		)),
+
 
 		// Expressions that can hold or return a single value
 		_numeric_expression: $ => choice(
