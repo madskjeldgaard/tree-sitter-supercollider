@@ -64,36 +64,51 @@ module.exports = grammar({
 			seq($._expression_statement, ";"),
 		),
 
-		_expression_statement: $ => choice(
-			$.function_definition,
-			$.function_call,
-			$.binary_expression,
-			$.unary_expression,
-			//$.keyword_message,
-			$._postfix,
-			$.variable_definition,
-			$.variable_definition_sequence,
-			$.return_statement
-		),
 
-		// These are the values that may be assigned to a variable or argument
+		/**
+		 * _object
+		 * -------
+		 * Any expression that can be used as a value in sclang
+		 * (i.e. anything that produces or holds a value).
+		 *
+		 * Essentially all expressions except statement-specific forms
+		 */
 		_object: $ => choice(
-			prec(2, $.class),
-			$.association,
-			$.nil_conditional,
-			$.nil_guard,
-			$.nil_default,
+			prec(2, $.class),          // Class references (higher precedence)
+			$.association,             // Key->value pairs
+			$.nil_conditional,         // x ? y or x ? {...} {...}
+			$.nil_guard,               // x !? {...}
+			$.nil_default,             // x ?? defaultValue
 			$.code_block,
 			$.function_block,
 			$.control_structure,
-			$.literal,
-			$.variable,
-			$.binary_expression,
-			$.unary_expression,
+			$.literal,                 // Numbers, strings, symbols, etc.
+			$.variable,                // Variable references
+			$.binary_expression,       // a + b, a collect: b, etc.
+			$.unary_expression,        // -x, +x
+			$.function_call,
+			$._postfix,
 			$.collection,
 			$.indexed_collection,
 			$.partial,
-			$.duplicated_statement,
+			$.duplicated_statement
+		),
+
+		/**
+		 * _expression_statement
+		 * ---------------------
+		 * Any construct that can stand alone as a statement in sclang.
+		 * This includes:
+		 *   - Statement-specific forms (definitions, returns)
+		 *   - Any expression (_object)
+		 *
+		 */
+		_expression_statement: $ => choice(
+			$.function_definition,         // f = { ... }
+			$.variable_definition,         // x = value
+			$.variable_definition_sequence, // x = 1, y = 2
+			$.return_statement,            // ^value
+			$._object                      // Any expression can be a statement
 		),
 
 		partial: $ => prec.right(PRECEDENCE.partial, "_"),
