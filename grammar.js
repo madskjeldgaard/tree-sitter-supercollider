@@ -113,33 +113,49 @@ module.exports = grammar({
 			field("value", $.function_block)
 		)),
 
-		function_call: $ => prec.right(
 
-			choice(
-
-				// method prefixed: ar(SinOsc, 110)
-				seq(
-					choice(alias($.identifier, $.method_name), $.class),
-					"(", optional($.parameter_call_list), ")"
-				),
-
-				// implicit new on classes type SinOsc();
-				seq(
-					$.class,
-					seq("(", optional($.parameter_call_list), ")"),
-				)
-
+		/*
+		 * function_call
+		 * --------------
+		 * Covers all forms of function/method invocation in sclang.
+		 *
+		 * Variants:   • Method-prefixed call:
+		 *       ar(SinOsc, 110)
+		 *       MyClass.someMethod(123)
+		 *
+		 *   • Implicit constructor:
+		 *       SinOsc(440)         // equivalent to SinOsc.new(440)
+		 *
+		 *   • Instance method chain:
+		 *       obj.method1(...).method2(...)
+		 *
+		 * Notes:
+		 *   - Receivers in chains are `_primary` terms, not arbitrary expressions.
+		 *   - Chains are left-associative and bind tighter than binary operators
+		 *     (enforced via `_postfix` and CALL precedence).
+		 *   - Supports instance-variable setter calls as well, though these are rare.
+		 *
+		 * Example:
+		 *   \freq.kr(440).midiratio.sin
+		 *   SinOsc.ar(440, mul: 0.5)
+		 */
+		function_call: $ => choice(
+			// Method-prefixed call: ar(SinOsc, 110) or Class(…)
+			seq(
+				choice(alias($.identifier, $.method_name), $.class),
+				"(", optional($.parameter_call_list), ")"
 			),
-			// Instance method (chainable)
+
+			// Implicit new on classes: SinOsc(…)
+			seq(
+				$.class,
+				"(", optional($.parameter_call_list), ")"
+			),
+
+			// Instance chain form: <primary>.<method>(...)...
 			seq(
 				field('receiver', $._primary),
-				repeat1(
-					choice(
-						$.method_call,
-						// This is already covered by the identifier rule, should it be more specific though?
-						$.instance_variable_setter_call,
-					)
-				)
+				repeat1(choice($.method_call, $.instance_variable_setter_call))
 			)
 		),
 
@@ -198,15 +214,12 @@ module.exports = grammar({
 		/**
 		 * _postfix
 		 * ---------
-		 * A postfix expression: either a method-call chain or a bare primary.
+		 * A postfix expression: either a bare primary or a chain of calls.
 		 *
-		 * Cases:
+		 * Variants:
 		 *   - `<primary>.<method>(...)...` — one primary followed by ≥1 method calls
 		 *   - `<primary>` — a bare primary
 		 *
-		* Notes:
-		*   • `prec.left` makes chains left-associative (calls nest L→R).
-		*   • `PRECEDENCE.call` keeps chains tighter than any binary operator.
 		 */
 		_postfix: $ => choice(
 			prec.left(PRECEDENCE.call, seq(
@@ -751,12 +764,12 @@ module.exports = grammar({
 		 *   {: i * 2, i <- (1..10), i % 2 == 0 }
 		 */
 		list_comprehension: $ => seq(
-			$.list_comp_open, 
+			$.list_comp_open,
 			field('body', choice(
 				$._expression_sequence,
 				$._postfix              // Allow single expressions without semicolon
 			)),
-			',', 
+			',',
 			field('qualifiers', sepBy1(',', $.qualifier)),  // One or more qualifiers separated by commas
 			'}'
 		),
@@ -769,7 +782,7 @@ module.exports = grammar({
 		 * side effects, or termination conditions.
 		 */
 		qualifier: $ => choice(
-			$.generator,        
+			$.generator,
 			$.guard,            // Conditional expressions to filter items
 			$.var_binding,      // Local variable bindings
 			$.side_effect,      // Code with side effects 
@@ -788,14 +801,14 @@ module.exports = grammar({
 				$.collection  //  pattern matching like: [x,y] <- pairs
 			)),
 			'<-',
-			field('source', $._expression_sequence)
+			field('source', $._expression)
 		),
 
 		/**
 		 * Guard: just an expression that returns boolean
 		 * No special syntax, distinguished by context
 		 */
-		guard: $ => field('guard', $._postfix), 
+		guard: $ => field('guard', $._postfix),
 
 		/**
 		 * Binding: var name = expr
@@ -805,7 +818,7 @@ module.exports = grammar({
 			'var',
 			field('name', $.identifier),
 			'=',
-			field('value', $._expression_sequence)
+			field('value', $._expression)
 		),
 
 		/**
@@ -814,7 +827,7 @@ module.exports = grammar({
 		 */
 		side_effect: $ => seq(
 			'::',
-			field('expression', $._expression_sequence)
+			field('expression', $._expression)
 		),
 
 		/**
@@ -823,7 +836,7 @@ module.exports = grammar({
 		 */
 		termination: $ => seq(
 			':while',
-			field('condition', $._expression_sequence)
+			field('condition', $._expression)
 		),
 
 		////////////////////
