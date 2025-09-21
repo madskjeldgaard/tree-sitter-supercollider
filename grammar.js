@@ -1,9 +1,9 @@
 const PRECEDENCE = {
 	comment: 1000,
 
-	call: 140,   // chains bind tighter than any binary op
-	BIN: 20,    // flat, left-associative binary tier
-	unary: 130,  // unary binds tighter than BIN (but below call)
+	call:  140,            // chains bind tighter than any binary op
+	BIN:   20,             // flat, left-associative binary tier
+	unary: 130,            // unary binds tighter than BIN (but below call)
 
 	association: 11,
 	associative_item: 10,
@@ -41,6 +41,7 @@ module.exports = grammar({
 		$._space_separator
 	],
 
+	// Inline declarations for optimization
 	//inline: $ => [$.keywords],
 
 	// The name of a token that will match keywords for the purpose of the keyword extraction optimization.
@@ -117,23 +118,23 @@ module.exports = grammar({
 			field("value", $.function_block)
 		)),
 
-		function_call: $ => prec.right(choice(
+		function_call: $ => prec.right(
+
 			choice(
 
 				// method prefixed: ar(SinOsc, 110)
 				seq(
 					choice(alias($.identifier, $.method_name), $.class),
-					seq("(", optional($.parameter_call_list), ")"),
+					"(", optional($.parameter_call_list), ")"
 				),
 
 				// implicit new on classes type SinOsc();
 				seq(
 					$.class,
 					seq("(", optional($.parameter_call_list), ")"),
-				),
+				)
 
 			),
-
 			// Instance method (chainable)
 			seq(
 				field('receiver', $._primary),
@@ -143,10 +144,9 @@ module.exports = grammar({
 						// This is already covered by the identifier rule, should it be more specific though?
 						$.instance_variable_setter_call,
 					)
-
 				)
 			)
-		)),
+		),
 
 		/**
 		 * _primary
@@ -230,19 +230,6 @@ module.exports = grammar({
 
 			)
 		),
-
-		// class_method_call: $ => prec.left(choice(
-		//	   // Class.method - class method
-		//	   prec.left(seq(
-		//		   ".",
-		//		   field("name", alias($.identifier, $.class_method_name)),
-		// optional(choice(
-
-		// seq("(", optional($.parameter_call_list), ")"), $._function_content)
-		//	   ))),
-		//	   // Class() - implicit .new
-		//	   seq("(", optional($.parameter_call_list), ")")
-		// )),
 
 		_expression_sequence: $ => seq(
 			repeat(prec.right(1, seq($._expression_statement, ";"))),
@@ -509,7 +496,7 @@ module.exports = grammar({
 									$.instance_var,
 									$.classvar
 								),
-								// variable definiton
+								// Variable definition
 								seq(
 									choice(
 										alias($.local_var, $.instance_var),
@@ -518,7 +505,7 @@ module.exports = grammar({
 										$.const
 									),
 									"=",
-									$._object,
+									$._object
 								),
 							)
 						),
@@ -609,6 +596,7 @@ module.exports = grammar({
 
 		// These are unused at the moment
 		_collection_types: $ => choice($._unordered_collection_types, $._ordered_collection_types),
+
 		_unordered_collection_types: $ => choice(
 			"Bag",
 			"Dictionary",
@@ -623,6 +611,7 @@ module.exports = grammar({
 			"Set",
 			"TwoWayIdentityDictionary"
 		),
+
 		_ordered_collection_types: $ => choice(
 			"Array",
 			"Array2D",
@@ -715,15 +704,6 @@ module.exports = grammar({
 			)),
 			field('right', $._postfix)
 		)),
-
-		// binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
-		// 	field('left', $._postfix),
-		// 	field('operator', choice(
-		// 		'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
-		// 		'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**'
-		// 	)),
-		// 	field('right', $._postfix)
-		// )),
 
 		/**
 		 * unary_expression
