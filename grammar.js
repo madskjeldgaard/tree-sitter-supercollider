@@ -768,7 +768,7 @@ module.exports = grammar({
 				field('condition', $._postfix),
 				'?',
 				field('if_not_nil', $.code_block),
-				field('if_nil', optional($.code_block))
+				field('if_nil', $.code_block)
 			)
 		)),
 
