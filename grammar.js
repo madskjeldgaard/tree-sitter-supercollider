@@ -4,11 +4,10 @@ const PRECEDENCE = {
 	call: 140,            // chains bind tighter than any binary op
 	BIN: 20,              // flat, left-associative binary tier
 	unary: 130,           // unary binds tighter than BIN (but below call)
-	keyword_message: 20,  // Same as BIN
+	//keyword_message: 20,  // Same as BIN
 
 	association: 11,
 	associative_item: 10,
-	stringConcat: 16,
 	STRING: 2,
 	partial: 15,
 	field: 13,
@@ -70,7 +69,7 @@ module.exports = grammar({
 			$.function_call,
 			$.binary_expression,
 			$.unary_expression,
-			$.keyword_message,
+			//$.keyword_message,
 			$._postfix,
 			$.variable_definition,
 			$.variable_definition_sequence,
@@ -81,7 +80,7 @@ module.exports = grammar({
 		_object: $ => choice(
 			prec(2, $.class),
 			$.association,
-			$.nil_check,
+			//$.nil_check,
 			$.code_block,
 			$.function_block,
 			$.control_structure,
@@ -267,8 +266,8 @@ module.exports = grammar({
 		/**
 		 * group
 		 * -----
-		 * A parenthesized expression for grouping or immediate evaluation.
-		 * Can contain regular expressions or code blocks.
+ 		 * A parenthesized expression for grouping. It can contain any expression,
+		 * including a code block node; evaluation semantics are unchanged.
 		 * 
 		 * Examples:
 		 *   (2 + 3)           // Simple grouping
@@ -662,12 +661,13 @@ module.exports = grammar({
 			"]"
 		),
 
+
 		arithmetic_series: $ => seq(
 			"(",
 			choice(
-				seq($._numeric_expression, ",", $._numeric_expression, "..", $._numeric_expression),
-				seq("..", $._numeric_expression),
-				seq($._numeric_expression, "..", $._numeric_expression),
+				seq($._postfix, ",", $._postfix, "..", $._postfix),  // (start, step..end)
+				seq("..", $._postfix),                                // (..end)
+				seq($._postfix, "..", $._postfix),                   // (start..end)
 			),
 			")"
 		),
@@ -680,6 +680,9 @@ module.exports = grammar({
 		 * binary_expression
 		 * -----------------
 		 * Represents any binary operator expression.
+		 * 
+		 * Note: Keep a unified binary_expression and let the 
+		 * semantic analyzer categorize operators (nil_check, keyword_message, etc).
 		 *
 		 * Structure:
 		 *   <left> <operator> <right>
@@ -697,36 +700,69 @@ module.exports = grammar({
 			field('left', $._postfix),
 			field('operator', choice(
 				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
-				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**'
-				// /[A-Za-z_]\w*:/    // See `keyword_message:` and `_expression_statement:`
+				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**',
+				'?', '!?', '??',       // Nil check operators see [[nil_check]]
+				'..',                  // range operator
+				/[A-Za-z_]\w*:/        // See [[keyword_message]] 
 			)),
 			field('right', $._postfix)
 		)),
 
-		// Rule specifically for keyword messages
-		keyword_message: $ => prec.left(PRECEDENCE.keyword_message, seq(
-			field('receiver', $._postfix),
-			field('selector', alias(/[a-zA-Z_]\w*:/, $.keyword_selector)),
-			field('argument', $._postfix)
-		)),
+		/** 
+		 * keyword_message	
+		 * ----------------
+		 * 
+		 * Unecessary. 
+		 * `23 mod: 10 + 10 mod: 5 ** 2` is parsed correctly by binary_expression
+		 * 
+		 * 
+		 * Inconsistent AST - `23 mod: 10` and `23 % 10` would have 
+		 * different node types despite identical semantics
+		 * 
+		 * 
+		 * */
+		// keyword_message: $ => prec.left(PRECEDENCE.keyword_message, seq(
+		// 	field('receiver', $._postfix),
+		// 	field('selector', alias(/[a-zA-Z_]\w*:/, $.keyword_selector)),
+		// 	field('argument', $._postfix)
+		// )),
 
 		/**
 		 * unary_expression
 		 * ----------------
 		 * Unary operators applied to a term. Unary binds tighter than BIN,
 		 * but looser than CALL (so chains still attach to the operand).
+		 * 
+		 * 
+		 * Note: `:` is treated as a unary operator here for simplicity,
+		 * r = (:1..10); 
+		 * -> a Routine
 		 */
 		unary_expression: $ => prec.left(PRECEDENCE.unary, seq(
-			field("operator", choice('+', '-')),
+			field("operator", choice('+', '-', ':')),
 			field("right", $._postfix)
 		)),
 
 		class: $ => prec(PRECEDENCE.class, field("name", /[A-Z][a-zA-Z\d_]*/)),
-		identifier: $ => /(r#)?[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
+		identifier: $ => /[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
 
-		// Nil check
-		// @FIXME: Should be a binary operator
-		nil_check: $ => prec.left(seq($._object, choice("?", "!?", "??"), $._object)),
+		/**
+		 *  Nil check operators: ?, !?, ??
+		 * ------------------------
+		 * 
+		 * Moved to binary_expression 
+		 * 
+		 * These operators check for nil values and provide defaults.
+		 * Since they behave as standard binary operators with the same precedence
+		 * and associativity, there's no compelling reason to separate them. 
+		 * The simpler, unified approach is better unless SuperCollider has special 
+		 * parsing rules for these operators that I haven't discovered yet.
+
+		// nil_check: $ => prec.left(PRECEDENCE.BIN, seq(  // Use same precedence as BIN
+		// 	field('left', $._postfix),    
+		// 	field('operator', choice('?', '!?', '??')),
+		// 	field('right', $._postfix)
+		// )),
 
 		// Expressions that can hold or return a single value
 		_numeric_expression: $ => choice(
@@ -737,7 +773,7 @@ module.exports = grammar({
 			$.function_call,
 			$.indexed_collection,
 			$.code_block,
-			$.nil_check,
+			//$.nil_check,
 			$.control_structure,
 		),
 
