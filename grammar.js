@@ -1,8 +1,8 @@
 const PRECEDENCE = {
 	comment: 1000,
 
-	call:  140,            // chains bind tighter than any binary op
-	BIN:   20,             // flat, left-associative binary tier
+	call: 140,            // chains bind tighter than any binary op
+	BIN: 20,             // flat, left-associative binary tier
 	unary: 130,            // unary binds tighter than BIN (but below call)
 
 	association: 11,
@@ -69,19 +69,30 @@ module.exports = grammar({
 			seq($._expression_statement, ";"),
 		),
 
+		// _expression_statement: $ => choice(
+		// 	// $.function_block,
+		// 	// $.comment,
+		// 	$.function_definition,
+		// 	$.function_call,
+		// 	$._object,
+		// 	$.variable_definition,
+		// 	$.variable_definition_sequence,
+		// 	// $.duplicated_statement,
+		// 	// $.binary_expression,
+		// 	$.return_statement
+		// ),
+
 		_expression_statement: $ => choice(
-			// $.function_block,
-			// $.comment,
 			$.function_definition,
 			$.function_call,
-			$._object,
+			$.binary_expression,
+			$.unary_expression,
+			$.keyword_message,
+			$._postfix,
 			$.variable_definition,
 			$.variable_definition_sequence,
-			// $.duplicated_statement,
-			// $.binary_expression,
 			$.return_statement
 		),
-
 		// These are the values that may be assigned to a variable or argument
 		_object: $ => choice(
 			prec(2, $.class),
@@ -699,10 +710,17 @@ module.exports = grammar({
 			field('left', $._postfix),
 			field('operator', choice(
 				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
-				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**',
-				/[A-Za-z_]\w*:/
+				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**'
+				// /[A-Za-z_]\w*:/    // See `keyword_message:` and `_expression_statement:`
 			)),
 			field('right', $._postfix)
+		)),
+
+		// Rule specifically for keyword messages
+		keyword_message: $ => prec.left(PRECEDENCE.keyword_message, seq(
+			field('receiver', $._postfix),
+			field('selector', alias(/[a-zA-Z_]\w*:/, $.keyword_selector)),
+			field('argument', $._postfix)
 		)),
 
 		/**
