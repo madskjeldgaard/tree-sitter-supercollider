@@ -156,6 +156,7 @@ module.exports = grammar({
 		 *   - variable: variable references
 		 *   - class: class identifiers
 		 *   - collection: collection literals (arrays, dicts, etc.)
+		 *  - list_comprehension: `{: ... }` constructs
 		 *   - code_block: `{ ... }` blocks
 		 *   - group: parenthesized expressions `( ... )`
 		 */
@@ -733,34 +734,59 @@ module.exports = grammar({
 		////////////////////////
 
 		/**
-		 * List Comprehensions
-		 * -------------------
-		 *  {: for list comprehensions
+		 * list_comp_open
+		 * --------------
+		 * Token for starting a list comprehension: '{:'.
+		 * Distinguished from regular code blocks ('{').
 		 */
 		list_comp_open: $ => token('{:'),
 
+		/**
+		 * list_comprehension
+		 * ------------------
+		 * Syntax:
+		 *   {: <body_expr>, <qualifier1>, <qualifier2>, ... }
+		 *
+		 * Examples:
+		 *   {: i * 2, i <- (1..10), i % 2 == 0 }
+		 */
 		list_comprehension: $ => seq(
-			$.list_comp_open,
+			$.list_comp_open, 
 			field('body', choice(
 				$._expression_sequence,
-				$._postfix // Allow single expressions without semicolon
+				$._postfix              // Allow single expressions without semicolon
 			)),
-			',',
-			field('qualifiers', sepBy1(',', $.qualifier)),
+			',', 
+			field('qualifiers', sepBy1(',', $.qualifier)),  // One or more qualifiers separated by commas
 			'}'
 		),
 
+		/**
+		 * qualifier
+		 * ---------
+		 * Qualifiers are the clauses inside comprehensions.
+		 * They can be generators, guards, variable bindings,
+		 * side effects, or termination conditions.
+		 */
+		qualifier: $ => choice(
+			$.generator,        
+			$.guard,            // Conditional expressions to filter items
+			$.var_binding,      // Local variable bindings
+			$.side_effect,      // Code with side effects 
+			$.termination       // Termination condition for iteration
+		),
+
+		/**
+		 * generator
+		 * --------------
+		 * Syntax: <pattern> <- <source>
+		 *
+		 */
 		generator: $ => seq(
 			field('pattern', choice(
 				$.identifier,
-				$.collection  // For pattern matching like [x,y] <- pairs
+				$.collection  //  pattern matching like: [x,y] <- pairs
 			)),
-			'<-',
-			field('source', $._expression_sequence)
-		),
-
-		generator: $ => seq(
-			field('pattern', $.identifier),
 			'<-',
 			field('source', $._expression_sequence)
 		),
@@ -769,11 +795,11 @@ module.exports = grammar({
 		 * Guard: just an expression that returns boolean
 		 * No special syntax, distinguished by context
 		 */
-		guard: $ => $._expression_sequence,
+		guard: $ => field('guard', $._postfix), 
 
 		/**
 		 * Binding: var name = expr
-		 * Creates a single-value binding (unlike generators which iterate)
+		 * Similar to variable declarations.
 		 */
 		var_binding: $ => seq(
 			'var',
