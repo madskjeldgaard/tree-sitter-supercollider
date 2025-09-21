@@ -2,8 +2,9 @@ const PRECEDENCE = {
 	comment: 1000,
 
 	call: 140,            // chains bind tighter than any binary op
-	BIN: 20,             // flat, left-associative binary tier
-	unary: 130,            // unary binds tighter than BIN (but below call)
+	BIN: 20,              // flat, left-associative binary tier
+	unary: 130,           // unary binds tighter than BIN (but below call)
+	keyword_message: 20,  // Same as BIN
 
 	association: 11,
 	associative_item: 10,
@@ -53,11 +54,6 @@ module.exports = grammar({
 		[$._expression, $._object],
 	],
 
-	// supertypes: $ => [
-	//	   $._object,
-	//	   $._expression_statement,
-	// ],
-
 	rules: {
 
 		source_file: $ => repeat($._expression),
@@ -68,19 +64,6 @@ module.exports = grammar({
 			$.class_def,
 			seq($._expression_statement, ";"),
 		),
-
-		// _expression_statement: $ => choice(
-		// 	// $.function_block,
-		// 	// $.comment,
-		// 	$.function_definition,
-		// 	$.function_call,
-		// 	$._object,
-		// 	$.variable_definition,
-		// 	$.variable_definition_sequence,
-		// 	// $.duplicated_statement,
-		// 	// $.binary_expression,
-		// 	$.return_statement
-		// ),
 
 		_expression_statement: $ => choice(
 			$.function_definition,
@@ -93,6 +76,7 @@ module.exports = grammar({
 			$.variable_definition_sequence,
 			$.return_statement
 		),
+
 		// These are the values that may be assigned to a variable or argument
 		_object: $ => choice(
 			prec(2, $.class),
@@ -182,6 +166,7 @@ module.exports = grammar({
 			$.variable,
 			$.class,
 			$.collection,
+			$.list_comprehension,
 			$.code_block,
 			$.group
 		),
@@ -294,18 +279,6 @@ module.exports = grammar({
 			$.code_block,
 			prec.left(seq(alias($.identifier, $.method_name), $.code_block))
 		),
-
-		/**
-		 * _function_content
-		 * -----------------
-		 * The body of a function/code block: `{ parameter_list? expression_sequence? }`.
-		 */
-		// _function_content: $ => seq(
-		// 	'{',
-		// 	optional($.parameter_list),
-		// 	optional($._expression_sequence),
-		// 	'}'
-		// ),
 
 		// Definition of parameters in function
 		parameter_list: $ => choice(
@@ -752,6 +725,79 @@ module.exports = grammar({
 			$.code_block,
 			$.nil_check,
 			$.control_structure,
+		),
+
+
+		////////////////////////
+		// List Comprehension //
+		////////////////////////
+
+		/**
+		 * List Comprehensions
+		 * -------------------
+		 *  {: for list comprehensions
+		 */
+		list_comp_open: $ => token('{:'),
+
+		list_comprehension: $ => seq(
+			$.list_comp_open,
+			field('body', choice(
+				$._expression_sequence,
+				$._postfix // Allow single expressions without semicolon
+			)),
+			',',
+			field('qualifiers', sepBy1(',', $.qualifier)),
+			'}'
+		),
+
+		generator: $ => seq(
+			field('pattern', choice(
+				$.identifier,
+				$.collection  // For pattern matching like [x,y] <- pairs
+			)),
+			'<-',
+			field('source', $._expression_sequence)
+		),
+
+		generator: $ => seq(
+			field('pattern', $.identifier),
+			'<-',
+			field('source', $._expression_sequence)
+		),
+
+		/**
+		 * Guard: just an expression that returns boolean
+		 * No special syntax, distinguished by context
+		 */
+		guard: $ => $._expression_sequence,
+
+		/**
+		 * Binding: var name = expr
+		 * Creates a single-value binding (unlike generators which iterate)
+		 */
+		var_binding: $ => seq(
+			'var',
+			field('name', $.identifier),
+			'=',
+			field('value', $._expression_sequence)
+		),
+
+		/**
+		 * Side effect: :: expr	
+		 * For inserting code with side effects like printing
+		 */
+		side_effect: $ => seq(
+			'::',
+			field('expression', $._expression_sequence)
+		),
+
+		/**
+		 * Termination: :while expr
+		 * Stops iteration when expression becomes false
+		 */
+		termination: $ => seq(
+			':while',
+			field('condition', $._expression_sequence)
 		),
 
 		////////////////////
