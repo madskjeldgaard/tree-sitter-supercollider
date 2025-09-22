@@ -4,7 +4,6 @@ const PRECEDENCE = {
 	BIN: 20,              // flat, left-associative binary tier
 	unary: 130,           // unary binds tighter than BIN (but below call)
 	keyword_message: 19,  // below BIN for left-to-right evaluation
-
 	association: 11,
 	associative_item: 10,
 	STRING: 2,
@@ -96,6 +95,14 @@ module.exports = grammar({
 		//	Functions  //
 		/////////////////
 
+		/**
+		 * function_definition
+		 * -------------------
+		 * A function definition, which assigns a function block to a variable.
+		 * Example:
+		 *   myFunc = { |x| x * 2 };
+		 * 
+		 */
 		function_definition: $ => prec.left(1, seq(
 			field("name", $.variable),
 			'=',
@@ -107,31 +114,7 @@ module.exports = grammar({
 		 * --------------
 		 * Covers direct function/method invocations in SuperCollider.
 		 * 
-		 * Variants:
-		 *   • Function call with identifier:
-		 *       ar(SinOsc, 110)
-		 *       someFunc(123)
-		 *   
-		 *   • Class method call:
-		 *       MyClass.someMethod(123)
-		 *   
-		 *   • Implicit constructor (new):
-		 *       SinOsc(440)  // equivalent to SinOsc.new(440)
-		*/
-		// function_call: $ => choice(
-		// 	// Function or class method call: func(args) or Class.method(args)
-		// 	seq(
-		// 		choice(alias($.identifier, $.method_name), $.class),
-		// 		"(", optional($.parameter_call_list), ")"
-		// 	),
-
-		// 	// Implicit constructor: Class(args)
-		// 	seq(
-		// 		$.class,
-		// 		"(", optional($.parameter_call_list), ")"
-		// 	),
-		// ),
-
+		 */
 		function_call: $ => seq(
 			choice(alias($.identifier, $.method_name), $.class),
 			"(", optional($.parameter_call_list), ")"
@@ -240,17 +223,9 @@ module.exports = grammar({
 		 *   (2 + 3)           // Simple grouping
 		 *   ({ "hello" })     // Immediate code block evaluation
 		 */
-		// group: $ => seq(
-		// 	'(',
-		// 	choice(
-		// 		$._expression_sequence,  // Regular grouped expression
-		// 		$.code_block            // Immediate code block: ({ ... })
-		// 	),
-		// 	')'
-		// ),
 		group: $ => seq(
 			'(',
-			$._expression_sequence,  
+			$._expression_sequence,
 			')'
 		),
 
@@ -422,17 +397,18 @@ module.exports = grammar({
 
 		variable_name: $ => $.identifier,
 
+		variable_definition: $ => prec(PRECEDENCE.vardef, seq(
+			field("name", $.variable),
+			"=",
+			field("value", $._object)
+		)),
+		
 		variable_definition_sequence: $ => prec(PRECEDENCE.vardef_sequence,
 			seq(
 				sepBy(",", choice($.variable_definition, $.variable)),
 				",", choice($.variable_definition, $.variable)
 			)
 		),
-		variable_definition: $ => prec(PRECEDENCE.vardef, seq(
-			field("name", $.variable),
-			"=",
-			field("value", $._object)
-		)),
 
 		///////////////
 		//	Classes  //
@@ -440,7 +416,6 @@ module.exports = grammar({
 
 		return_statement: $ => prec.left(seq("^", choice($._object, $.function_call))),
 
-		// Definition of class
 		class_def: $ => prec(PRECEDENCE.class_def, seq(optional("+"), $.class, optional(seq(":", alias($.class, $.parent_class))), "{",
 			repeat(
 				choice(
@@ -730,8 +705,7 @@ module.exports = grammar({
 		/**
 		 * list_comp_open
 		 * --------------
-		 * Token for starting a list comprehension: '{:'.
-		 * Distinguished from regular code blocks ('{').
+		 * Token 
 		 */
 		list_comp_open: $ => token('{:'),
 
@@ -894,7 +868,6 @@ module.exports = grammar({
 			// start.for ( end, {body} )
 			seq($.integer, ".for", "(", $.integer, ",", $.function_block, ")")
 		),
-
 		forby: $ => choice(
 			// forBy ( start, end, step, {body} )
 			seq(
@@ -955,4 +928,3 @@ module.exports = grammar({
 		)
 	}
 });
-// End of grammar.js
