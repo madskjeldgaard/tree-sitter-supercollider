@@ -4,7 +4,7 @@ const PRECEDENCE = {
 	call: 140,            // chains bind tighter than any binary op
 	BIN: 20,              // flat, left-associative binary tier
 	unary: 130,           // unary binds tighter than BIN (but below call)
-	//keyword_message: 20,  // Same as BIN
+	keyword_message: 19,  // below BIN for left-to-right evaluation
 
 	association: 11,
 	associative_item: 10,
@@ -59,8 +59,6 @@ module.exports = grammar({
 		source_file: $ => repeat($._expression),
 
 		_expression: $ => choice(
-			//$.code_block,
-			//$.group,
 			$.class_def,
 			seq($._expression_statement, ";"),
 		),
@@ -71,31 +69,29 @@ module.exports = grammar({
 			$.function_call,
 			$.binary_expression,
 			$.unary_expression,
-			$._postfix, 
+			$.keyword_message,
+			$._postfix,
 			$.variable_definition,
 			$.variable_definition_sequence,
 			$.return_statement
 		),
 
 		_object: $ => choice(
-			prec(2, $.class),
 			$.association,
 			$.nil_conditional,
 			$.nil_guard,
 			$.nil_default,
-			//$.code_block,
 			$.function_block,
 			$.control_structure,
-			$._postfix,
-			//$.literal,
-			//$.variable,
 			$.binary_expression,
 			$.unary_expression,
-			//$.collection,
 			$.indexed_collection,
 			$.partial,
-			$.duplicated_statement
+			$.duplicated_statement,
+			$.keyword_message,
+			$._postfix  
 		),
+
 		partial: $ => prec.right(PRECEDENCE.partial, "_"),
 
 		duplicated_statement: $ => prec.left(PRECEDENCE.duplication, seq(
@@ -140,19 +136,24 @@ module.exports = grammar({
 		 *   SinOsc.ar(440, mul: 0.5)  // Class method
 		 *   SinOsc(440)                // Implicit new
 		 *   rand(100)                  // Function call
-		 */
-		function_call: $ => choice(
-			// Function or class method call: func(args) or Class.method(args)
-			seq(
-				choice(alias($.identifier, $.method_name), $.class),
-				"(", optional($.parameter_call_list), ")"
-			),
+		//  */
+		// function_call: $ => choice(
+		// 	// Function or class method call: func(args) or Class.method(args)
+		// 	seq(
+		// 		choice(alias($.identifier, $.method_name), $.class),
+		// 		"(", optional($.parameter_call_list), ")"
+		// 	),
 
-			// Implicit constructor: Class(args)
-			seq(
-				$.class,
-				"(", optional($.parameter_call_list), ")"
-			),
+		// 	// Implicit constructor: Class(args)
+		// 	seq(
+		// 		$.class,
+		// 		"(", optional($.parameter_call_list), ")"
+		// 	),
+		// ),
+		
+		function_call: $ => seq(
+			choice(alias($.identifier, $.method_name), $.class),
+			"(", optional($.parameter_call_list), ")"
 		),
 
 		/**
@@ -438,12 +439,11 @@ module.exports = grammar({
 
 		variable: $ => choice(
 			$.environment_var,
-			$.local_var,
 			$.classvar,
-			// $.const, // Only works in classes?
 			$.builtin_var,
 			$.instance_var
 		),
+
 		builtin_var: $ => field("name", choice(
 			"inf",
 			"nil",
@@ -456,8 +456,13 @@ module.exports = grammar({
 			"topEnvironment"
 		)),
 
-		local_var: $ => prec(PRECEDENCE.localvar, choice(
-			field("name", $.identifier), seq('var', field("name", $.identifier)))
+		// local_var: $ => prec(PRECEDENCE.localvar, choice(
+		// 	field("name", $.identifier), seq('var', field("name", $.identifier)))
+		// ),
+
+		local_var: $ => prec(PRECEDENCE.localvar, 
+			seq('var', field("name", $.identifier))
+
 		),
 
 		instance_var: $ => seq(optional('var'), optional(choice("<", ">", "<>")), field("name", $.identifier)),
@@ -709,7 +714,7 @@ module.exports = grammar({
 			field('operator', choice(
 				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
 				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**',
-				/[A-Za-z_]\w*:/        // See [[keyword_message]] 
+				///[A-Za-z_]\w*:/        // See [[keyword_message]] 
 			)),
 			field('right', $._postfix)
 		)),
@@ -727,11 +732,11 @@ module.exports = grammar({
 		 * 
 		 * 
 		 * */
-		// keyword_message: $ => prec.left(PRECEDENCE.keyword_message, seq(
-		// 	field('receiver', $._postfix),
-		// 	field('selector', alias(/[a-zA-Z_]\w*:/, $.keyword_selector)),
-		// 	field('argument', $._postfix)
-		// )),
+		keyword_message: $ => prec.left(PRECEDENCE.keyword_message, seq(
+			field('receiver', $._postfix),
+			field('selector', alias(/[a-zA-Z_]\w*:/, $.keyword_selector)),
+			field('argument', $._postfix)
+		)),
 
 		/**
 		 * unary_expression
@@ -750,7 +755,10 @@ module.exports = grammar({
 		)),
 
 		class: $ => prec(PRECEDENCE.class, field("name", /[A-Z][a-zA-Z\d_]*/)),
-		identifier: $ => /[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
+		
+		//identifier: $ => /[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
+		
+		identifier: $ => /[\p{L}_][\p{L}\p{N}_]*/u,
 
 		/**
 		 *  Nil check operators: ?, !?, ??
@@ -1070,3 +1078,4 @@ module.exports = grammar({
 
 	}
 });
+// End of grammar.js
