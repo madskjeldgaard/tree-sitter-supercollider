@@ -480,7 +480,7 @@ module.exports = grammar({
 		variable_definition: $ => prec(PRECEDENCE.vardef, seq(
 			field("name", $.variable),
 			"=",
-			field("value", choice($.class, $._object, $.function_call))
+			field("value", $._object)
 		)),
 
 		///////////////
