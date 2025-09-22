@@ -20,26 +20,15 @@ const PRECEDENCE = {
 	class: 20
 }
 
-function sepBy1(sep, rule) {
-	return seq(rule, repeat(seq(sep, rule)))
-}
-
-function sepBy(sep, rule) {
-	return optional(sepBy1(sep, rule))
-}
+function sepBy1(sep, rule) { return seq(rule, repeat(seq(sep, rule)))}
+function sepBy(sep, rule) { return optional(sepBy1(sep, rule))}
 
 module.exports = grammar({
 	name: 'supercollider',
 	extras: $ => [/\s/, $.line_comment, $.block_comment],
-
-	externals: $ => [
-		$.block_comment,
-		$._space_separator
-	],
-
+	externals: $ => [ $.block_comment, $._space_separator],
 	inline: $ => [$.bin_op],
 	word: $ => $.identifier,
-
 	conflicts: $ => [
 		[$.switch],
 		[$._expression, $._object],
@@ -91,30 +80,12 @@ module.exports = grammar({
 			field("duplication_times", $._object)
 		)),
 
-		/////////////////
-		//	Functions  //
-		/////////////////
-
-		/**
-		 * function_definition
-		 * -------------------
-		 * A function definition, which assigns a function block to a variable.
-		 * Example:
-		 *   myFunc = { |x| x * 2 };
-		 * 
-		 */
 		function_definition: $ => prec.left(1, seq(
 			field("name", $.variable),
 			'=',
 			field("value", $.function_block)
 		)),
 
-		/**
-		 * function_call
-		 * --------------
-		 * Covers direct function/method invocations in SuperCollider.
-		 * 
-		 */
 		function_call: $ => seq(
 			choice(alias($.identifier, $.method_name), $.class),
 			"(", optional($.parameter_call_list), ")"
@@ -137,20 +108,6 @@ module.exports = grammar({
 			$.group
 		),
 
-		/**
-		 * method_call
-		 * ------------
-		 * A method call introduced by a dot `.` and followed by an identifier.
-		 *
-		 * Structure:
-		 *   .name(args?)
-		 *
-		 * Notes:
-		 *   - The `name` is captured as `method_name` for highlighting/queries.
-		 *   - Arguments are optional:
-		 *       • `()` with optional parameter list
-		 *       • or an inline code block used as an argument
-		 */
 		method_call: $ => prec.right(seq(
 			".",
 			field("name", alias($.identifier, $.method_name)),
@@ -197,15 +154,6 @@ module.exports = grammar({
 			optional(";")
 		),
 
-		/**
-		 * code_block
-		 * ----------
-		 * A function/code block delimited by `{ ... }`, optionally with parameters.
-		 *
-		 * Examples:
-		 *   { arg x; x * 2 }
-		 *   { |x, y| x + y }
-		 */
 		code_block: $ => seq(
 			'{',
 			optional($.parameter_list),
@@ -276,23 +224,6 @@ module.exports = grammar({
 		// see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
 		variable_argument: $ => seq("...", field("name", $.identifier)),
 
-
-		/**
-		 * parameter_call_list / named_argument
-		 * ------------------------------------
-		 * Argument handling for function and method calls.
-		 *
-		 * `parameter_call_list` is a comma-separated list of either unnamed
-		 * arguments (`_object`) or named arguments.
-		 *
-		 * `named_argument` consists of an identifier or symbol followed by `:`
-		 * and a value. The value is always stored under the `value` field,
-		 * ensuring constructs like `curve: -1` parse correctly.
-		 *
-		 * Examples:
-		 *   SinOsc.ar(440, mul: 0.5)
-		 *   Env.perc(0.01, curve: -1)
-		 */
 		parameter_call_list: $ => sepBy1(',', choice($.named_argument, $._object)),
 
 		named_argument: $ => seq(
@@ -319,8 +250,6 @@ module.exports = grammar({
 			$.hexinteger,
 			$.exponential
 		),
-
-		// pi_statement: $ => seq(optional($.number), "pi"),
 
 		integer: $ => /\d+/,
 		hexinteger: $ => /0x([a-fA-F\d])+/,
@@ -402,7 +331,7 @@ module.exports = grammar({
 			"=",
 			field("value", $._object)
 		)),
-		
+
 		variable_definition_sequence: $ => prec(PRECEDENCE.vardef_sequence,
 			seq(
 				sepBy(",", choice($.variable_definition, $.variable)),
@@ -460,10 +389,7 @@ module.exports = grammar({
 		//	Comments  //
 		////////////////
 
-		comment: $ => choice(
-			$.line_comment,
-			$.block_comment
-		),
+		comment: $ => choice($.line_comment,$.block_comment),
 
 		line_comment: $ => prec(PRECEDENCE.comment, token(seq('//', /.*/))),
 
@@ -593,15 +519,17 @@ module.exports = grammar({
 		),
 
 
-		arithmetic_series: $ => seq(
-			"(",
-			choice(
-				seq($._postfix, ",", $._postfix, "..", $._postfix),  // (start, step..end)
-				seq("..", $._postfix),                                // (..end)
-				seq($._postfix, "..", $._postfix),                   // (start..end)
-			),
-			")"
+		// Arithmetic series patterns
+		arithmetic_series: $ => seq('(', choice(
+			$.arithmetic_series_full,    // (start, step .. end)
+			$.arithmetic_series_to_end,  // (.. end)
+			$.arithmetic_series_range    // (start .. end)
+		), ')'
 		),
+
+		arithmetic_series_full: $ => seq($._postfix, ',', $._postfix, '..', $._postfix),
+		arithmetic_series_to_end: $ => seq('..', $._postfix),
+		arithmetic_series_range: $ => seq($._postfix, '..', $._postfix),
 
 		///////////////////
 		//	Expressions  //
@@ -686,7 +614,6 @@ module.exports = grammar({
 			field('default', choice($._postfix, $.code_block))
 		)),
 
-
 		// Expressions that can hold or return a single value
 		_numeric_expression: $ => choice(
 			$._postfix,
@@ -697,16 +624,10 @@ module.exports = grammar({
 			$.control_structure,
 		),
 
-
 		////////////////////////
 		// List Comprehension //
 		////////////////////////
 
-		/**
-		 * list_comp_open
-		 * --------------
-		 * Token 
-		 */
 		list_comp_open: $ => token('{:'),
 
 		/**
@@ -729,13 +650,6 @@ module.exports = grammar({
 			'}'
 		)),
 
-		/**
-		 * qualifier
-		 * ---------
-		 * Qualifiers are the clauses inside comprehensions.
-		 * They can be generators, guards, variable bindings,
-		 * side effects, or termination conditions.
-		 */
 		qualifier: $ => choice(
 			$.generator,
 			$.guard,            // Conditional expressions to filter items
@@ -857,11 +771,7 @@ module.exports = grammar({
 			)
 		),
 
-		/**
-		 * for / forBy
-		 * -----------
-		 * SC’s numeric iteration helpers.
-		 */
+
 		for: $ => choice(
 			// for ( start, end, {body} )
 			seq("for", "(", $._postfix, ",", $._postfix, ",", $.function_block, ")"),
@@ -886,11 +796,7 @@ module.exports = grammar({
 			)
 		),
 
-		/**
-		 * case
-		 * ----
-		 * One or more function blocks terminated with `;`.
-		 */
+
 		case: $ => seq(
 			field("name", "case"),
 			repeat($.function_block),
