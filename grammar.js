@@ -1,6 +1,5 @@
 const PRECEDENCE = {
 	comment: 1000,
-
 	call: 140,            // chains bind tighter than any binary op
 	BIN: 20,              // flat, left-associative binary tier
 	unary: 130,           // unary binds tighter than BIN (but below call)
@@ -32,8 +31,6 @@ function sepBy(sep, rule) {
 
 module.exports = grammar({
 	name: 'supercollider',
-
-	// Ignore whitespace and comments
 	extras: $ => [/\s/, $.line_comment, $.block_comment],
 
 	externals: $ => [
@@ -41,10 +38,7 @@ module.exports = grammar({
 		$._space_separator
 	],
 
-	// Inline declarations for optimization
-	//inline: $ => [$.keywords],
-
-	// The name of a token that will match keywords for the purpose of the keyword extraction optimization.
+	inline: $ => [$.bin_op],
 	word: $ => $.identifier,
 
 	conflicts: $ => [
@@ -55,14 +49,12 @@ module.exports = grammar({
 	],
 
 	rules: {
-
 		source_file: $ => repeat($._expression),
 
 		_expression: $ => choice(
 			$.class_def,
 			seq($._expression_statement, ";"),
 		),
-
 
 		_expression_statement: $ => choice(
 			$.function_definition,
@@ -89,7 +81,7 @@ module.exports = grammar({
 			$.partial,
 			$.duplicated_statement,
 			$.keyword_message,
-			$._postfix  
+			$._postfix
 		),
 
 		partial: $ => prec.right(PRECEDENCE.partial, "_"),
@@ -125,18 +117,7 @@ module.exports = grammar({
 		 *   
 		 *   • Implicit constructor (new):
 		 *       SinOsc(440)  // equivalent to SinOsc.new(440)
-		 * 
-		 * Notes:
-		 *   - Method chaining (obj.method1().method2()) is handled by _postfix rule
-		 *   - This rule only handles direct calls that start with an identifier or class
-		 *   - Instance method chains are parsed through _postfix → _primary → method_call
-		 *   - The duplicate class branch ensures both forms parse correctly
-		 * 
-		 * Examples:
-		 *   SinOsc.ar(440, mul: 0.5)  // Class method
-		 *   SinOsc(440)                // Implicit new
-		 *   rand(100)                  // Function call
-		//  */
+		*/
 		// function_call: $ => choice(
 		// 	// Function or class method call: func(args) or Class.method(args)
 		// 	seq(
@@ -150,7 +131,7 @@ module.exports = grammar({
 		// 		"(", optional($.parameter_call_list), ")"
 		// 	),
 		// ),
-		
+
 		function_call: $ => seq(
 			choice(alias($.identifier, $.method_name), $.class),
 			"(", optional($.parameter_call_list), ")"
@@ -162,28 +143,7 @@ module.exports = grammar({
 		 * Defines a *primary expression* — the basic building blocks that can
 		 * stand alone or serve as receivers for method calls.
 		 *
-		 * Includes:
-		 *   - number: numeric literal
-		 *   - string: string literal
-		 *   - symbol: symbols like \freq
-		 *   - variable: variable references
-		 *   - class: class identifiers
-		 *   - collection: collection literals (arrays, dicts, etc.)
-		 *  - list_comprehension: `{: ... }` constructs
-		 *   - code_block: `{ ... }` blocks
-		 *   - group: parenthesized expressions `( ... )`
 		 */
-		// _primary: $ => choice(
-		// 	$.number,
-		// 	$.string,
-		// 	$.symbol,
-		// 	$.variable,
-		// 	$.class,
-		// 	$.collection,
-		// 	$.list_comprehension,
-		// 	$.code_block,
-		// 	$.group
-		// ),
 		_primary: $ => choice(
 			$.literal,
 			$.variable,
@@ -290,7 +250,7 @@ module.exports = grammar({
 		// ),
 		group: $ => seq(
 			'(',
-			$._expression_sequence,  // Remove the choice with code_block
+			$._expression_sequence,  
 			')'
 		),
 
@@ -378,16 +338,6 @@ module.exports = grammar({
 			$.bool,
 		),
 
-		/**
-		 * number
-		 * ------
-		 * Numeric literal forms:
-		 *   • integer       — e.g. 42
-		 *   • float         — e.g. 3.14
-		 *   • hexinteger    — e.g. 0xFF
-		 *   • exponential   — e.g. 1.0e-3
-		 * Note: `pi` handling was removed from the grammar.
-		 */
 		number: $ => choice(
 			$.integer,
 			$.float,
@@ -456,11 +406,7 @@ module.exports = grammar({
 			"topEnvironment"
 		)),
 
-		// local_var: $ => prec(PRECEDENCE.localvar, choice(
-		// 	field("name", $.identifier), seq('var', field("name", $.identifier)))
-		// ),
-
-		local_var: $ => prec(PRECEDENCE.localvar, 
+		local_var: $ => prec(PRECEDENCE.localvar,
 			seq('var', field("name", $.identifier))
 
 		),
@@ -502,7 +448,6 @@ module.exports = grammar({
 					seq(
 						sepBy(",",
 							choice(
-
 								// Variable declaration
 								choice(
 									alias($.local_var, $.instance_var),
@@ -524,12 +469,10 @@ module.exports = grammar({
 						),
 						";"
 					),
-
 					// Instance method
 					seq(
 						alias($.identifier, $.instance_method_name), $.function_block
 					),
-
 					// Class method
 					seq(
 						"*", alias($.identifier, $.class_method_name), $.function_block
@@ -650,9 +593,6 @@ module.exports = grammar({
 		),
 
 		_indexable_object: $ => choice(
-			// $.collection,
-			// $.variable,
-			// $.string,
 			$._postfix,
 			prec.left(1, $.code_block),
 			$.control_structure
@@ -695,42 +635,17 @@ module.exports = grammar({
 		/**
 		 * binary_expression
 		 * -----------------
-		 * Represents any binary operator expression.
-		 * 
-		 * Structure:
-		 *   <left> <operator> <right>
-		 *
-		 * Notes:
-		 *   • Single flat, left-associative tier (`PRECEDENCE.BIN`).
-		 *   • Operands are `_postfix` so method-call chains bind tighter than binops.
-		 *   • Covers all symbolic binary operators, including `**`.
-		 *   • Matches SuperCollider’s L→R evaluation of binary operators.
-		 *
-		 * Example:
-		 *   \freq.kr(440) * (Env.perc(0.01, curve: -1).ar * 48).midiratio
 		 */
+		bin_op: $ => choice('||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=', '<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**'),
 		binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
 			field('left', $._postfix),
-			field('operator', choice(
-				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
-				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**',
-				///[A-Za-z_]\w*:/        // See [[keyword_message]] 
-			)),
+			field('operator', $.bin_op),
 			field('right', $._postfix)
 		)),
 
 		/** 
 		 * keyword_message	
 		 * ----------------
-		 * 
-		 * Unecessary. 
-		 * `23 mod: 10 + 10 mod: 5 ** 2` is parsed correctly by binary_expression
-		 * 
-		 * 
-		 * Inconsistent AST - `23 mod: 10` and `23 % 10` would have 
-		 * different node types despite identical semantics
-		 * 
-		 * 
 		 * */
 		keyword_message: $ => prec.left(PRECEDENCE.keyword_message, seq(
 			field('receiver', $._postfix),
@@ -744,7 +659,6 @@ module.exports = grammar({
 		 * Unary operators applied to a term. Unary binds tighter than BIN,
 		 * but looser than CALL (so chains still attach to the operand).
 		 * 
-		 * 
 		 * Note: `:` is treated as a unary operator here for simplicity,
 		 * r = (:1..10); 
 		 * -> a Routine
@@ -755,15 +669,14 @@ module.exports = grammar({
 		)),
 
 		class: $ => prec(PRECEDENCE.class, field("name", /[A-Z][a-zA-Z\d_]*/)),
-		
+
 		//identifier: $ => /[a-zA-Zα-ωΑ-Ωµ_][a-zA-Zα-ωΑ-Ωµ\d_]*/,
-		
 		identifier: $ => /[\p{L}_][\p{L}\p{N}_]*/u,
 
 		/**
 		 *  Nil check operators: ?, !?, ??
 		 * ------------------------
-		 * These operators have special short-circuiting evaluation rules in SC.
+		 * These operators have special evaluation rules
 		 * 
 		 */
 
@@ -801,15 +714,11 @@ module.exports = grammar({
 
 		// Expressions that can hold or return a single value
 		_numeric_expression: $ => choice(
-			// $.number,
-			// $.variable,
 			$._postfix,
 			$.binary_expression,
 			$.unary_expression,
 			$.function_call,
 			$.indexed_collection,
-			//$.code_block,
-			//$.nil_check,
 			$.control_structure,
 		),
 
@@ -861,12 +770,6 @@ module.exports = grammar({
 			$.termination       // Termination condition for iteration
 		),
 
-		/**
-		 * generator
-		 * --------------
-		 * Syntax: <pattern> <- <source>
-		 *
-		 */
 		generator: $ => seq(
 			field('pattern', choice(
 				$.identifier,
@@ -876,16 +779,8 @@ module.exports = grammar({
 			field('source', $._expression)
 		),
 
-		/**
-		 * Guard: just an expression that returns boolean
-		 * No special syntax, distinguished by context
-		 */
 		guard: $ => field('guard', $._postfix),
 
-		/**
-		 * Binding: var name = expr
-		 * Similar to variable declarations.
-		 */
 		var_binding: $ => seq(
 			'var',
 			field('name', $.identifier),
@@ -893,19 +788,11 @@ module.exports = grammar({
 			field('value', $._expression)
 		),
 
-		/**
-		 * Side effect: :: expr	
-		 * For inserting code with side effects like printing
-		 */
 		side_effect: $ => seq(
 			'::',
 			field('expression', $._expression)
 		),
 
-		/**
-		 * Termination: :while expr
-		 * Stops iteration when expression becomes false
-		 */
 		termination: $ => seq(
 			':while',
 			field('condition', $._expression)
@@ -915,13 +802,6 @@ module.exports = grammar({
 		//	Conditionals  //
 		////////////////////
 
-		/**
-		 * control_structure
-		 * -----------------
-		 * Entry point for SC’s control forms. Each form accepts an expression
-		 * (use `_postfix` so chains bind tighter than binops) and one or more
-		 * function blocks (code blocks) as bodies/branches.
-		 */
 		control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
 			$.if, $.while, $.for, $.forby, $.case, $.switch
 		)),
@@ -1073,9 +953,6 @@ module.exports = grammar({
 				seq($._postfix, $.function_block)
 			))
 		)
-
-
-
 	}
 });
 // End of grammar.js
