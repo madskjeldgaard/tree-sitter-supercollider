@@ -46,11 +46,12 @@ module.exports = grammar({
 
 	// The name of a token that will match keywords for the purpose of the keyword extraction optimization.
 	word: $ => $.identifier,
+
 	conflicts: $ => [
-		// [$.selector_binary, $.binary_expression],
-		// [$.selector_binary, $.unary_expression],
 		[$.switch],
 		[$._expression, $._object],
+		[$._primary, $.function_block],
+		[$._primary, $.collection],
 	],
 
 	rules: {
@@ -58,59 +59,43 @@ module.exports = grammar({
 		source_file: $ => repeat($._expression),
 
 		_expression: $ => choice(
-			$.code_block,
-			$.group,
+			//$.code_block,
+			//$.group,
 			$.class_def,
 			seq($._expression_statement, ";"),
 		),
 
 
-		/**
-		 * _object
-		 * -------
-		 * Any expression that can be used as a value in sclang
-		 * (i.e. anything that produces or holds a value).
-		 *
-		 * Essentially all expressions except statement-specific forms
-		 */
+		_expression_statement: $ => choice(
+			$.function_definition,
+			$.function_call,
+			$.binary_expression,
+			$.unary_expression,
+			$._postfix, 
+			$.variable_definition,
+			$.variable_definition_sequence,
+			$.return_statement
+		),
+
 		_object: $ => choice(
-			prec(2, $.class),          // Class references (higher precedence)
-			$.association,             // Key->value pairs
-			$.nil_conditional,         // x ? y or x ? {...} {...}
-			$.nil_guard,               // x !? {...}
-			$.nil_default,             // x ?? defaultValue
-			$.code_block,
+			prec(2, $.class),
+			$.association,
+			$.nil_conditional,
+			$.nil_guard,
+			$.nil_default,
+			//$.code_block,
 			$.function_block,
 			$.control_structure,
-			$.literal,                 // Numbers, strings, symbols, etc.
-			$.variable,                // Variable references
-			$.binary_expression,       // a + b, a collect: b, etc.
-			$.unary_expression,        // -x, +x
-			$.function_call,
 			$._postfix,
-			$.collection,
+			//$.literal,
+			//$.variable,
+			$.binary_expression,
+			$.unary_expression,
+			//$.collection,
 			$.indexed_collection,
 			$.partial,
 			$.duplicated_statement
 		),
-
-		/**
-		 * _expression_statement
-		 * ---------------------
-		 * Any construct that can stand alone as a statement in sclang.
-		 * This includes:
-		 *   - Statement-specific forms (definitions, returns)
-		 *   - Any expression (_object)
-		 *
-		 */
-		_expression_statement: $ => choice(
-			$.function_definition,         // f = { ... }
-			$.variable_definition,         // x = value
-			$.variable_definition_sequence, // x = 1, y = 2
-			$.return_statement,            // ^value
-			$._object                      // Any expression can be a statement
-		),
-
 		partial: $ => prec.right(PRECEDENCE.partial, "_"),
 
 		duplicated_statement: $ => prec.left(PRECEDENCE.duplication, seq(
@@ -129,50 +114,45 @@ module.exports = grammar({
 			field("value", $.function_block)
 		)),
 
-
-		/*
+		/**
 		 * function_call
 		 * --------------
-		 * Covers all forms of function/method invocation in sclang.
-		 *
-		 * Variants:   • Method-prefixed call:
+		 * Covers direct function/method invocations in SuperCollider.
+		 * 
+		 * Variants:
+		 *   • Function call with identifier:
 		 *       ar(SinOsc, 110)
+		 *       someFunc(123)
+		 *   
+		 *   • Class method call:
 		 *       MyClass.someMethod(123)
-		 *
-		 *   • Implicit constructor:
-		 *       SinOsc(440)         // equivalent to SinOsc.new(440)
-		 *
-		 *   • Instance method chain:
-		 *       obj.method1(...).method2(...)
-		 *
+		 *   
+		 *   • Implicit constructor (new):
+		 *       SinOsc(440)  // equivalent to SinOsc.new(440)
+		 * 
 		 * Notes:
-		 *   - Receivers in chains are `_primary` terms, not arbitrary expressions.
-		 *   - Chains are left-associative and bind tighter than binary operators
-		 *     (enforced via `_postfix` and CALL precedence).
-		 *   - Supports instance-variable setter calls as well, though these are rare.
-		 *
-		 * Example:
-		 *   \freq.kr(440).midiratio.sin
-		 *   SinOsc.ar(440, mul: 0.5)
+		 *   - Method chaining (obj.method1().method2()) is handled by _postfix rule
+		 *   - This rule only handles direct calls that start with an identifier or class
+		 *   - Instance method chains are parsed through _postfix → _primary → method_call
+		 *   - The duplicate class branch ensures both forms parse correctly
+		 * 
+		 * Examples:
+		 *   SinOsc.ar(440, mul: 0.5)  // Class method
+		 *   SinOsc(440)                // Implicit new
+		 *   rand(100)                  // Function call
 		 */
 		function_call: $ => choice(
-			// Method-prefixed call: ar(SinOsc, 110) or Class(…)
+			// Function or class method call: func(args) or Class.method(args)
 			seq(
 				choice(alias($.identifier, $.method_name), $.class),
 				"(", optional($.parameter_call_list), ")"
 			),
 
-			// Implicit new on classes: SinOsc(…)
+			// Implicit constructor: Class(args)
 			seq(
 				$.class,
 				"(", optional($.parameter_call_list), ")"
 			),
-
-			// Instance chain form: <primary>.<method>(...)...
-			seq(
-				field('receiver', $._primary),
-				repeat1(choice($.method_call, $.instance_variable_setter_call))
-			)
 		),
 
 		/**
@@ -192,10 +172,19 @@ module.exports = grammar({
 		 *   - code_block: `{ ... }` blocks
 		 *   - group: parenthesized expressions `( ... )`
 		 */
+		// _primary: $ => choice(
+		// 	$.number,
+		// 	$.string,
+		// 	$.symbol,
+		// 	$.variable,
+		// 	$.class,
+		// 	$.collection,
+		// 	$.list_comprehension,
+		// 	$.code_block,
+		// 	$.group
+		// ),
 		_primary: $ => choice(
-			$.number,
-			$.string,
-			$.symbol,
+			$.literal,
 			$.variable,
 			$.class,
 			$.collection,
@@ -218,14 +207,14 @@ module.exports = grammar({
 		 *       • `()` with optional parameter list
 		 *       • or an inline code block used as an argument
 		 */
-		method_call: $ => seq(
+		method_call: $ => prec.right(seq(
 			".",
 			field("name", alias($.identifier, $.method_name)),
 			optional(choice(
 				seq("(", optional($.parameter_call_list), ")"),
 				$.code_block
 			))
-		),
+		)),
 
 		/**
 		 * _postfix
@@ -290,12 +279,17 @@ module.exports = grammar({
 		 *   (2 + 3)           // Simple grouping
 		 *   ({ "hello" })     // Immediate code block evaluation
 		 */
+		// group: $ => seq(
+		// 	'(',
+		// 	choice(
+		// 		$._expression_sequence,  // Regular grouped expression
+		// 		$.code_block            // Immediate code block: ({ ... })
+		// 	),
+		// 	')'
+		// ),
 		group: $ => seq(
 			'(',
-			choice(
-				$._expression_sequence,  // Regular grouped expression
-				$.code_block            // Immediate code block: ({ ... })
-			),
+			$._expression_sequence,  // Remove the choice with code_block
 			')'
 		),
 
@@ -651,9 +645,9 @@ module.exports = grammar({
 		),
 
 		_indexable_object: $ => choice(
-			$.collection,
-			$.variable,
-			$.string,
+			// $.collection,
+			// $.variable,
+			// $.string,
 			$._postfix,
 			prec.left(1, $.code_block),
 			$.control_structure
@@ -698,9 +692,6 @@ module.exports = grammar({
 		 * -----------------
 		 * Represents any binary operator expression.
 		 * 
-		 * Note: Keep a unified binary_expression and let the 
-		 * semantic analyzer categorize operators (nil_check, keyword_message, etc).
-		 *
 		 * Structure:
 		 *   <left> <operator> <right>
 		 *
@@ -718,8 +709,6 @@ module.exports = grammar({
 			field('operator', choice(
 				'||', '&&', '|', '^', '&', '==', '!=', '<', '<=', '>', '>=',
 				'<<', '>>', '+', '-', '++', '+/+', '*', '/', '%', '**',
-				// '?', '!?', '??',       // Nil check operators
-				'..',                  // range operator
 				/[A-Za-z_]\w*:/        // See [[keyword_message]] 
 			)),
 			field('right', $._postfix)
@@ -804,13 +793,14 @@ module.exports = grammar({
 
 		// Expressions that can hold or return a single value
 		_numeric_expression: $ => choice(
-			$.number,
-			$.variable,
+			// $.number,
+			// $.variable,
+			$._postfix,
 			$.binary_expression,
 			$.unary_expression,
 			$.function_call,
 			$.indexed_collection,
-			$.code_block,
+			//$.code_block,
 			//$.nil_check,
 			$.control_structure,
 		),
@@ -837,7 +827,7 @@ module.exports = grammar({
 		 * Examples:
 		 *   {: i * 2, i <- (1..10), i % 2 == 0 }
 		 */
-		list_comprehension: $ => seq(
+		list_comprehension: $ => prec(1, seq(
 			$.list_comp_open,
 			field('body', choice(
 				$._expression_sequence,
@@ -846,7 +836,7 @@ module.exports = grammar({
 			',',
 			field('qualifiers', sepBy1(',', $.qualifier)),  // One or more qualifiers separated by commas
 			'}'
-		),
+		)),
 
 		/**
 		 * qualifier
