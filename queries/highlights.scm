@@ -1,116 +1,113 @@
-; highlights.scm
-; See this for full list: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md
-
+; =========================
 ; Comments
+; =========================
 (line_comment) @comment @spell
 (block_comment) @comment @spell
 
-; Argument definition
-(argument 
-  name: (identifier) @variable.parameter)
-
-; Variable argument
-[ "..." ] @variable.parameter
-
-; Variables
-(local_var 
-  name: (identifier) @variable)
-
-(environment_var 
-  name:(identifier) @variable.builtin)
-
-(builtin_var) @constant.builtin
-
-; Functions
-(named_argument
-  name: (identifier) @variable.parameter)
-
-; Methods
-(method_call
-  name: (method_name) @function.method.call)
-
-(method_name) @function.method.call
-
-; Collections
-(associative_item
-  (identifier) @property)
-
-; Classes
-(class) @type
+; =========================
+; Definitions / Types
+; =========================
+(class (name: (_) @type))
 (parent_class) @type
+(instance_method_name) @method
+(class_method_name)    @method
 
-(instance_method_name) @function.method
-(class_method_name) @function.method
+; =========================
+; Calls
+; =========================
+; Bare function/class calls: foo(...), SinOsc(...)
+(function_call (method_name) @function.call)
+(function_call (class)       @constructor)
 
+; Instance method calls: obj.foo(...)
+(method_call name: (method_name) @method.call)
+
+; Keyword messages: coll collect: {...}
+(keyword_message
+  (selector: (keyword_selector) @method.call))
+
+; =========================
+; Parameters / Arguments
+; =========================
+(parameter_list (argument (identifier) @variable.parameter))
+(parameter_list (argument (variable_argument (identifier) @variable.parameter)))
+(named_argument (name: (identifier) @variable.parameter))
+(named_argument (name: (symbol)     @variable.parameter))
+
+; =========================
+; Variables & Bindings
+; =========================
+(local_var       (identifier) @variable)
+(instance_var    (identifier) @variable)
+(classvar        (identifier) @variable)
+(const           (identifier) @constant)
+(builtin_var)                      @constant.builtin
+(environment_var (identifier)      @variable.builtin)
+
+; =========================
 ; Literals
-(bool) @boolean
-(number) @number
-(float) @number.float
-(string) @string
+; (use leaf kinds to avoid double-highlighting)
+; =========================
+(integer)      @number
+(hexinteger)   @number
+(float)        @number.float
+(exponential)  @number.float
+(pi_literal)   @number.float
+(accidental)   @number
+(string)       @string
 (escape_sequence) @string.escape
-(symbol) @string.special.symbol
+(symbol)       @string.special.symbol
+(char)         @character
+(bool)         @boolean
 
-; Conditionals
-[
-  "if"
-  "while"
-  "case"
-  "switch"
-  "?"
-  "!?"
-  "??"
-] @keyword.conditional
+; =========================
+; Operators / Pairs
+; =========================
+(binary_expression (operator) @operator)
+(unary_expression  (operator) @operator)
 
-; Iterations
-[ "for" "forBy" ] @keyword.repeat
+; nil-ops: highlight only the operator tokens
+(nil_conditional "?") @keyword.conditional
+(nil_guard      "!?") @keyword.conditional
+(nil_default    "??") @keyword.conditional
 
-; Duplication operator
-[ "!" ] @keyword.repeat
+; association pairs
+(association "->") @operator
 
-; Arithmetic series operator
-[ ".." ] @operator
+; duplication (x ! n)
+(duplicated_statement "!" @operator)
 
-; Operators
-[
-  "&&"
-  "||"
-  "&"
-  "|"
-  "^"
-  "=="
-  "!="
-  "<"
-  "<="
-  ">"
-  ">="
-  "<<"
-  ">>"
-  "+"
-  "-"
-  "*"
-  "/"
-  "%"
-  "="
-  "@"
-  "|@|"
-  "@@"
-  "@|@"
-  "++"
-  "+/+"
-] @operator
+; dotdot range
+[".."] @operator
 
-; Keywords
-[
-  "arg"
-  "classvar"
-  "const"
-  ; "super"
-  ; "this"
-  "var"
-] @keyword
+; adverb after binop: .foo / .3 / .(expr)
+(adverb "." @operator)
 
-; Brackets
+; =========================
+; Collections / Properties
+; =========================
+(associative_item (identifier) @property)
+(associative_item (symbol)     @property)
+
+; =========================
+; Control keywords (token-only)
+; =========================
+["if" "while" "case" "switch"] @keyword.conditional
+["for" "forBy"]                @keyword.repeat
+
+; return ^
+(return_statement "^") @keyword
+
+; =========================
+; List comprehensions / Generators
+; =========================
+(list_comp_open)  @punctuation.bracket   ; '{:'
+(generator "<-")  @operator
+(termination ":while") @keyword.conditional
+(side_effect "::")     @operator
+
+; =========================
+; Punctuation
+; =========================
 [ "(" ")" "[" "]" "{" "}" "|" ] @punctuation.bracket
-
-; Delimeters
-[ ";" "." "," ] @punctuation.delimiter
+[ ";" "," ":" "." ]             @punctuation.delimiter

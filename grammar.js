@@ -1,3 +1,4 @@
+
 const PRECEDENCE = {
   comment: 1000,
 
@@ -34,7 +35,7 @@ module.exports = grammar({
   // ---------- Metadata / Tokens ----------
   word: $ => $.identifier,
   extras: $ => [/\s/, $.line_comment, $.block_comment],
-  externals: $ => [ $.block_comment, $._space_separator ],
+  externals: $ => [$.block_comment, $._space_separator],
 
   // Optional supertypes (useful for queries)
   // supertypes: $ => [ $._expression, $._object, $._primary ],
@@ -187,6 +188,22 @@ module.exports = grammar({
     hexinteger: $ => /0x([a-fA-F\d])+/,
     float: $ => /\d+\.\d+/,
     exponential: $ => /-?\d+(\.\d+)?[eE]-?\d+/,
+
+    pi_literal: $ => choice(
+      'pi',                          // π
+      seq(choice($.integer, $.float), 'pi') // 2pi, 2.5pi
+    ),
+
+    accidental: $ => /\d+[sb]+/,    // e.g. 12s, 4bb, 7ss
+
+    number: $ => choice(
+      $.integer,
+      $.float,
+      $.hexinteger,
+      $.exponential,
+      $.pi_literal,
+      $.accidental
+    ),
 
     symbol: $ => choice(
       prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/, $.escape_sequence)))),
