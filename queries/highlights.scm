@@ -7,7 +7,7 @@
 ; =========================
 ; Definitions / Types
 ; =========================
-(class (name: (_) @type))
+(class)        @type ; we can capture the whole node here
 (parent_class) @type
 (instance_method_name) @method
 (class_method_name)    @method
@@ -23,20 +23,21 @@
 (method_call name: (method_name) @method.call)
 
 ; Keyword messages: coll collect: {...}
-(keyword_message
-  (selector: (keyword_selector) @method.call))
+(keyword_message 
+  selector: (keyword_selector) @method.call) ; fix typo
 
 ; =========================
 ; Parameters / Arguments
 ; =========================
-(parameter_list (argument (identifier) @variable.parameter))
-(parameter_list (argument (variable_argument (identifier) @variable.parameter)))
-(named_argument (name: (identifier) @variable.parameter))
-(named_argument (name: (symbol)     @variable.parameter))
+(parameter_list "arg" @keyword) ; capture the 'arg' keyword
+(parameter_list (argument (identifier) @variable.parameter)) ; variable_argument is aliased to argument in grammar.js
+(named_argument name: (identifier) @variable.parameter) ; fix typo
+(named_argument name: (symbol)     @variable.parameter) ; fix typo
 
 ; =========================
 ; Variables & Bindings
 ; =========================
+[ "var" "classvar" "const"] @keyword ; capture the variable keywords
 (local_var       (identifier) @variable)
 (instance_var    (identifier) @variable)
 (classvar        (identifier) @variable)
@@ -63,8 +64,14 @@
 ; =========================
 ; Operators / Pairs
 ; =========================
-(binary_expression (operator) @operator)
-(unary_expression  (operator) @operator)
+; operator is a field with unamed nodes so we need to capture them explicitly
+(binary_expression 
+  operator: [
+    "||" "&&" "|" "^" "&" "==" "!=" "<" "<=" ">" ">="
+    "<<" ">>" "+" "-" "++" "+/+" "*" "/" "%" "**"
+  ] @operator)
+(unary_expression  operator: ["+" "-" ":"] @operator)
+["="] @operator
 
 ; nil-ops: highlight only the operator tokens
 (nil_conditional "?") @keyword.conditional
@@ -80,14 +87,15 @@
 ; dotdot range
 [".."] @operator
 
+; is this used ?
 ; adverb after binop: .foo / .3 / .(expr)
-(adverb "." @operator)
+; (adverb "." @operator)
 
 ; =========================
 ; Collections / Properties
 ; =========================
 (associative_item (identifier) @property)
-(associative_item (symbol)     @property)
+(associative_item ":"          @property) ; no 'symbol' node in associative_item
 
 ; =========================
 ; Control keywords (token-only)

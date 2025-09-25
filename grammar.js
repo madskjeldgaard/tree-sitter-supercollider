@@ -243,7 +243,8 @@ module.exports = grammar({
       $.environment_var,
       $.classvar,
       $.builtin_var,
-      $.instance_var
+      $.instance_var,
+      $.local_var // need this to capture it in highlights.scm
     ),
 
     builtin_var: $ => field("name", choice(
