@@ -124,20 +124,20 @@ module.exports = grammar({
       optional(seq("(", optional($.parameter_call_list), ")"))
     )),
 
-    _expression_sequence: $ => seq(
-      repeat(prec.right(1, seq($._expression_statement, ";"))),
+    expression_sequence: $ => seq(
+      repeat(seq($._expression_statement, ";")),
       $._expression_statement,
-      optional(";")
+      seq(optional(";"))
     ),
 
     code_block: $ => seq(
       '{',
       optional($.parameter_list),
-      optional($._expression_sequence),
+      optional($.expression_sequence),
       '}'
     ),
 
-    group: $ => seq('(', $._expression_sequence, ')'),
+    group: $ => seq('(', $.expression_sequence, ')'),
 
     function_block: $ => choice(
       $.code_block,
@@ -374,7 +374,7 @@ module.exports = grammar({
 
     list_comprehension: $ => prec(1, seq(
       $.list_comp_open,
-      field('body', choice($._expression_sequence, $._postfix)),
+      field('body', choice($.expression_sequence, $._postfix)),
       ',',
       field('qualifiers', sepBy1(',', $.qualifier)),
       '}'
