@@ -1,46 +1,36 @@
-
 const PRECEDENCE = {
   comment: 1000,
 
-  // expression tiers
   call: 140,           // postfix chains bind tighter than any binary op
   unary: 130,          // tighter than BIN, looser than call
   BIN: 20,             // flat, left-associative binary tier
   keyword_message: 19, // below BIN to preserve L→R evaluation
 
-  // misc
   association: 11,
   associative_item: 10,
   partial: 15,
   field: 13,
   duplication: 12,
-  controlstruct: 3,
   localvar: 4,
   vardef: 3,
   vardef_sequence: 2,
-  assign: 0,
   STRING: 2,
-  closure: -1,
   class_def: 1,
   class: 20
 };
 
-// Small combinators
 function sepBy1(sep, rule) { return seq(rule, repeat(seq(sep, rule))); }
 function sepBy(sep, rule) { return optional(sepBy1(sep, rule)); }
 
 module.exports = grammar({
   name: 'supercollider',
-
-  // ---------- Metadata / Tokens ----------
   word: $ => $.identifier,
   extras: $ => [/\s/, $.line_comment, $.block_comment],
   externals: $ => [$.block_comment, $._space_separator],
 
-  // Optional supertypes (useful for queries)
+  // Optional 
   // supertypes: $ => [ $._expression, $._object, $._primary ],
 
-  // ---------- Conflicts ----------
   conflicts: $ => [
     [$.switch],
     [$._expression, $._object],
@@ -48,9 +38,7 @@ module.exports = grammar({
     [$._primary, $.collection],
   ],
 
-  // ---------- Rules ----------
   rules: {
-    // ===== Program =====
     source_file: $ => repeat($._expression),
 
     _expression: $ => choice(
@@ -182,8 +170,6 @@ module.exports = grammar({
     // ===== Literals / Tokens =====
     literal: $ => choice($.number, $.symbol, $.char, $.string, $.bool),
 
-    number: $ => choice($.integer, $.float, $.hexinteger, $.exponential),
-
     integer: $ => /\d+/,
     hexinteger: $ => /0x([a-fA-F\d])+/,
     float: $ => /\d+\.\d+/,
@@ -244,7 +230,7 @@ module.exports = grammar({
       $.classvar,
       $.builtin_var,
       $.instance_var,
-      $.local_var // need this to capture it in highlights.scm
+      $.local_var
     ),
 
     builtin_var: $ => field("name", choice(
@@ -482,11 +468,10 @@ module.exports = grammar({
       "}"
     )),
 
-    // ===== Comments =====
     comment: $ => choice($.line_comment, $.block_comment),
     line_comment: $ => prec(PRECEDENCE.comment, token(seq('//', /.*/))),
 
-    // ----- (Unused catalog helpers kept for reference) -----
+    // Helper rules kept for reference
     _collection_types: $ => choice($._unordered_collection_types, $._ordered_collection_types),
 
     _unordered_collection_types: $ => choice(
