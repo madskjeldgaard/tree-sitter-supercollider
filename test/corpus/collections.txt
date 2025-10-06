@@ -610,24 +610,20 @@ Associative array
       (associative_item
         (association
           (literal
-            (symbol
-              (identifier )))
+            (symbol))
           (literal
             (number
               (integer )))))
       (associative_item
         (association
           (literal
-            (symbol
-              (identifier )))
+            (symbol))
           (literal
-            (symbol
-              (identifier )))))
+            (symbol))))
       (associative_item
         (association
           (literal
-            (symbol
-              (identifier )))
+            (symbol))
           (literal
             (number
               (float ))))))))

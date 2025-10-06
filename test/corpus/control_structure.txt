@@ -412,15 +412,13 @@ x = case
                   (float )))))
           (function_block
             (literal
-              (symbol
-                (identifier ))))
+              (symbol)))
           (function_block
             (literal
               (bool )))
           (function_block
             (literal
-              (symbol
-                (identifier ))))
+              (symbol)))
           (function_block
             (binary_expression
               left: (variable
@@ -430,8 +428,7 @@ x = case
                   (integer )))))
           (function_block
             (literal
-              (symbol
-                (identifier )))))))))
+              (symbol))))))))
 
 ==================
 simple switch with literal as test value
@@ -455,16 +452,14 @@ switch(0,
               (integer ))))
         (function_block
           (literal
-            (symbol
-              (identifier ))))
+            (symbol)))
         (function_block
           (literal
             (number
               (integer ))))
         (function_block
           (literal
-            (symbol
-              (identifier ))))))))
+            (symbol)))))))
 
 ============
 Weird kind of switch (no commas)
@@ -492,32 +487,28 @@ switch (201)
               (integer ))))
         (function_block
           (literal
-            (symbol
-              (identifier ))))
+            (symbol)))
         (function_block
           (literal
             (number
               (float ))))
         (function_block
           (literal
-            (symbol
-              (identifier ))))
+            (symbol)))
         (function_block
           (literal
             (number
               (integer ))))
         (function_block
           (literal
-            (symbol
-              (identifier ))))
+            (symbol)))
         (function_block
           (literal
             (number
               (integer ))))
         (function_block
           (literal
-            (symbol
-              (identifier ))))))))
+            (symbol)))))))
 
 ===========
 Switch with variable.choose as input
@@ -568,29 +559,25 @@ x = switch (y.choose)
                 (integer ))))
           (function_block
             (literal
-              (symbol
-                (identifier ))))
+              (symbol)))
           (function_block
             (literal
               (number
                 (integer ))))
           (function_block
             (literal
-              (symbol
-                (identifier ))))
+              (symbol)))
           (function_block
             (literal
               (number
                 (integer ))))
           (function_block
             (literal
-              (symbol
-                (identifier ))))
+              (symbol)))
           (function_block
             (literal
               (number
                 (integer ))))
           (function_block
             (literal
-              (symbol
-                (identifier )))))))))
+              (symbol))))))))

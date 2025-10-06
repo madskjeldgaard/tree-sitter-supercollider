@@ -10,3 +10,33 @@ Class extensions
     (class )
     (instance_method_name )
     (function_block )))
+
+====
+Multiple class definitions
+====
+SinOsc{
+	someMethod{}
+}
+
+SinOsc{
+	someMethod{}
+}
+
+
++SinOsc{
+	someMethod{}
+}
+---
+(source_file
+  (class_def
+    (class )
+    (instance_method_name )
+    (function_block ))
+  (class_def
+    (class )
+    (instance_method_name )
+    (function_block ))
+  (class_def
+    (class )
+    (instance_method_name )
+    (function_block )))

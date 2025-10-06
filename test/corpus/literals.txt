@@ -289,7 +289,7 @@ var sym = \averyLongSymbol;
       (local_var
         (identifier )))
     (literal
-        (symbol (identifier)))))
+        (symbol ))))
 
 ==================
 literal symbol single quoted

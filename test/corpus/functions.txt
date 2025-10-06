@@ -101,8 +101,7 @@ SynthDef('yo', {});
         (argument_calls
           (unnamed_argument
             (literal
-              (symbol
-                (identifier )))))
+              (symbol))))
         (argument_calls
           (unnamed_argument
             (function_block )))))
@@ -206,8 +205,7 @@ Spaces in argument list with no commas
         (argument
           name: (identifier)
           value: (literal
-            (symbol
-              (identifier))))
+            (symbol)))
         (argument
           name: (identifier))))))
 
@@ -866,8 +864,7 @@ f.value(arg1: \hej);
         (argument_calls
           (named_argument
             (identifier )
-            (literal
-              (symbol (identifier) ))))))))
+            (literal (symbol  ))))))))
 
 ==================
 chained instance methods on literal
