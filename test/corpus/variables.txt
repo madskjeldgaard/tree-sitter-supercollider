@@ -84,8 +84,7 @@ var v1, v2, v3=1000, v4=\yo;
           (local_var
             name: (identifier )))
         value: (literal
-          (symbol
-            (identifier )))))))
+          (symbol))))))
 
 ==================
 class alias in environment var

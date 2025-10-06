@@ -74,6 +74,7 @@ module.exports = grammar({
 			$.code_block,
 			$.class_def,
 			seq($._expression_statement, ";"),
+			seq($._expression_statement, "\n"),
 		),
 
 		_expression_statement: $ => choice(
@@ -295,16 +296,13 @@ module.exports = grammar({
 			$.char,
 			$.string,
 			$.bool,
-			// $.pi_statement
 		),
 
-		// pi_statement: $ => seq(optional($.number), "pi"),
 		number: $ => choice(
 			$.integer,
 			$.float,
 			$.hexinteger,
 			$.exponential,
-			"pi",
 			seq(optional($.number), "pi")
 		),
 
@@ -312,9 +310,13 @@ module.exports = grammar({
 		hexinteger: $ => /0x([a-fA-F\d])+/,
 		float: $ => /\d+\.\d+/,
 		exponential: $ => /-?\d+(\.\d+)?[eE]-?\d+/,
+		// symbol: $ => choice(
+		// 	prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/, $.escape_sequence)))),
+		// 	prec.left(seq("'", optional(token.immediate(/[^"'\\]+/)), "'")),
+		// ),
 		symbol: $ => choice(
-			prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/, $.escape_sequence)))),
-			prec.left(seq("'", optional(token.immediate(/[^"'\\]+/)), "'")),
+			seq( '\\', token.immediate(prec(PRECEDENCE.STRING, /[a-zA-Zα-ωΑ-Ωµ\d_]*/))),
+			seq( "'", token.immediate(prec(PRECEDENCE.STRING, /([^']|\\')*/)), "'")
 		),
 		char: $ => /\$./,
 
@@ -323,26 +325,14 @@ module.exports = grammar({
 			seq(
 				'"',
 				repeat(choice(
-					token.immediate(prec(PRECEDENCE.STRING, /[^"\\\n]+|\\\r?\n/)),
-					$.escape_sequence
+					token.immediate(prec(PRECEDENCE.STRING, /[^"\\]+/)),
+					alias(/\\[nrtfv"]/, $.escape_sequence),
 				)),
-				'"'
+				'"',
 			)
 		),
 
 		bool: $ => choice("true", "false"),
-
-		// TODO: Is this necessary in SC?
-		escape_sequence: $ => token.immediate(seq(
-			'\\',
-			choice(
-				/[^xu0-7]/,
-				/[0-7]{1,3}/,
-				/x[0-9a-fA-F]{2}/,
-				/u[0-9a-fA-F]{4}/,
-				/u\{[0-9a-fA-F]+\}/
-			)
-		)),
 
 		/////////////////
 		//	Variables  //
@@ -613,7 +603,7 @@ module.exports = grammar({
 				[PRECEDENCE.or, '||'],
 				[PRECEDENCE.bitand, '&'],
 				[PRECEDENCE.bitor, '|'],
-				[PRECEDENCE.comparative, choice('==', '!=', '<', '<=', '>', '>=')],
+				[PRECEDENCE.comparative, choice('===', '!==', '==', '!=', '<', '<=', '>', '>=')],
 				[PRECEDENCE.shift, choice('<<', '>>')],
 				[PRECEDENCE.additive, choice('+', '-', '++')],
 				[PRECEDENCE.multiplicative, choice('*', '/', '%', prec.left("**"))],
