@@ -18,7 +18,7 @@ static inline bool sc_is_alpha(int32_t c) {
 }
 static inline bool sc_is_alnum(int32_t c) {
   return c > 0 && (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') ||
-                    ('0' <= c && c <= '9'));
+                   ('0' <= c && c <= '9'));
 }
 #else
 static inline bool sc_is_alpha(int32_t c) { return iswalpha(c); }
@@ -29,19 +29,31 @@ typedef struct {
   unsigned hash_depth;
 } ScannerState;
 
+/* --- Hot tables for O(1) tests --- */
+static unsigned char WS_TABLE[256];
+static unsigned char OP_LEAD_TABLE[256];
+
+static void init_tables_once(void) {
+  // whitespace
+  WS_TABLE[(unsigned char)' ']  = 1;
+  WS_TABLE[(unsigned char)'\t'] = 1;
+  WS_TABLE[(unsigned char)'\r'] = 1;
+  WS_TABLE[(unsigned char)'\n'] = 1;
+  WS_TABLE[(unsigned char)'\f'] = 1;
+
+  // operator leads (note: ':' is intentionally excluded — used by keyword selectors)
+  const char *ops = "@+-*/<>!?|&^%.";
+  for (const char *p = ops; *p; ++p) OP_LEAD_TABLE[(unsigned char)*p] = 1;
+}
+
 static inline void skip_ws(TSLexer *lx) {
-  while (lx->lookahead &&
-         (lx->lookahead == ' ' || lx->lookahead == '\t' ||
-          lx->lookahead == '\r' || lx->lookahead == '\n' ||
-          lx->lookahead == '\f')) {
+  while (lx->lookahead && WS_TABLE[(unsigned char)lx->lookahead]) {
     lx->advance(lx, true);
   }
 }
 
-// NOTE: do NOT include ':' here; it's reserved for keyword selectors in sclang.
 static inline bool is_op_lead(int32_t c) {
-  unsigned char ch = (unsigned char)c;
-  return strchr("@+-*/<>!?|&^%.", ch) != NULL; // '.' added
+  return (c > 0) && OP_LEAD_TABLE[(unsigned char)c];
 }
 
 static bool is_complete_op(const char *op, unsigned len) {
@@ -55,17 +67,14 @@ static bool is_complete_op(const char *op, unsigned len) {
     "+>>", "**>", "+/+", "...", NULL
   };
 
-  if (len == 1)
-    // ':' REMOVED (keyword selectors); keep division, etc.
-    return strchr("@+-*/%|&^!?<>", op[0]) != NULL;
+  if (len == 1) return strchr("@+-*/%|&^!?<>", op[0]) != NULL;
 
   const char **ops = (len == 2) ? ops2 : (len == 3) ? ops3 : NULL;
   if (!ops) return false;
 
-  for (const char **p = ops; *p; ++p)
-    if (strncmp(op, *p, len) == 0)
-      return true;
-
+  for (const char **p = ops; *p; ++p) {
+    if (strncmp(op, *p, len) == 0) return true;
+  }
   return false;
 }
 
@@ -74,7 +83,6 @@ static bool is_prefix_of_op(const char *op, unsigned len) {
   static const char *prefixes[] = {"@|", "<<", ">>", "++", "+>", "--", "..", NULL};
 
   if (len == 1) return is_op_lead(op[0]);
-
   if (len == 2) {
     for (const char **p = prefixes; *p; ++p) {
       if (strncmp(op, *p, len) == 0) return true;
@@ -102,7 +110,7 @@ static bool scan_block_comment(TSLexer *lx) {
 
 enum TokenType {
   BLOCK_COMMENT,
-  //LIST_COMP_OPEN, // maybe better handle in grammar with token.immediate(':')
+  //LIST_COMP_OPEN, // handled in grammar with token.immediate(':')
   OP_SYM,
   HASH_OPEN,
   HASH_CLOSE,
@@ -111,6 +119,7 @@ enum TokenType {
 
 void *tree_sitter_supercollider_external_scanner_create(void) {
   ScannerState *st = (ScannerState *)calloc(1, sizeof(ScannerState));
+  init_tables_once();
   DBG("create");
   return st;
 }
@@ -162,8 +171,7 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
       DBG("HASH_OPEN depth=1");
       return true;
     } else {
-      // If a bare '#' is not meaningful in sclang, this is safe.
-      // If it *is* meaningful, we'd need to avoid consuming unless '[' follows.
+      // If a bare '#' is not meaningful in sclang, avoid consuming
       return false;
     }
   }
@@ -232,6 +240,7 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
           lx->mark_end(lx);
         }
         if (!is_prefix_of_op(buf, len)) break;
+        if (len == 3) break;
       }
 
       if (had_complete) {
@@ -254,6 +263,7 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
         lx->mark_end(lx);
       }
       if (!is_prefix_of_op(buf, len)) break;
+      if (len == 3) break;  // short-circuit: no 4-char ops
     }
 
     if (had_complete) {
@@ -263,9 +273,8 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
     return false;
   }
 
-  //  intentionally do NOT implement LIST_COMP_OPEN "{:" here,
-  // because external scanners can't peek without consuming. Handle it
-  // in the grammar with `{` followed by `token.immediate(':')`.
+  // NOTE: we intentionally do NOT implement "{:" here;
+  // grammar enforces it via '{' + token.immediate(':').
 
   return false;
 }

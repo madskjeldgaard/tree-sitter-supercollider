@@ -188,7 +188,7 @@ module.exports = grammar({
     symbol: $ => choice(
       prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/)))),
       seq("'", repeat(choice(token.immediate(/[^'\\]+/), $.escape_sequence)), "'"),
-      $.SYMBOL_IN_HASH // from scanner inside #[ ... ]
+      $.SYMBOL_IN_HASH
     ),
 
     char: $ => /\$(?:\.|[^\n])/,
