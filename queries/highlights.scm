@@ -38,9 +38,9 @@
 ; Variables & Bindings
 ; =========================
 (local_var       (identifier) @variable)
-(instance_var    (identifier) @variable)
-(classvar        (identifier) @variable)
-(const           (identifier) @constant)
+(classvar (identifier) @variable)
+(instance_var (identifier) @variable)
+(const (identifier) @constant)
 (builtin_var)                      @constant.builtin
 (environment_var (identifier)      @variable.builtin)
 
@@ -101,7 +101,7 @@
 ; =========================
 ; List comprehensions / Generators
 ; =========================
-(list_comp_open)  @punctuation.bracket   ; '{:'
+;; (list_comp_open)  @punctuation.bracket   ; '{:'
 (generator "<-")  @operator
 (termination ":while") @keyword.conditional
 (side_effect "::")     @operator
