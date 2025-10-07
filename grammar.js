@@ -17,17 +17,17 @@ const sepBy = (sep, rule) => optional(sepBy1(sep, rule));
 
 module.exports = grammar({
   name: 'supercollider',
+
   supertypes: $ => [$._expression, $._object, $._primary],
   word: $ => $.identifier,
   extras: $ => [/\s/, $.line_comment, $.block_comment],
 
   externals: $ => [
     $.block_comment,
-    $.LIST_COMP_OPEN,
     $.OP_SYM,
     $.HASH_OPEN,
     $.HASH_CLOSE,
-    $.SYMBOL_IN_HASH,
+    $.SYMBOL_IN_HASH, // kept to align with scanner's #[ ... ] stateful lexing
   ],
 
   conflicts: $ => [
@@ -169,6 +169,7 @@ module.exports = grammar({
     ),
 
     literal: $ => choice($.number, $.symbol, $.char, $.string, $.concatenated_string, $.bool),
+
     integer: $ => /\d+/,
     hexinteger: $ => /0x[0-9a-fA-F]+/,
     radix_integer: $ => /([2-9]|[1-2][0-9]|3[0-6])r[0-9a-zA-Z]+/,
@@ -187,10 +188,11 @@ module.exports = grammar({
     symbol: $ => choice(
       prec.left(seq('\\', optional(choice($.identifier, /[0-9]+/)))),
       seq("'", repeat(choice(token.immediate(/[^'\\]+/), $.escape_sequence)), "'"),
-      $.SYMBOL_IN_HASH
+      $.SYMBOL_IN_HASH // from scanner inside #[ ... ]
     ),
 
     char: $ => /\$(?:\.|[^\\n])/,
+
     string: $ => seq(
       '"',
       repeat(choice(
@@ -234,10 +236,7 @@ module.exports = grammar({
     environment_var: $ => seq('~', field("name", $.identifier)),
     variable_definition: $ => seq(field("name", $.variable), "=", field("value", $._object)),
 
-    return_statement: $ => prec.left(seq(
-      "^",
-      $._object
-    )),
+    return_statement: $ => prec.left(seq("^", $._object)),
 
     collection: $ => prec.left(seq(
       choice(
@@ -260,11 +259,14 @@ module.exports = grammar({
     _collection_sequence: $ => seq(sepBy1(",", choice($.associative_item, $._object)), optional(",")),
     _paired_associative_sequence: $ => seq(sepBy1(",", $.associative_item), optional(",")),
 
-    association: $ => prec(PRECEDENCE.association, seq(field("left", $._object), "->", field("right", $._object))),
+    association: $ => prec(PRECEDENCE.association,
+      seq(field("left", $._object), "->", field("right", $._object))
+    ),
 
     associative_item: $ => prec(PRECEDENCE.associative_item, choice(
       seq(choice($.identifier, $.symbol, $.string), ":", $._object),
-      $.association)),
+      $.association
+    )),
 
     _indexable_object: $ => choice($._postfix, prec.left(1, $.code_block), $.control_structure),
 
@@ -335,8 +337,10 @@ module.exports = grammar({
       field('value', $._postfix), '??', field('default', choice($._postfix, $.code_block))
     )),
 
+    // Rewritten: no external LIST_COMP_OPEN — use '{' + immediate ':'.
     list_comprehension: $ => prec(1, seq(
-      $.LIST_COMP_OPEN,
+      '{',
+      token.immediate(':'),               // enforce "{:" with no extras
       field('body', choice($.expression_sequence, $._postfix)),
       ',',
       field('qualifiers', sepBy1(',', $.qualifier)),
@@ -344,7 +348,6 @@ module.exports = grammar({
     )),
 
     qualifier: $ => prec.left(1, choice($.generator, $.guard, $.var_binding, $.side_effect, $.termination)),
-
     generator: $ => seq(field('pattern', choice($.identifier, $.collection)), '<-', field('source', $._object)),
     guard: $ => field('condition', $._postfix),
     var_binding: $ => seq('var', field('name', $.identifier), '=', field('value', $._object)),
