@@ -14,11 +14,11 @@
 #ifdef SC_ASCII_ONLY
 #include <ctype.h>
 static inline bool sc_is_alpha(int32_t c) {
-  return (c > 0 && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')));
+  return c > 0 && (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z'));
 }
 static inline bool sc_is_alnum(int32_t c) {
-  return (c > 0 && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
-                    (c >= '0' && c <= '9')));
+  return c > 0 && (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') ||
+                    ('0' <= c && c <= '9'));
 }
 #else
 static inline bool sc_is_alpha(int32_t c) { return iswalpha(c); }
@@ -62,13 +62,17 @@ static bool is_complete_op(const char *op, unsigned len) {
 }
 
 static bool is_prefix_of_op(const char *op, unsigned len) {
+  static const char *prefixes[] = {"@|", "<<", ">>", "++", "+>", "--", NULL};
+  
   if (len == 1)
     return is_op_lead(op[0]);
+
   if (len == 2) {
-    return (op[0] == '@' && op[1] == '|') || (op[0] == '<' && op[1] == '<') ||
-           (op[0] == '>' && op[1] == '>') ||
-           (op[0] == '+' && (op[1] == '+' || op[1] == '>')) ||
-           (op[0] == '-' && op[1] == '-');
+    for (const char **p = prefixes; *p; ++p) {
+      if (strncmp(op, *p, len) == 0) {
+        return true;
+      }
+    }
   }
   return false;
 }
