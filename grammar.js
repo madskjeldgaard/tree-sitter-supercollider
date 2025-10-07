@@ -27,7 +27,7 @@ module.exports = grammar({
     $.OP_SYM,
     $.HASH_OPEN,
     $.HASH_CLOSE,
-    $.SYMBOL_IN_HASH, // kept to align with scanner's #[ ... ] stateful lexing
+    $.SYMBOL_IN_HASH, 
   ],
 
   conflicts: $ => [

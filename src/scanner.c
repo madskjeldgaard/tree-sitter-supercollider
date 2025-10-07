@@ -1,7 +1,7 @@
+#include "tree_sitter/parser.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <tree_sitter/parser.h>
 #include <wctype.h>
 
 #ifdef TS_DEBUG
@@ -34,16 +34,22 @@ static unsigned char WS_TABLE[256];
 static unsigned char OP_LEAD_TABLE[256];
 
 static void init_tables_once(void) {
-  // whitespace
-  WS_TABLE[(unsigned char)' ']  = 1;
-  WS_TABLE[(unsigned char)'\t'] = 1;
-  WS_TABLE[(unsigned char)'\r'] = 1;
-  WS_TABLE[(unsigned char)'\n'] = 1;
-  WS_TABLE[(unsigned char)'\f'] = 1;
+  // Use memset to initialize tables to zero efficiently
+  memset(WS_TABLE, 0, sizeof(WS_TABLE));
+  memset(OP_LEAD_TABLE, 0, sizeof(OP_LEAD_TABLE));
 
-  // operator leads (note: ':' is intentionally excluded — used by keyword selectors)
+  // Initialize whitespace table with specific indices
+  const char ws_chars[] = " \t\r\n\f";
+  for (const char *p = ws_chars; *p != '\0'; ++p) {
+    WS_TABLE[(unsigned char)*p] = 1;
+  }
+
+  // Operator leads (note: ':' is intentionally excluded — used by keyword
+  // selectors)
   const char *ops = "@+-*/<>!?|&^%.";
-  for (const char *p = ops; *p; ++p) OP_LEAD_TABLE[(unsigned char)*p] = 1;
+  for (const char *p = ops; *p != '\0'; ++p) {
+    OP_LEAD_TABLE[(unsigned char)*p] = 1;
+  }
 }
 
 static inline void skip_ws(TSLexer *lx) {
@@ -52,40 +58,49 @@ static inline void skip_ws(TSLexer *lx) {
   }
 }
 
+/*
+Determine whether the given character can start an operator token.
+
+Performs an O(1) lookup in OP_LEAD_TABLE using the low 8 bits of c.
+Non-positive values are rejected.
+
+*/
 static inline bool is_op_lead(int32_t c) {
   return (c > 0) && OP_LEAD_TABLE[(unsigned char)c];
 }
 
 static bool is_complete_op(const char *op, unsigned len) {
-  static const char *ops2[] = {
-    "@@", "++", "--", "**", "<<", ">>", "<>",
-    "<=", ">=", "==", "!=", "&&", "||", "!?",
-    "??", "..", "->", "<-", NULL
-  };
-  static const char *ops3[] = {
-    "@|@", "+++", "---", "<<*", ">>*",
-    "+>>", "**>", "+/+", "...", NULL
-  };
+  static const char *ops2[] = {"@@", "++", "--", "**", "<<", ">>", "<>",
+                               "<=", ">=", "==", "!=", "&&", "||", "!?",
+                               "??", "..", "->", "<-", NULL};
+  static const char *ops3[] = {"@|@", "+++", "---", "<<*", ">>*",
+                               "+>>", "**>", "+/+", "...", NULL};
 
-  if (len == 1) return strchr("@+-*/%|&^!?<>", op[0]) != NULL;
+  if (len == 1)
+    return strchr("@+-*/%|&^!?<>", op[0]) != NULL;
 
   const char **ops = (len == 2) ? ops2 : (len == 3) ? ops3 : NULL;
-  if (!ops) return false;
+  if (!ops)
+    return false;
 
   for (const char **p = ops; *p; ++p) {
-    if (strncmp(op, *p, len) == 0) return true;
+    if (strncmp(op, *p, len) == 0)
+      return true;
   }
   return false;
 }
 
 static bool is_prefix_of_op(const char *op, unsigned len) {
   // Add ".." so "..." can extend properly
-  static const char *prefixes[] = {"@|", "<<", ">>", "++", "+>", "--", "..", NULL};
+  static const char *prefixes[] = {"@|", "<<", ">>", "++",
+                                   "+>", "--", "..", NULL};
 
-  if (len == 1) return is_op_lead(op[0]);
+  if (len == 1)
+    return is_op_lead(op[0]);
   if (len == 2) {
     for (const char **p = prefixes; *p; ++p) {
-      if (strncmp(op, *p, len) == 0) return true;
+      if (strncmp(op, *p, len) == 0)
+        return true;
     }
   }
   return false;
@@ -100,9 +115,11 @@ static bool scan_block_comment(TSLexer *lx) {
       return true;
     }
     lx->advance(lx, false);
-    if (prev == '/' && c == '*') depth++;
+    if (prev == '/' && c == '*')
+      depth++;
     if (prev == '*' && c == '/') {
-      if (--depth == 0) return true;
+      if (--depth == 0)
+        return true;
     }
     prev = c;
   }
@@ -110,13 +127,16 @@ static bool scan_block_comment(TSLexer *lx) {
 
 enum TokenType {
   BLOCK_COMMENT,
-  //LIST_COMP_OPEN, // handled in grammar with token.immediate(':')
+  // LIST_COMP_OPEN, // handled in grammar with token.immediate(':')
   OP_SYM,
   HASH_OPEN,
   HASH_CLOSE,
   SYMBOL_IN_HASH
 };
 
+/*
+Create and initialize the external scanner state for grammar.
+*/
 void *tree_sitter_supercollider_external_scanner_create(void) {
   ScannerState *st = (ScannerState *)calloc(1, sizeof(ScannerState));
   init_tables_once();
@@ -131,7 +151,8 @@ void tree_sitter_supercollider_external_scanner_destroy(void *payload) {
 
 unsigned tree_sitter_supercollider_external_scanner_serialize(void *payload,
                                                               char *buffer) {
-  if (!payload || !buffer) return 0;
+  if (!payload || !buffer)
+    return 0;
   ScannerState *st = (ScannerState *)payload;
   buffer[0] = (char)(st->hash_depth & 0xFF);
   buffer[1] = (char)((st->hash_depth >> 8) & 0xFF);
@@ -142,11 +163,12 @@ unsigned tree_sitter_supercollider_external_scanner_serialize(void *payload,
 void tree_sitter_supercollider_external_scanner_deserialize(void *payload,
                                                             const char *buffer,
                                                             unsigned length) {
-  if (!payload) return;
+  if (!payload)
+    return;
   ScannerState *st = (ScannerState *)payload;
   if (length >= 2) {
-    st->hash_depth = ((unsigned char)buffer[0]) |
-                     (((unsigned char)buffer[1]) << 8);
+    st->hash_depth =
+        ((unsigned char)buffer[0]) | (((unsigned char)buffer[1]) << 8);
   } else if (length == 1) {
     st->hash_depth = (unsigned char)buffer[0];
   } else {
@@ -155,6 +177,9 @@ void tree_sitter_supercollider_external_scanner_deserialize(void *payload,
   DBG("deserialize depth=%u", st->hash_depth);
 }
 
+/*
+Scan the next external token for the SuperCollider grammar.
+*/
 bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
                                                      const bool *valid) {
   ScannerState *st = (ScannerState *)payload;
@@ -176,38 +201,25 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
     }
   }
 
-  if (st->hash_depth > 0) {
-    if (lx->lookahead == '#') {
+  if (valid[HASH_CLOSE] && lx->lookahead == ']') {
+    if (st->hash_depth == 1) {
       lx->advance(lx, false);
-      if (lx->lookahead == '[') {
-        lx->advance(lx, false);
-        st->hash_depth++;
-        DBG("nested #[ depth=%u", st->hash_depth);
-        // Not a token boundary itself
-        return false;
-      }
-      return false;
-    }
-
-    if (valid[HASH_CLOSE] && lx->lookahead == ']') {
-      lx->advance(lx, false);
-      if (st->hash_depth > 0) st->hash_depth--;
+      st->hash_depth = 0;
       DBG("] depth=%u", st->hash_depth);
-      if (st->hash_depth == 0) {
-        lx->result_symbol = HASH_CLOSE;
-        return true;
-      }
-      return false;
+      lx->result_symbol = HASH_CLOSE;
+      return true;
     }
+    /* Inner ']' of nested content (e.g., normal arrays), let grammar handle. */
+    return false;
+  }
 
-    if (valid[SYMBOL_IN_HASH]) {
-      if (sc_is_alpha(lx->lookahead) || lx->lookahead == '_') {
-        do {
-          lx->advance(lx, false);
-        } while (sc_is_alnum(lx->lookahead) || lx->lookahead == '_');
-        lx->result_symbol = SYMBOL_IN_HASH;
-        return true;
-      }
+  if (st->hash_depth > 0 && valid[SYMBOL_IN_HASH]) {
+    if (sc_is_alpha(lx->lookahead) || lx->lookahead == '_') {
+      do {
+        lx->advance(lx, false);
+      } while (sc_is_alnum(lx->lookahead) || lx->lookahead == '_');
+      lx->result_symbol = SYMBOL_IN_HASH;
+      return true;
     }
   }
 
@@ -221,7 +233,8 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
       // If immediately '/*' and BLOCK_COMMENT is valid, divert to comment
       if (valid[BLOCK_COMMENT] && lx->lookahead == '*') {
         lx->advance(lx, false); // consume '*'
-        if (!scan_block_comment(lx)) return false;
+        if (!scan_block_comment(lx))
+          return false;
         lx->result_symbol = BLOCK_COMMENT;
         return true;
       }
@@ -239,8 +252,10 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
           had_complete = true;
           lx->mark_end(lx);
         }
-        if (!is_prefix_of_op(buf, len)) break;
-        if (len == 3) break;
+        if (!is_prefix_of_op(buf, len))
+          break;
+        if (len == 3)
+          break;
       }
 
       if (had_complete) {
@@ -262,8 +277,10 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
         had_complete = true;
         lx->mark_end(lx);
       }
-      if (!is_prefix_of_op(buf, len)) break;
-      if (len == 3) break;  // short-circuit: no 4-char ops
+      if (!is_prefix_of_op(buf, len))
+        break;
+      if (len == 3)
+        break; // short-circuit: no 4-char ops
     }
 
     if (had_complete) {
@@ -272,9 +289,5 @@ bool tree_sitter_supercollider_external_scanner_scan(void *payload, TSLexer *lx,
     }
     return false;
   }
-
-  // NOTE: we intentionally do NOT implement "{:" here;
-  // grammar enforces it via '{' + token.immediate(':').
-
   return false;
 }
