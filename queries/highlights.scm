@@ -81,7 +81,7 @@
 [".."] @operator
 
 ; adverb after binop: .foo / .3 / .(expr)
-(adverb "." @operator)
+;;(adverb "." @operator)
 
 ; =========================
 ; Collections / Properties

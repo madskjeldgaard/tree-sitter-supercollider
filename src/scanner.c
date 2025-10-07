@@ -57,7 +57,7 @@ static bool is_complete_op(const char *op, unsigned len) {
 
   if (len == 1)
     // ':' REMOVED (keyword selectors); keep division, etc.
-    return strchr("@+-*/%|&^!?<>.", op[0]) != NULL;
+    return strchr("@+-*/%|&^!?<>", op[0]) != NULL;
 
   const char **ops = (len == 2) ? ops2 : (len == 3) ? ops3 : NULL;
   if (!ops) return false;
@@ -102,7 +102,7 @@ static bool scan_block_comment(TSLexer *lx) {
 
 enum TokenType {
   BLOCK_COMMENT,
-  LIST_COMP_OPEN, // maybe better handle in grammar with token.immediate(':')
+  //LIST_COMP_OPEN, // maybe better handle in grammar with token.immediate(':')
   OP_SYM,
   HASH_OPEN,
   HASH_CLOSE,

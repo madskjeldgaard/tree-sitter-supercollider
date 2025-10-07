@@ -191,12 +191,12 @@ module.exports = grammar({
       $.SYMBOL_IN_HASH // from scanner inside #[ ... ]
     ),
 
-    char: $ => /\$(?:\.|[^\\n])/,
+    char: $ => /\$(?:\.|[^\n])/,
 
     string: $ => seq(
       '"',
       repeat(choice(
-        token.immediate(prec(PRECEDENCE.STRING, /[^"\\n]+/)),
+        token.immediate(prec(PRECEDENCE.STRING, /[^"\n\\]+/)),
         $.escape_sequence
       )),
       '"'
@@ -302,7 +302,7 @@ module.exports = grammar({
 
     binary_operator: $ => choice(
       $.OP_SYM,
-      '==', '!=', '===', '!==', '<=', '>=', '<', '>'
+      '==', '!=', '<=', '>=', '<', '>'
     ),
 
     binary_expression: $ => prec.left(PRECEDENCE.BIN, seq(
