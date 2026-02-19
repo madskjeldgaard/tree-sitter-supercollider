@@ -175,12 +175,8 @@ literal with method
 ---
 (source_file
   (function_call
-    (receiver
-      (literal
-        (number
-          (float ))))
-    (method_call
-      (method_name ))))
+    receiver: (literal (number (float )))
+    name: (identifier)))
 
 ==================
 literal number

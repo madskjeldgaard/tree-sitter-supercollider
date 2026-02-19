@@ -26,10 +26,7 @@
   name: (identifier) @variable.parameter)
 
 ; Methods
-(method_call
-  name: (method_name) @function.method.call)
-
-(method_name) @function.method.call
+(function_call name: (_) @function.method.call)
 
 ; Collections
 (associative_item
@@ -52,17 +49,20 @@
 
 ; Conditionals
 [
-  "if"
-  "while"
-  "case"
-  "switch"
   "?"
   "!?"
   "??"
 ] @keyword.conditional
 
-; Iterations
-[ "for" "forBy" ] @keyword.repeat
+(
+  (function_call name: (_) @keyword.conditional)
+  (#any-of? @keyword.conditional "if" "while" "case" "switch" "try" "protect")
+)
+
+(
+  (function_call name: (_) @keyword.repeat)
+  (#any-of? @keyword.repeat "for" "forBy")
+)
 
 ; Duplication operator
 [ "!" ] @keyword.repeat
@@ -104,10 +104,13 @@
   "arg"
   "classvar"
   "const"
-  ; "super"
-  ; "this"
   "var"
 ] @keyword
+
+(
+  (local_var name: (identifier) @variable.builtin)
+  (#any-of? @variable.builtin "this" "super")
+)
 
 ; Brackets
 [ "(" ")" "[" "]" "{" "}" "|" ] @punctuation.bracket

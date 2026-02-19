@@ -1,3 +1,5 @@
+/// <reference types="tree-sitter-cli/dsl" />
+
 const PRECEDENCE = {
 	comment: 1000,
 	association: 11,
@@ -57,7 +59,6 @@ module.exports = grammar({
 	conflicts: $ => [
 		// [$.selector_binary, $.binary_expression],
 		// [$.selector_binary, $.unary_expression],
-		[$.switch],
 		[$._expression, $._object],
 	],
 
@@ -98,7 +99,6 @@ module.exports = grammar({
 			$.nil_check,
 			$.code_block,
 			$.function_block,
-			$.control_structure,
 			$.literal,
 			$.variable,
 			$.binary_expression,
@@ -127,77 +127,56 @@ module.exports = grammar({
 			field("value", $.function_block)
 		)),
 
-		function_call: $ =>
-		prec.right(choice(
-			choice(
-
-				// method prefixed: ar(SinOsc, 110)
-				seq(
-					choice(alias($.identifier, $.method_name), $.class),
-					seq("(", optional($.parameter_call_list), ")"),
-				),
-
-				// implicit new on classes type SinOsc();
-				seq(
-					$.class,
-					seq("(", optional($.parameter_call_list), ")"),
-				),
-
-			),
-			// Instance method (chainable)
-			seq(
-				alias($._object, $.receiver),
-				repeat1(
-					choice(
-						$.method_call,
-						// This is already covered by the identifier rule, should it be more specific though?
-						$.instance_variable_setter_call,
-					)
-
+    function_call: $ =>
+      prec.right(choice(
+        // method prefixed: ar(SinOsc, 110)
+        seq(
+          field("name", $.identifier),
+          choice(
+            seq("(",
+              field("receiver", $._argument_calls),
+              choice(
+                field("arguments", alias($._additional_args, $.parameter_call_list)),
+                ")",
+              )
+            ),
+            // fork {}
+            seq(
+              field("receiver", $.function_block), 
+              optional(field("arguments", alias($._additional_block_args, $.parameter_call_list)))
+            )
+          )
+        ),
+        // implicit new on classes type SinOsc() or Pspawner {};
+        seq(field("receiver", $.class), field("arguments", $.parameter_call_list)),
+        // Instance method (chainable as nested calls)
+        seq(
+          field("receiver", $._object),
+          $._method_call
 				)
-			)
 		)),
 
-		method_call: $ => prec.left(seq(
-			".",
-			field("name", optional(alias($.identifier, $.method_name))),
-			// Instance.method or Instance.method()
-			optional(choice(
-				seq("(", optional($.parameter_call_list), ")"),
-				$._function_content
-			))
-		)),
+    _additional_args: $ => prec(1, seq(
+      optional(seq(",", sepBy(",", $._argument_calls))),
+      ")",
+      repeat($.function_block)
+    )),
+    _additional_block_args: $ => prec(1, repeat1($.function_block)),
 
-		// This is unused
-		instance_variable_setter_call: $ => prec.left(2,
-			seq(
-				".",
-				field("name", optional(alias($.identifier, $.method_name))),
-				"_",
-				// Instance.method or Instance.method()
-				optional(seq("(", optional($.parameter_call_list), ")")),
-
-			)
-		),
-
-		// class_method_call: $ => prec.left(choice(
-		//	   // Class.method - class method
-		//	   prec.left(seq(
-		//		   ".",
-		//		   field("name", alias($.identifier, $.class_method_name)),
-		// optional(choice(
-
-		// seq("(", optional($.parameter_call_list), ")"), $._function_content)
-		//	   ))),
-		//	   // Class() - implicit .new
-		//	   seq("(", optional($.parameter_call_list), ")")
-		// )),
+    _method_call: $ => prec.left(seq(
+      ".",
+      // optional(alias($.identifier, $.method_name)),
+      optional(field("name", $.identifier)),
+      // Instance.method or Instance.method()
+      optional(field("arguments", $.parameter_call_list))
+    )),
 
 		_expression_sequence: $ => seq(
 			repeat(prec.right(1, seq($._expression_statement, ";"))),
 			// Last statement in sequence
 			$._expression_statement,
-			optional(";")
+			optional(";"),
+      optional(seq($.return_statement, optional(";")))
 		),
 
 		code_block: $ => seq(
@@ -206,27 +185,17 @@ module.exports = grammar({
 			')'
 		),
 
-		function_block: $ => choice(
-			$._function_content,
-			prec.left(seq(alias($.identifier, $.method_name), $._function_content)),
-		),
-
-		_function_content: $ => choice(
+    function_block: $ => choice(
 			seq(
 				'{',
 				optional($.parameter_list),
-				// optional(seq($._expression_statement, ";")),
-				optional(
-					$._expression_sequence
-				),
+				optional($._expression_sequence),
 				'}'
 			),
 			seq(
 				seq("(", "{"),
 				optional($.parameter_list),
-				optional(
-					$._expression_sequence
-				),
+				optional($._expression_sequence),
 				seq(")", "}"),
 			),
 		),
@@ -267,24 +236,24 @@ module.exports = grammar({
 		// see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
 		variable_argument: $ => seq("...", field("name", $.identifier)),
 
-		// When supplying arguments to a function call
-		parameter_call_list: $ => sepBy1(',', $.argument_calls),
+    // call(1,2,3) {}, call {} {}
+    parameter_call_list: $ => choice(
+      seq("(", optional(sepBy1(',', $._argument_calls)), ")", repeat($.function_block)),
+      repeat1($.function_block)
+    ),
 
-		argument_calls: $ => choice(
+		_argument_calls: $ => choice(
 			$.named_argument,
 			$.unnamed_argument,
 		),
 
 		// function call is added here to allow things like Array() in params
 		unnamed_argument: $ => choice($.function_call, $._object),
-		named_argument: $ => prec.left(10,
-			field("name", seq(
-				choice($.symbol, $.identifier),
-				seq(
-					choice('=', ':'),
-					choice($.function_call, $._object),
-				)
-			))),
+		named_argument: $ => prec.left(10, seq(
+			field("name", choice($.symbol, $.identifier)),
+      choice('=', ':'),
+			field("value", choice($.function_call, $._object))
+    )),
 
 		///////////////////////
 		//	Define literal	//
@@ -315,17 +284,18 @@ module.exports = grammar({
 		// 	prec.left(seq("'", optional(token.immediate(/[^"'\\]+/)), "'")),
 		// ),
 		symbol: $ => choice(
-			seq( '\\', token.immediate(prec(PRECEDENCE.STRING, /[a-zA-Zα-ωΑ-Ωµ\d_]*/))),
+			seq( '\\', token.immediate(prec(PRECEDENCE.STRING-1, /[a-zA-Zα-ωΑ-Ωµ\d_]*/))),
 			seq( "'", token.immediate(prec(PRECEDENCE.STRING, /([^']|\\')*/)), "'")
 		),
-		char: $ => /\$./,
+    // match $ followed by any char or escaped char (e.g. $a, $\n, $\\, $\2)
+		char: $ => /\$(?:[^\\]|\\.)/,
 
-		// Taken from https://github.com/tree-sitter/tree-sitter-javascript/blob/83f6a2d900a2dc245e4717ccd05c2a362443cd87/grammar.js#L808
 		string: $ => repeat1(
 			seq(
 				'"',
 				repeat(choice(
 					token.immediate(prec(PRECEDENCE.STRING, /[^"\\]+/)),
+          token.immediate(prec(PRECEDENCE.STRING, /\\[^nrtfv"]/)),
 					alias(/\\[nrtfv"]/, $.escape_sequence),
 				)),
 				'"',
@@ -380,7 +350,10 @@ module.exports = grammar({
 			)
 		),
 		variable_definition: $ => prec(PRECEDENCE.vardef, seq(
-			field("name", $.variable),
+			choice(
+        field("name", $.variable),
+        seq("#", sepBy1(",", field("name", $.variable)))
+      ),
 			"=",
 			field("value", choice($.class, $._object, $.function_call))
 		)),
@@ -392,48 +365,49 @@ module.exports = grammar({
 		return_statement: $ => prec.left(seq("^", choice($._object, $.function_call))),
 
 		// Definition of class
-		class_def: $ => prec(PRECEDENCE.class_def, seq(optional("+"), $.class, optional(seq(":", alias($.class, $.parent_class))), "{",
-			repeat(
-				choice(
-					// Variables
-					seq(
-						sepBy(",",
-							choice(
+		class_def: $ => prec(PRECEDENCE.class_def, seq(
+      optional("+"), $.class, optional(seq(":", alias($.class, $.parent_class))), 
+      "{", field("body", $.class_def_body), "}")),
 
-								// Variable declaration
-								choice(
-									alias($.local_var, $.instance_var),
-									$.instance_var,
-									$.classvar
-								),
-								// variable definiton
-								seq(
-									choice(
-										alias($.local_var, $.instance_var),
-										$.instance_var,
-										$.classvar,
-										$.const
-									),
-									"=",
-									$._object,
-								),
-							)
-						),
-						";"
-					),
+    class_def_body: $ => repeat1(
+      choice(
+        // Variables
+        prec(PRECEDENCE.localvar+1, seq(
+          sepBy(",",
+            choice(
+              // Variable declaration
+              choice(
+                alias($.local_var, $.instance_var),
+                $.instance_var,
+                $.classvar
+              ),
+              // variable definiton
+              seq(
+                choice(
+                  alias($.local_var, $.instance_var),
+                  $.instance_var,
+                  $.classvar,
+                  $.const
+                ),
+                "=",
+                $._object,
+              ),
+            )
+          ),
+          ";"
+        )),
 
-					// Instance method
-					seq(
-						alias($.identifier, $.instance_method_name), $.function_block
-					),
+        // Instance method
+        prec(PRECEDENCE.call + 1, seq(
+          alias($.identifier, $.instance_method_name), $.function_block
+        )),
 
-					// Class method
-					seq(
-						"*", alias($.identifier, $.class_method_name), $.function_block
-					),
-				)
-			),
-			"}")),
+        // Class method
+        prec(PRECEDENCE.call + 1, seq(
+          "*", alias($.identifier, $.class_method_name), $.function_block
+        )),
+      )
+    ),
 
 		////////////////
 		//	Comments  //
@@ -550,7 +524,6 @@ module.exports = grammar({
 			$.string,
 			$.function_call,
 			prec.left(1, $.code_block),
-			$.control_structure
 		),
 
 		indexed_collection: $ => seq(
@@ -592,6 +565,7 @@ module.exports = grammar({
 		//	field('right', $._object)
 		// ))),
 		binary_expression: $ => {
+      /** @type [number, string|Rule][] */
 			const table = [
 
 				// "Selector as binary operator"
@@ -624,6 +598,7 @@ module.exports = grammar({
 		},
 
 		unary_expression: $ => {
+      /** @type [number, string|Rule][] */
 			const table = [
 				[PRECEDENCE.unary, '-'],
 				[PRECEDENCE.unary, '*'],
@@ -655,171 +630,6 @@ module.exports = grammar({
 			$.indexed_collection,
 			$.code_block,
 			$.nil_check,
-			$.control_structure,
 		),
-
-		////////////////////
-		//	Conditionals  //
-		////////////////////
-
-		control_structure: $ => prec(PRECEDENCE.controlstruct, choice(
-			$.if, $.while, $.for, $.forby, $.case, $.switch
-		)),
-
-		if: $ => choice(
-			// if (expr) trueFunc falseFunc
-			prec.right(
-				seq(
-					field("name", "if"),
-					"(",
-					field("expression", prec.left(
-						choice($.function_call, $._object)
-					)),
-					")",
-					field("true", $.function_block),
-					optional(field("false", $.function_block)),
-				)
-			),
-			// if (expr, trueFunc, falseFunc);
-			prec.right(
-				seq(
-					field("name", "if"),
-					"(",
-					field("expression", prec.left(
-						choice($.function_call, $._object)
-					)),
-					field("true", seq(",", $.function_block)),
-					optional(field("false", seq(",", $.function_block))),
-					")"
-				)
-			),
-
-			// TODO: Should/could this be covered by the instance method rules?
-			// expr.if (trueFunc, falseFunc);
-			seq(
-				prec.left(1,
-					seq(
-						field("expression", choice($.function_call, $._object)),
-						field("name", seq(".", "if"))
-					)
-				),
-				choice(
-					// expr.if{truefunc}
-					field("true", $.function_block),
-					choice(
-						// expr.if({truefunc}) or expr.if{truefunc};
-						choice(
-							seq(field("true", $.function_block)),
-							seq("(", field("true", $.function_block), ")"),
-						),
-						// expr.if({truefunc}, {falsefunc})
-						seq(
-							"(",
-							field("true", $.function_block),
-							optional(field("false",
-								seq(",", $.function_block))),
-							")"
-						)
-					)
-				)
-			)
-		),
-
-		while: $ => choice(
-			// while ( testFunc, bodyFunc );
-			prec.left(1, seq(
-				field("name", "while"),
-				"(",
-				field("test_func", $.function_block),
-				",",
-				field("body_func", $.function_block),
-				")"
-			)),
-			// testFunc.while( bodyFunc );
-			seq(
-				field("expression", choice($.function_call, $._object)),
-				field("name", ".while"),
-				field("body_func", $.function_block),
-			),
-			// while testFunc bodyFunc;
-			seq(
-				field("name", "while"),
-				field("test_func", $.function_block),
-				field("body_func", $.function_block),
-			),
-		),
-
-		for: $ => choice(
-			// for ( startValue, endValue, function )
-			seq("for", "(", $.integer, ",", $.integer, ",", $.function_block, ")"),
-			// startValue.for ( endValue, function )
-			seq($.integer, ".for", "(", $.integer, ",", $.function_block, ")")
-		),
-		forby: $ => choice(
-			// forBy ( startValue, endValue, stepValue, function );
-			seq(
-				field("name", "forBy"),
-				"(",
-				$.integer,
-				",",
-				$.integer,
-				",",
-				$.integer,
-				",",
-				$.function_block,
-				")"
-			),
-			// startValue.forBy ( endValue, stepValue, function );
-			seq(
-				$.integer,
-				field("name", ".forBy"),
-				"(",
-				$.integer,
-				",",
-				$.integer,
-				",",
-				$.function_block,
-				")"
-			)
-		),
-
-		case: $ => seq(
-			field("name", "case"),
-			repeat($.function_block),
-			";"
-		),
-
-		switch: $ => choice(
-			seq(
-				field("name", "switch"),
-				"(",
-				choice($.function_call, $._object),
-				",",
-				sepBy(
-					",",
-					seq($._object, ",", $.function_block)
-				),
-				",",
-				seq($._object, ",", $.function_block),
-				optional(seq(",", $.function_block)),
-				")"
-			),
-			prec.right(seq(
-				field("name", "switch"),
-				$.code_block,
-				// "(", $._object, ")",
-				repeat(
-					seq(
-						choice($.function_call, $._object),
-						$.function_block
-					)
-				),
-				seq(
-					choice($.function_call, $._object),
-					$.function_block
-				),
-			))
-		),
-
 	}
 });
