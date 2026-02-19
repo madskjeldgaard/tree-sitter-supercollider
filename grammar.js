@@ -127,56 +127,56 @@ module.exports = grammar({
 			field("value", $.function_block)
 		)),
 
-    function_call: $ =>
-      prec.right(choice(
-        // method prefixed: ar(SinOsc, 110)
-        seq(
-          field("name", $.identifier),
-          choice(
-            seq("(",
-              field("receiver", $._argument_calls),
-              choice(
-                field("arguments", alias($._additional_args, $.parameter_call_list)),
-                ")",
-              )
-            ),
-            // fork {}
-            seq(
-              field("receiver", $.function_block), 
-              optional(field("arguments", alias($._additional_block_args, $.parameter_call_list)))
-            )
-          )
-        ),
-        // implicit new on classes type SinOsc() or Pspawner {};
-        seq(field("receiver", $.class), field("arguments", $.parameter_call_list)),
-        // Instance method (chainable as nested calls)
-        seq(
-          field("receiver", $._object),
-          $._method_call
+		function_call: $ =>
+			prec.right(choice(
+				// method prefixed: ar(SinOsc, 110)
+				seq(
+					field("name", $.identifier),
+					choice(
+						seq("(",
+							field("receiver", $._argument_calls),
+							choice(
+								field("arguments", alias($._additional_args, $.parameter_call_list)),
+								")",
+							)
+						),
+						// fork {}
+						seq(
+							field("receiver", $.function_block), 
+							optional(field("arguments", alias($._additional_block_args, $.parameter_call_list)))
+						)
+					)
+				),
+				// implicit new on classes type SinOsc() or Pspawner {};
+				seq(field("receiver", $.class), field("arguments", $.parameter_call_list)),
+				// Instance method (chainable as nested calls)
+				seq(
+					field("receiver", $._object),
+					$._method_call
 				)
+			)),
+
+		_additional_args: $ => prec(1, seq(
+			optional(seq(",", sepBy(",", $._argument_calls))),
+			")",
+			repeat($.function_block)
 		)),
+		_additional_block_args: $ => prec(1, repeat1($.function_block)),
 
-    _additional_args: $ => prec(1, seq(
-      optional(seq(",", sepBy(",", $._argument_calls))),
-      ")",
-      repeat($.function_block)
-    )),
-    _additional_block_args: $ => prec(1, repeat1($.function_block)),
-
-    _method_call: $ => prec.left(seq(
-      ".",
-      // optional(alias($.identifier, $.method_name)),
-      optional(field("name", $.identifier)),
-      // Instance.method or Instance.method()
-      optional(field("arguments", $.parameter_call_list))
-    )),
+		_method_call: $ => prec.left(seq(
+			".",
+			// optional(alias($.identifier, $.method_name)),
+			optional(field("name", $.identifier)),
+			// Instance.method or Instance.method()
+			optional(field("arguments", $.parameter_call_list))
+		)),
 
 		_expression_sequence: $ => seq(
 			repeat(prec.right(1, seq($._expression_statement, ";"))),
 			// Last statement in sequence
 			$._expression_statement,
 			optional(";"),
-      optional(seq($.return_statement, optional(";")))
+			optional(seq($.return_statement, optional(";")))
 		),
 
 		code_block: $ => seq(
@@ -185,7 +185,7 @@ module.exports = grammar({
 			')'
 		),
 
-    function_block: $ => choice(
+		function_block: $ => choice(
 			seq(
 				'{',
 				optional($.parameter_list),
@@ -236,11 +236,11 @@ module.exports = grammar({
 		// see https://doc.sccode.org/Reference/Functions.html#Variable%20Arguments
 		variable_argument: $ => seq("...", field("name", $.identifier)),
 
-    // call(1,2,3) {}, call {} {}
-    parameter_call_list: $ => choice(
-      seq("(", optional(sepBy1(',', $._argument_calls)), ")", repeat($.function_block)),
-      repeat1($.function_block)
-    ),
+		// call(1,2,3) {}, call {} {}
+		parameter_call_list: $ => choice(
+			seq("(", optional(sepBy1(',', $._argument_calls)), ")", repeat($.function_block)),
+			repeat1($.function_block)
+		),
 
 		_argument_calls: $ => choice(
 			$.named_argument,
@@ -251,9 +251,9 @@ module.exports = grammar({
 		unnamed_argument: $ => choice($.function_call, $._object),
 		named_argument: $ => prec.left(10, seq(
 			field("name", choice($.symbol, $.identifier)),
-      choice('=', ':'),
+			choice('=', ':'),
 			field("value", choice($.function_call, $._object))
-    )),
+		)),
 
 		///////////////////////
 		//	Define literal	//
@@ -287,7 +287,7 @@ module.exports = grammar({
 			seq( '\\', token.immediate(prec(PRECEDENCE.STRING-1, /[a-zA-Zα-ωΑ-Ωµ\d_]*/))),
 			seq( "'", token.immediate(prec(PRECEDENCE.STRING, /([^']|\\')*/)), "'")
 		),
-    // match $ followed by any char or escaped char (e.g. $a, $\n, $\\, $\2)
+		// match $ followed by any char or escaped char (e.g. $a, $\n, $\\, $\2)
 		char: $ => /\$(?:[^\\]|\\.)/,
 
 		string: $ => repeat1(
@@ -295,7 +295,7 @@ module.exports = grammar({
 				'"',
 				repeat(choice(
 					token.immediate(prec(PRECEDENCE.STRING, /[^"\\]+/)),
-          token.immediate(prec(PRECEDENCE.STRING, /\\[^nrtfv"]/)),
+					token.immediate(prec(PRECEDENCE.STRING, /\\[^nrtfv"]/)),
 					alias(/\\[nrtfv"]/, $.escape_sequence),
 				)),
 				'"',
@@ -351,9 +351,9 @@ module.exports = grammar({
 		),
 		variable_definition: $ => prec(PRECEDENCE.vardef, seq(
 			choice(
-        field("name", $.variable),
-        seq("#", sepBy1(",", field("name", $.variable)))
-      ),
+				field("name", $.variable),
+				seq("#", sepBy1(",", field("name", $.variable)))
+			),
 			"=",
 			field("value", choice($.class, $._object, $.function_call))
 		)),
@@ -366,48 +366,48 @@ module.exports = grammar({
 
 		// Definition of class
 		class_def: $ => prec(PRECEDENCE.class_def, seq(
-      optional("+"), $.class, optional(seq(":", alias($.class, $.parent_class))), 
-      "{", field("body", $.class_def_body), "}")),
+			optional("+"), $.class, optional(seq(":", alias($.class, $.parent_class))), 
+			"{", field("body", $.class_def_body), "}")),
 
-    class_def_body: $ => repeat1(
-      choice(
-        // Variables
-        prec(PRECEDENCE.localvar+1, seq(
-          sepBy(",",
-            choice(
-              // Variable declaration
-              choice(
-                alias($.local_var, $.instance_var),
-                $.instance_var,
-                $.classvar
-              ),
-              // variable definiton
-              seq(
-                choice(
-                  alias($.local_var, $.instance_var),
-                  $.instance_var,
-                  $.classvar,
-                  $.const
-                ),
-                "=",
-                $._object,
-              ),
-            )
-          ),
-          ";"
-        )),
+		class_def_body: $ => repeat1(
+			choice(
+				// Variables
+				prec(PRECEDENCE.localvar+1, seq(
+					sepBy(",",
+						choice(
+							// Variable declaration
+							choice(
+								alias($.local_var, $.instance_var),
+								$.instance_var,
+								$.classvar
+							),
+							// variable definiton
+							seq(
+								choice(
+									alias($.local_var, $.instance_var),
+									$.instance_var,
+									$.classvar,
+									$.const
+								),
+								"=",
+								$._object,
+							),
+						)
+					),
+					";"
+				)),
 
-        // Instance method
-        prec(PRECEDENCE.call + 1, seq(
-          alias($.identifier, $.instance_method_name), $.function_block
-        )),
+				// Instance method
+				prec(PRECEDENCE.call + 1, seq(
+					alias($.identifier, $.instance_method_name), $.function_block
+				)),
 
-        // Class method
-        prec(PRECEDENCE.call + 1, seq(
-          "*", alias($.identifier, $.class_method_name), $.function_block
-        )),
-      )
-    ),
+				// Class method
+				prec(PRECEDENCE.call + 1, seq(
+					"*", alias($.identifier, $.class_method_name), $.function_block
+				)),
+			)
+		),
 
 		////////////////
 		//	Comments  //
@@ -565,7 +565,7 @@ module.exports = grammar({
 		//	field('right', $._object)
 		// ))),
 		binary_expression: $ => {
-      /** @type [number, string|Rule][] */
+			/** @type [number, string|Rule][] */
 			const table = [
 
 				// "Selector as binary operator"
@@ -598,7 +598,7 @@ module.exports = grammar({
 		},
 
 		unary_expression: $ => {
-      /** @type [number, string|Rule][] */
+			/** @type [number, string|Rule][] */
 			const table = [
 				[PRECEDENCE.unary, '-'],
 				[PRECEDENCE.unary, '*'],
