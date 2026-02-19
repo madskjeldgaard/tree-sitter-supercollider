@@ -38,25 +38,6 @@
     }
   },
   {
-    "type": "argument_calls",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "named_argument",
-          "named": true
-        },
-        {
-          "type": "unnamed_argument",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "arithmetic_series",
     "named": true,
     "fields": {},
@@ -70,10 +51,6 @@
         },
         {
           "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -129,10 +106,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -223,10 +196,6 @@
           },
           {
             "type": "collection",
-            "named": true
-          },
-          {
-            "type": "control_structure",
             "named": true
           },
           {
@@ -410,10 +379,6 @@
             "named": true
           },
           {
-            "type": "control_structure",
-            "named": true
-          },
-          {
             "type": "duplicated_statement",
             "named": true
           },
@@ -507,32 +472,6 @@
     }
   },
   {
-    "type": "case",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "case",
-            "named": false
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "function_block",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "class",
     "named": true,
     "fields": {}
@@ -540,10 +479,40 @@
   {
     "type": "class_def",
     "named": true,
-    "fields": {},
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "class_def_body",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
+      "types": [
+        {
+          "type": "class",
+          "named": true
+        },
+        {
+          "type": "parent_class",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "class_def_body",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
       "types": [
         {
           "type": "association",
@@ -578,10 +547,6 @@
           "named": true
         },
         {
-          "type": "control_structure",
-          "named": true
-        },
-        {
           "type": "duplicated_statement",
           "named": true
         },
@@ -611,10 +576,6 @@
         },
         {
           "type": "nil_check",
-          "named": true
-        },
-        {
-          "type": "parent_class",
           "named": true
         },
         {
@@ -674,10 +635,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -776,10 +733,6 @@
           "named": true
         },
         {
-          "type": "control_structure",
-          "named": true
-        },
-        {
           "type": "duplicated_statement",
           "named": true
         },
@@ -844,41 +797,6 @@
     }
   },
   {
-    "type": "control_structure",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "case",
-          "named": true
-        },
-        {
-          "type": "for",
-          "named": true
-        },
-        {
-          "type": "forby",
-          "named": true
-        },
-        {
-          "type": "if",
-          "named": true
-        },
-        {
-          "type": "switch",
-          "named": true
-        },
-        {
-          "type": "while",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "duplicated_statement",
     "named": true,
     "fields": {
@@ -904,10 +822,6 @@
           },
           {
             "type": "collection",
-            "named": true
-          },
-          {
-            "type": "control_structure",
             "named": true
           },
           {
@@ -970,10 +884,6 @@
           },
           {
             "type": "collection",
-            "named": true
-          },
-          {
-            "type": "control_structure",
             "named": true
           },
           {
@@ -1043,59 +953,6 @@
     }
   },
   {
-    "type": "for",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "integer",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "forby",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": ".forBy",
-            "named": false
-          },
-          {
-            "type": "forBy",
-            "named": false
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "integer",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "function_block",
     "named": true,
     "fields": {},
@@ -1124,10 +981,6 @@
           "named": true
         },
         {
-          "type": "control_structure",
-          "named": true
-        },
-        {
           "type": "duplicated_statement",
           "named": true
         },
@@ -1149,10 +1002,6 @@
         },
         {
           "type": "literal",
-          "named": true
-        },
-        {
-          "type": "method_name",
           "named": true
         },
         {
@@ -1193,36 +1042,97 @@
   {
     "type": "function_call",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "class",
-          "named": true
-        },
-        {
-          "type": "instance_variable_setter_call",
-          "named": true
-        },
-        {
-          "type": "method_call",
-          "named": true
-        },
-        {
-          "type": "method_name",
-          "named": true
-        },
-        {
-          "type": "parameter_call_list",
-          "named": true
-        },
-        {
-          "type": "receiver",
-          "named": true
-        }
-      ]
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "parameter_call_list",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "receiver": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "association",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "class",
+            "named": true
+          },
+          {
+            "type": "code_block",
+            "named": true
+          },
+          {
+            "type": "collection",
+            "named": true
+          },
+          {
+            "type": "duplicated_statement",
+            "named": true
+          },
+          {
+            "type": "function_block",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "indexed_collection",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "named_argument",
+            "named": true
+          },
+          {
+            "type": "nil_check",
+            "named": true
+          },
+          {
+            "type": "partial",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "unnamed_argument",
+            "named": true
+          },
+          {
+            "type": "variable",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1252,120 +1162,6 @@
     }
   },
   {
-    "type": "if",
-    "named": true,
-    "fields": {
-      "expression": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "association",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "class",
-            "named": true
-          },
-          {
-            "type": "code_block",
-            "named": true
-          },
-          {
-            "type": "collection",
-            "named": true
-          },
-          {
-            "type": "control_structure",
-            "named": true
-          },
-          {
-            "type": "duplicated_statement",
-            "named": true
-          },
-          {
-            "type": "function_block",
-            "named": true
-          },
-          {
-            "type": "function_call",
-            "named": true
-          },
-          {
-            "type": "indexed_collection",
-            "named": true
-          },
-          {
-            "type": "literal",
-            "named": true
-          },
-          {
-            "type": "nil_check",
-            "named": true
-          },
-          {
-            "type": "partial",
-            "named": true
-          },
-          {
-            "type": "unary_expression",
-            "named": true
-          },
-          {
-            "type": "variable",
-            "named": true
-          }
-        ]
-      },
-      "false": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": ",",
-            "named": false
-          },
-          {
-            "type": "function_block",
-            "named": true
-          }
-        ]
-      },
-      "name": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": ".",
-            "named": false
-          },
-          {
-            "type": "if",
-            "named": false
-          }
-        ]
-      },
-      "true": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": ",",
-            "named": false
-          },
-          {
-            "type": "function_block",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "index_subrange",
     "named": true,
     "fields": {},
@@ -1379,10 +1175,6 @@
         },
         {
           "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -1429,10 +1221,6 @@
             "named": true
           },
           {
-            "type": "control_structure",
-            "named": true
-          },
-          {
             "type": "function_call",
             "named": true
           },
@@ -1476,10 +1264,6 @@
           "named": true
         },
         {
-          "type": "control_structure",
-          "named": true
-        },
-        {
           "type": "function_call",
           "named": true
         },
@@ -1511,32 +1295,6 @@
     }
   },
   {
-    "type": "instance_variable_setter_call",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "method_name",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "parameter_call_list",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "item",
     "named": true,
     "fields": {},
@@ -1562,10 +1320,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -1660,127 +1414,27 @@
     }
   },
   {
-    "type": "method_call",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "method_name",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "association",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "class",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
-          "named": true
-        },
-        {
-          "type": "duplicated_statement",
-          "named": true
-        },
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "function_call",
-          "named": true
-        },
-        {
-          "type": "function_definition",
-          "named": true
-        },
-        {
-          "type": "indexed_collection",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "nil_check",
-          "named": true
-        },
-        {
-          "type": "parameter_call_list",
-          "named": true
-        },
-        {
-          "type": "parameter_list",
-          "named": true
-        },
-        {
-          "type": "partial",
-          "named": true
-        },
-        {
-          "type": "return_statement",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
-          "named": true
-        },
-        {
-          "type": "variable",
-          "named": true
-        },
-        {
-          "type": "variable_definition",
-          "named": true
-        },
-        {
-          "type": "variable_definition_sequence",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "named_argument",
     "named": true,
     "fields": {
       "name": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": ":",
-            "named": false
+            "type": "identifier",
+            "named": true
           },
           {
-            "type": "=",
-            "named": false
-          },
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
           {
             "type": "association",
             "named": true
@@ -1802,10 +1456,6 @@
             "named": true
           },
           {
-            "type": "control_structure",
-            "named": true
-          },
-          {
             "type": "duplicated_statement",
             "named": true
           },
@@ -1815,10 +1465,6 @@
           },
           {
             "type": "function_call",
-            "named": true
-          },
-          {
-            "type": "identifier",
             "named": true
           },
           {
@@ -1835,10 +1481,6 @@
           },
           {
             "type": "partial",
-            "named": true
-          },
-          {
-            "type": "symbol",
             "named": true
           },
           {
@@ -1879,10 +1521,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -1961,10 +1599,18 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "argument_calls",
+          "type": "function_block",
+          "named": true
+        },
+        {
+          "type": "named_argument",
+          "named": true
+        },
+        {
+          "type": "unnamed_argument",
           "named": true
         }
       ]
@@ -1996,77 +1642,6 @@
     "fields": {}
   },
   {
-    "type": "receiver",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "association",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "class",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
-          "named": true
-        },
-        {
-          "type": "duplicated_statement",
-          "named": true
-        },
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "function_call",
-          "named": true
-        },
-        {
-          "type": "indexed_collection",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "nil_check",
-          "named": true
-        },
-        {
-          "type": "partial",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
-          "named": true
-        },
-        {
-          "type": "variable",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "return_statement",
     "named": true,
     "fields": {},
@@ -2092,10 +1667,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -2170,10 +1741,6 @@
           "named": true
         },
         {
-          "type": "control_structure",
-          "named": true
-        },
-        {
           "type": "duplicated_statement",
           "named": true
         },
@@ -2244,88 +1811,6 @@
     }
   },
   {
-    "type": "switch",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "switch",
-            "named": false
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "association",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "class",
-          "named": true
-        },
-        {
-          "type": "code_block",
-          "named": true
-        },
-        {
-          "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
-          "named": true
-        },
-        {
-          "type": "duplicated_statement",
-          "named": true
-        },
-        {
-          "type": "function_block",
-          "named": true
-        },
-        {
-          "type": "function_call",
-          "named": true
-        },
-        {
-          "type": "indexed_collection",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "nil_check",
-          "named": true
-        },
-        {
-          "type": "partial",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
-          "named": true
-        },
-        {
-          "type": "variable",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "symbol",
     "named": true,
     "fields": {}
@@ -2374,10 +1859,6 @@
           },
           {
             "type": "collection",
-            "named": true
-          },
-          {
-            "type": "control_structure",
             "named": true
           },
           {
@@ -2446,10 +1927,6 @@
         },
         {
           "type": "collection",
-          "named": true
-        },
-        {
-          "type": "control_structure",
           "named": true
         },
         {
@@ -2527,7 +2004,7 @@
     "named": true,
     "fields": {
       "name": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
@@ -2558,10 +2035,6 @@
           },
           {
             "type": "collection",
-            "named": true
-          },
-          {
-            "type": "control_structure",
             "named": true
           },
           {
@@ -2621,112 +2094,6 @@
           "named": true
         }
       ]
-    }
-  },
-  {
-    "type": "while",
-    "named": true,
-    "fields": {
-      "body_func": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "function_block",
-            "named": true
-          }
-        ]
-      },
-      "expression": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "association",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "class",
-            "named": true
-          },
-          {
-            "type": "code_block",
-            "named": true
-          },
-          {
-            "type": "collection",
-            "named": true
-          },
-          {
-            "type": "control_structure",
-            "named": true
-          },
-          {
-            "type": "duplicated_statement",
-            "named": true
-          },
-          {
-            "type": "function_block",
-            "named": true
-          },
-          {
-            "type": "function_call",
-            "named": true
-          },
-          {
-            "type": "indexed_collection",
-            "named": true
-          },
-          {
-            "type": "literal",
-            "named": true
-          },
-          {
-            "type": "nil_check",
-            "named": true
-          },
-          {
-            "type": "partial",
-            "named": true
-          },
-          {
-            "type": "unary_expression",
-            "named": true
-          },
-          {
-            "type": "variable",
-            "named": true
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": ".while",
-            "named": false
-          },
-          {
-            "type": "while",
-            "named": false
-          }
-        ]
-      },
-      "test_func": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "function_block",
-            "named": true
-          }
-        ]
-      }
     }
   },
   {
@@ -2823,18 +2190,6 @@
   },
   {
     "type": "...",
-    "named": false
-  },
-  {
-    "type": ".for",
-    "named": false
-  },
-  {
-    "type": ".forBy",
-    "named": false
-  },
-  {
-    "type": ".while",
     "named": false
   },
   {
@@ -3070,10 +2425,6 @@
     "named": true
   },
   {
-    "type": "case",
-    "named": false
-  },
-  {
     "type": "char",
     "named": true
   },
@@ -3110,24 +2461,12 @@
     "named": true
   },
   {
-    "type": "for",
-    "named": false
-  },
-  {
-    "type": "forBy",
-    "named": false
-  },
-  {
     "type": "hexinteger",
     "named": true
   },
   {
     "type": "identifier",
     "named": true
-  },
-  {
-    "type": "if",
-    "named": false
   },
   {
     "type": "inf",
@@ -3156,10 +2495,6 @@
   {
     "type": "ref",
     "named": true
-  },
-  {
-    "type": "switch",
-    "named": false
   },
   {
     "type": "thisFunction",
@@ -3191,10 +2526,6 @@
   },
   {
     "type": "var",
-    "named": false
-  },
-  {
-    "type": "while",
     "named": false
   },
   {

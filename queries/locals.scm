@@ -3,7 +3,7 @@
 (function_call)
 (code_block)
 (function_block)
-(control_structure)
+; (control_structure)
 ] @scope
 
 ; Definitions

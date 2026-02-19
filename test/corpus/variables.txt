@@ -2,17 +2,15 @@
 constants
 ====================
 YoYO{
-    const <yo=2;
+  const <yo=2;
 }
 ---
 (source_file
-  (class_def
-    (class )
-    (const
-      name: (identifier ))
-    (literal
-      (number
-        (integer )))))
+ (class_def
+  (class )
+  body: (class_def_body
+    (const name: (identifier ))
+    (literal (number (integer ))))))
 
 ====================
 instance variables with setters and getters
@@ -175,3 +173,15 @@ var num3 = num1 + num2;
       right: (variable
         (local_var name:
           (identifier))))))
+
+==================
+multiple variable assignment
+==================
+# a, b, c = anArray;
+---
+(source_file
+  (variable_definition
+   name: (variable (environment_var name: (identifier )))
+   name: (variable (environment_var name: (identifier )))
+   name: (variable (environment_var name: (identifier )))
+   value: (variable (local_var name: (identifier)))))
