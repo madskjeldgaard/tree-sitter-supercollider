@@ -10,6 +10,6 @@
   (const)
   (instance_var)
   (variable_definition)
-  (variable_definition_sequence (variable_definition))
+  (variable_definition_sequence)
   (code_block)
 ] @context

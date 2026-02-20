@@ -1,22 +1,45 @@
+; assignment
+(variable_definition
+  name: (_) @assignment.lhs
+  value: (_) @assignment.inner @assignment.rhs) @assignment.outer
+
+(function_definition
+  name: (_) @assignment.lhs
+  value: (_) @assignment.inner @assignment.rhs) @assignment.outer
+
+; block
+(code_block
+  (_)* @block.inner) @block.outer
+
+; class
+(class_def
+  (class_def_body) @class.inner) @class.outer
+
+; call
+(function_call
+  arguments: (_
+    .
+    "("
+    _+ @call.inner
+    ")")?) @call.outer
+
+; comment
+(line_comment) @comment.outer
+
+(block_comment) @comment.outer
+
 ; conditional:
-; needs two queries because of true.if(true, false) vs if(true) { true } { false }
 (function_call
   name: (_) @_name
   (#eq? @_name "if")
-  receiver: (_) @conditional.condition
   arguments: (parameter_call_list
-    (_) @conditional.inner
-  )?) @conditional.outer
+    (_) @conditional.inner)?) @conditional.outer
 
-(function_call
-  receiver: (_) @conditional.condition
-  name: (_) @_name
-  (#eq? @_name "if")
-  arguments: (parameter_call_list
-    (_) @conditional.inner
-  )?) @conditional.outer
+; function
+((function_block) @function.inner @function.outer
+  (#offset! @function.inner 0 1 0 -1)) ; use offset to skip brackets
 
-; loops
+; loop
 (function_call
   name: (identifier) @_fname
   (#eq? @_fname "while")
@@ -35,50 +58,40 @@
   arguments: (parameter_call_list
     (_) @loop.inner .)?) @loop.outer
 
-
-(code_block
-  (_)* @block.inner) @block.outer
-
-(class_def
-  (class_def_body) @class.inner) @class.outer
-
-(line_comment) @comment.outer
-
-(block_comment) @comment.outer
-
-(function_block
-  (_) @function.inner) @function.outer
+; number
+(number) @number.inner
 
 ;parameters
-((parameter_call_list
-  "," @_start
+(parameter_call_list
+  (_) @parameter.inner @parameter.outer
   .
-  (_) @parameter.inner)
-  (#make-range! "parameter.outer" @_start @parameter.inner))
+  (",")? @parameter.outer)
 
-((parameter_call_list
+(parameter_call_list
+  "," @parameter.outer
   .
-  (_) @parameter.inner
-  .
-  ","? @_end)
-  (#make-range! "parameter.outer" @parameter.inner @_end))
+  (_) @parameter.inner @parameter.outer .)
 
-(((symbol)?
-  (identifier)
-  "," @_start
+(parameter_list
+  (_) @parameter.inner @parameter.outer
   .
-  ((method_name)
-    (function_call
-      (_))) @parameter.inner)
-  (#make-range! "parameter.outer" @_start @parameter.inner))
+  (",")? @parameter.outer)
 
-(((symbol)?
-  (identifier)
+(parameter_list
+  "," @parameter.outer
   .
-  ((method_name)
-    (function_call
-      (_))) @parameter.inner
-  .
-  ","? @_end)
-  (#make-range! "parameter.outer" @parameter.inner @_end))
+  (_) @parameter.inner @parameter.outer .)
 
+(collection
+  (_) @parameter.inner @parameter.outer
+  .
+  (",")? @parameter.outer)
+
+(collection
+  "," @parameter.outer
+  .
+  (_) @parameter.inner @parameter.outer .)
+
+; return
+(return_statement
+  (_) @return.inner) @return.outer
