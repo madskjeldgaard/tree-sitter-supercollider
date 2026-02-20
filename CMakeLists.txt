@@ -4,7 +4,6 @@ project(tree-sitter-supercollider
         VERSION "0.3.0"
         DESCRIPTION "SuperCollider grammar for tree-sitter"
         HOMEPAGE_URL "https://github.com/madskjeldgaard/tree-sitter-supercollider"
-        LANGUAGES C)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 option(TREE_SITTER_REUSE_ALLOCATOR "Reuse the library allocator" OFF)
