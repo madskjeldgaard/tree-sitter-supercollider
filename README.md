@@ -83,8 +83,8 @@ Add this to your nvim config (change path in `url` to that of the tree sitter su
 
 ```lua
 -- tree-sitter-supercollider
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.supercollider = {
+local parsers = require "nvim-treesitter.parsers"
+parsers.supercollider = {
 	install_info = {
 		-- url = "~/code/tree-sitter-supercollider",
 		url = "https://github.com/madskjeldgaard/tree-sitter-supercollider",
