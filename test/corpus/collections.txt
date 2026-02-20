@@ -133,22 +133,15 @@ arr|@|1
 (source_file
   (code_block
     (function_call
-      (receiver
-        (literal
-          (number
-            (integer ))))
-      (method_call
-        name: (method_name )
+      receiver: (literal (number (integer )))
+      name: (identifier)
+      arguments: (parameter_call_list (function_block
         (parameter_list
-          (argument
-            name: (identifier )))
+          (argument name: (identifier )))
         (function_call
-          (receiver
-            (variable
-              (local_var
-                name: (identifier ))))
-          (method_call
-            name: (method_name )))))))
+          receiver: (variable (local_var name: (identifier )))
+          name: (identifier))))
+      )))
 
 ==================
 10.do({|index| index.postln})
@@ -160,26 +153,15 @@ arr|@|1
 (source_file
   (code_block
     (function_call
-      (receiver
-        (literal
-          (number
-            (integer ))))
-      (method_call
-        name: (method_name )
-        (parameter_call_list
-          (argument_calls
-            (unnamed_argument
-              (function_block
-                (parameter_list
-                  (argument
-                    name: (identifier )))
-                (function_call
-                  (receiver
-                    (variable
-                      (local_var
-                        name: (identifier ))))
-                  (method_call
-                    name: (method_name )))))))))))
+      receiver: (literal (number (integer )))
+      name: (identifier)
+      arguments: (parameter_call_list
+        (unnamed_argument (function_block
+          (parameter_list
+            (argument name: (identifier )))
+          (function_call
+            receiver: (variable (local_var name: (identifier )))
+            name: (identifier))))))))
 
 ==================
 arithmetic series (1.0, 1.0..2.0)
@@ -252,29 +234,18 @@ var index = rrand(0, 8);
 (source_file
   (code_block
     (variable_definition
-      name: (variable
-        (local_var
-          name: (identifier)))
+      name: (variable (local_var name: (identifier)))
       value: (function_call
-        (method_name)
-        (parameter_call_list
-          (argument_calls
-            (unnamed_argument
-              (literal
-                (number
-                  (integer)))))
-          (argument_calls
-            (unnamed_argument
-              (literal
-                (number
-                  (integer))))))))
+        name: (identifier)
+        receiver: (unnamed_argument
+            (literal (number (integer))))
+        arguments: (parameter_call_list
+          (unnamed_argument
+              (literal (number (integer)))))))
     (collection
       (arithmetic_series
-        (variable
-          (local_var
-            name: (identifier)))
-        (number
-          (integer))))))
+        (variable (local_var name: (identifier)))
+        (number (integer))))))
 
 ==================
 Variable as index in collection
@@ -337,42 +308,22 @@ array[1][0].postln;
 (source_file
   (code_block
     (variable_definition
-      name: (variable
-        (local_var
-          name: (identifier)))
+      name: (variable (local_var name: (identifier)))
       value: (collection
         (collection
-          (literal
-            (number
-              (integer)))
-          (literal
-            (number
-              (integer)))
-          (literal
-            (number
-              (integer))))
+          (literal (number (integer)))
+          (literal (number (integer)))
+          (literal (number (integer))))
         (collection
-          (literal
-            (number
-              (integer)))
-          (literal
-            (number
-              (integer)))
-          (literal
-            (number
-              (integer))))))
+          (literal (number (integer)))
+          (literal (number (integer)))
+          (literal (number (integer))))))
     (function_call
-      (receiver
-        (indexed_collection
-          (variable
-            (local_var
-              name: (identifier)))
-          index: (number
-            (integer))
-          index: (number
-            (integer))))
-      (method_call
-        name: (method_name)))))
+      receiver: (indexed_collection
+          (variable (local_var name: (identifier)))
+          index: (number (integer))
+          index: (number (integer)))
+      name: (identifier))))
 
 ==================
 index_collection array[1..3]
@@ -570,10 +521,8 @@ var serve = Array.new;
         (local_var
           name: (identifier )))
       value: (function_call
-        (receiver
-          (class ))
-        (method_call
-          name: (method_name ))))))
+        receiver: (class )
+        name: (identifier)))))
 
 ==================
 integer array
@@ -610,24 +559,20 @@ Associative array
       (associative_item
         (association
           (literal
-            (symbol
-              (identifier )))
+            (symbol))
           (literal
             (number
               (integer )))))
       (associative_item
         (association
           (literal
-            (symbol
-              (identifier )))
+            (symbol))
           (literal
-            (symbol
-              (identifier )))))
+            (symbol))))
       (associative_item
         (association
           (literal
-            (symbol
-              (identifier )))
+            (symbol))
           (literal
             (number
               (float ))))))))
