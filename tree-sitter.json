@@ -1,0 +1,40 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "tree_sitter_supercollider",
+      "camelcase": "TreeSitterSupercollider",
+      "title": "TreeSitterSupercollider",
+      "scope": "source.tree_sitter_supercollider",
+      "file-types": ["tree_sitter_supercollider"],
+      "injection-regex": "^tree_sitter_supercollider$",
+      "class-name": "TreeSitterTreeSitterSupercollider"
+    }
+  ],
+  "metadata": {
+    "version": "0.3.2",
+    "license": "MIT",
+    "description": "TreeSitterSupercollider grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "madskjeldgaard",
+        "url": ""
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/madskjeldgaard/tree-sitter-supercollider",
+      "funding": ""
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "java": false,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
+
