@@ -1,6 +1,7 @@
 {
   "name": "tree-sitter-supercollider",
-  "version": "0.2.8",
+  "type": "module",
+  "version": "0.3.0",
   "description": "Tree sitter parser for the SuperCollider programming language",
   "main": "bindings/node",
   "scripts": {
@@ -9,19 +10,10 @@
   "author": "mads kjeldgaard",
   "license": "ISC",
   "dependencies": {
-    "nan": "^2.14.2"
+    "nan": "^2.14.2",
+    "node-addon-api": "^8.5.0"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.19.4"
-  },
-  "tree-sitter": [
-    {
-      "scope": "source.scd",
-      "file-types": [
-        "scd",
-        "sc"
-      ],
-      "highlights": "queries/highlights.scm"
-    }
-  ]
+    "tree-sitter-cli": "^0.26.5"
+  }
 }
