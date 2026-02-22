@@ -12,16 +12,6 @@
     "nan": "^2.14.2"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.19.4"
-  },
-  "tree-sitter": [
-    {
-      "scope": "source.scd",
-      "file-types": [
-        "scd",
-        "sc"
-      ],
-      "highlights": "queries/highlights.scm"
-    }
-  ]
+    "tree-sitter-cli": "^0.26.5"
+  }
 }
