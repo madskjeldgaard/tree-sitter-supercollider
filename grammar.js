@@ -41,7 +41,7 @@ function sepBy(sep, rule) {
 	return optional(sepBy1(sep, rule))
 }
 
-module.exports = grammar({
+export default grammar({
 	name: 'supercollider',
 
 	// Ignore whitespace and comments

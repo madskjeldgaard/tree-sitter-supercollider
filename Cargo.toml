@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-supercollider"
 description = "supercollider grammar for the tree-sitter parsing library"
-version = "0.2.8"
+version = "0.3.0"
 keywords = ["incremental", "parsing", "supercollider"]
 categories = ["parsing", "text-editors"]
 repository = "https://github.com/tree-sitter/tree-sitter-supercollider"
@@ -20,7 +20,8 @@ include = [
 path = "bindings/rust/lib.rs"
 
 [dependencies]
-tree-sitter = "~0.20.0"
+tree-sitter = "~0.26.5"
+tree-sitter-language = "0.1.7"
 
 [build-dependencies]
 cc = "1.0"
