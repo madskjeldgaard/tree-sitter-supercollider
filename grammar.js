@@ -62,10 +62,11 @@ export default grammar({
 		[$._expression, $._object],
 	],
 
-	// supertypes: $ => [
-	//	   $._object,
-	//	   $._expression_statement,
-	// ],
+	supertypes: $ => [
+    // $._object,
+    $.expression_statement,
+    $.comment,
+	],
 
 	rules: {
 
@@ -74,8 +75,8 @@ export default grammar({
 		_expression: $ => choice(
 			$.code_block,
 			$.class_def,
-			seq($._expression_statement, ";"),
-			seq($._expression_statement, "\n"),
+			seq($.expression_statement, ";"),
+			seq($.expression_statement, "\n"),
 		),
 
 		_expression_statement: $ => choice(
@@ -172,9 +173,9 @@ export default grammar({
 		)),
 
 		_expression_sequence: $ => seq(
-			repeat(prec.right(1, seq($._expression_statement, ";"))),
+			repeat(prec.right(1, seq($.expression_statement, ";"))),
 			// Last statement in sequence
-			$._expression_statement,
+			$.expression_statement,
 			optional(";"),
 			optional(seq($.return_statement, optional(";")))
 		),
