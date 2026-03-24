@@ -74,27 +74,50 @@ tree-sitter generate && tree-sitter highlight example-file.scd
 
 ## Trying with nvim-treesitter
 
-Install [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) to use this grammar with NeoVim and follow their instructions for installing grammars.
-
-### Install locally in nvim
-For development purposes it may be helpful to install your supercollider grammar locally:
-
-Add this to your nvim config (change path in `url` to that of the tree sitter supercollider repo on your system if it you've downloaded it somewhere):
+Install [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) to use this grammar with NeoVim and follow their instructions for [installing grammars](https://github.com/nvim-treesitter/nvim-treesitter#setup). Installing the latest release of `tree-sitter-supercollider` is usually done by adding `supercollider` to the list of languages installed by `nvim-treesitter` in your nvim config:
 
 ```lua
--- tree-sitter-supercollider
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.supercollider = {
-	install_info = {
-		-- url = "~/code/tree-sitter-supercollider",
-		url = "https://github.com/madskjeldgaard/tree-sitter-supercollider",
-		files = {"src/parser.c", "src/scanner.c"},
-		maintainer = "@madskjeldgaard"
-	},
-	filetype = "supercollider", -- if filetype does not agrees with parser name
-}
+require('nvim-treesitter').install { 'supercollider' }
 ```
-Also see nvim-treesitter [README](https://github.com/nvim-treesitter/nvim-treesitter#adding-parsers).
+
+or by running this command in nvim:
+
+```vim
+:TSInstall supercollider
+```
+
+### Install locally in nvim
+For development purposes it may be helpful to install your supercollider grammar locally.
+With nvim-treesitter, this requires creating a `User TSUpdate` autocommand in your nvim config. For installation from a local folder:
+
+```lua
+vim.api.nvim_create_autocmd('User', { pattern = 'TSUpdate',
+callback = function()
+    require('nvim-treesitter.parsers').supercollider = {
+        install_info = {
+            path = "~/code/tree-sitter-supercollider",
+            queries = 'queries'
+        };
+    }
+end})
+```
+
+Or to install the `develop` branch:
+
+```lua
+vim.api.nvim_create_autocmd('User', { pattern = 'TSUpdate',
+callback = function()
+    require('nvim-treesitter.parsers').supercollider = {
+        install_info = {
+            url = 'https://github.com/madskjeldgaard/tree-sitter-supercollider',
+            branch = 'develop',
+            queries = 'queries'
+        };
+    }
+end})
+```
+
+For more information, see nvim-treesitter [README: adding custom languages](https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages).
 
 ## Contributing
 Help WANTED. This project is too big to be handled by one person, and so any and all help would be appreciated.
@@ -110,6 +133,12 @@ The source code is divided up like this:
 - **test/corpus/** - All unit tests sit here as .txt files
 - **queries/*.scm** - Syntax highlighting, code folding and indentation
 - **src/scanner.c** - A C file defining external scanners for more complex matching tasks
+
+New features and fixes are merged on branch `develop` first. Maintainance workflow for new releases would be:
+- update version: run `tree-sitter version --bump`
+- merge `develop` to `main`
+- add tag for the new version
+- file pull requests to update [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter), [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) and [nvim-treesitter-context](https://github.com/nvim-treesitter/nvim-treesitter-context) if necessary.
 
 ### Resources
 Here are some helpful resources for developers who want to contribute:
