@@ -3,8 +3,7 @@
   (binary_expression)
   (collection)
   (indexed_collection)
-  (parameter_call_list)
-  (function_call)
+  (parameter_call_list "(")
   (class_def)
   (classvar)
   (const)
@@ -16,8 +15,6 @@
 ] @indent.begin
 
 [
-  (parameter_call_list
-    (_))
   ")"
   "}"
   "]"
