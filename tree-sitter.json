@@ -31,12 +31,12 @@
   },
   "bindings": {
     "c": true,
-    "go": false,
-    "java": false,
+    "go": true,
+    "java": true,
     "node": true,
-    "python": false,
+    "python": true,
     "rust": true,
-    "swift": false,
-    "zig": false
+    "swift": true,
+    "zig": true
   }
 }
