@@ -5,18 +5,18 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [tree-sitter-supercollider](#tree-sitter-supercollider)
-  - [Contributing](#contributing)
-    - [Overview](#overview)
-    - [Resources](#resources)
-      - [Tree-sitter resources:](#tree-sitter-resources)
-      - [SuperCollider language resources:](#supercollider-language-resources)
-    - [Testing](#testing)
   - [Status: Experimental but almost fully implemented](#status-experimental-but-almost-fully-implemented)
   - [Features](#features)
   - [Showcase:](#showcase)
   - [Try it out](#try-it-out)
   - [Trying with nvim-treesitter](#trying-with-nvim-treesitter)
     - [Install locally in nvim](#install-locally-in-nvim)
+  - [Contributing](#contributing)
+    - [Overview](#overview)
+    - [Resources](#resources)
+      - [Tree-sitter resources:](#tree-sitter-resources)
+      - [SuperCollider language resources:](#supercollider-language-resources)
+    - [Testing](#testing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ![live parsing of code](/assets/playground2.gif)
