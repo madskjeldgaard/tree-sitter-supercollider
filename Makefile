@@ -1,6 +1,6 @@
 LANGUAGE_NAME := tree-sitter-supercollider
 HOMEPAGE_URL := https://github.com/madskjeldgaard/tree-sitter-supercollider
-VERSION := 0.3.0
+VERSION := 0.3.2
 
 # repository
 SRC_DIR := src
