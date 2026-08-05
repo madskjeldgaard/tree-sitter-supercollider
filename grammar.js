@@ -249,10 +249,21 @@ export default grammar({
 
 		// function call is added here to allow things like Array() in params
 		unnamed_argument: $ => choice($.function_call, $._object),
-		named_argument: $ => prec.left(10, seq(
-			field("name", choice($.symbol, $.identifier)),
-			choice('=', ':'),
-			field("value", choice($.function_call, $._object))
+		named_argument: $ => prec.left(10, choice(
+			seq(
+				field("name", choice($.symbol, $.identifier)),
+				choice('=', ':'),
+				field("value", choice($.function_call, $._object))
+			),
+			// Single-letter names lex as environment_var's /[a-z]/ token, so
+			// they need their own branch: f.value(2, c: 3). Restricted to the
+			// ':' form so assignments to interpreter globals in argument
+			// position (f(n = x)) keep parsing as unnamed arguments.
+			seq(
+				field("name", alias(/[a-z]/, $.identifier)),
+				':',
+				field("value", choice($.function_call, $._object))
+			)
 		)),
 
 		///////////////////////
