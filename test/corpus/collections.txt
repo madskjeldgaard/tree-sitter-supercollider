@@ -668,3 +668,39 @@ a = Set[1, 2, 3];
       (literal
         (number
           (integer ))))))
+
+================================================================================
+expression sequence in array elements with trailing semicolon
+================================================================================
+
+x = [Prand([nil, Pseq([24, 31]);]), 5];
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_definition
+    (variable
+      (environment_var
+        (identifier)))
+    (collection
+      (function_call
+        (class)
+        (parameter_call_list
+          (unnamed_argument
+            (collection
+              (variable
+                (builtin_var))
+              (function_call
+                (class)
+                (parameter_call_list
+                  (unnamed_argument
+                    (collection
+                      (literal
+                        (number
+                          (integer)))
+                      (literal
+                        (number
+                          (integer)))))))))))
+      (literal
+        (number
+          (integer))))))
