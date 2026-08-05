@@ -451,9 +451,13 @@ export default grammar({
 			)
 		)),
 
+		// Array elements are expression sequences per sclang's grammar
+		// (lang11d: arrayelems1 elements are exprseq, and exprseq is
+		// `exprn optsemi`), so `[a; b, c]` and a trailing `;` inside an
+		// element (`[x, foo(y);]`) are legal sclang.
 		_collection_sequence: $ => seq(sepBy1(",", choice(
 			$.associative_item,
-			$._object
+			seq($._object, repeat(seq(";", $._object)), optional(";"))
 		)), optional(",")),
 
 		_paired_associative_sequence: $ => seq(sepBy1(",", $.associative_item), optional(",")),
