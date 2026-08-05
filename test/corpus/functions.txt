@@ -800,3 +800,65 @@ Something { } { };
     (parameter_call_list 
       (function_block)
       (function_block)))))
+
+================================================================================
+named arguments with single-letter names
+================================================================================
+
+f.value(2, c: 3, b: 4);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_call
+    (variable
+      (environment_var
+        (identifier)))
+    (identifier)
+    (parameter_call_list
+      (unnamed_argument
+        (literal
+          (number
+            (integer))))
+      (named_argument
+        (identifier)
+        (literal
+          (number
+            (integer))))
+      (named_argument
+        (identifier)
+        (literal
+          (number
+            (integer)))))))
+
+================================================================================
+assignment to interpreter global in argument position stays unnamed
+================================================================================
+
+s.sendMsg("/s_new", "test", n = s.nextNodeID);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_call
+    (variable
+      (environment_var
+        (identifier)))
+    (identifier)
+    (parameter_call_list
+      (unnamed_argument
+        (literal
+          (string)))
+      (unnamed_argument
+        (literal
+          (string)))
+      (unnamed_argument
+        (function_call
+          (binary_expression
+            (variable
+              (environment_var
+                (identifier)))
+            (variable
+              (environment_var
+                (identifier))))
+          (identifier))))))
